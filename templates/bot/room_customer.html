@@ -1,0 +1,150 @@
+
+{% extends 'base_employee.html' %}
+{% load static %}
+
+
+{% block title %} Chat {% endblock %}
+	{% block style %}
+<link href="{% static 'bot/css/chat-styles.css' %}" rel="stylesheet" id="">
+<style>
+body{
+    display: block;
+}
+#frame{
+margin:auto;
+margin-top: 20px;
+}
+#save-chat{
+    float: right;
+    margin: 10px;
+    background: #32465a;
+    border-color: #32465a;
+}
+</style>
+	{% endblock %}
+
+
+{% block content %}
+
+
+<div id="frame">
+
+	<div class="content">
+		<div class="contact-profile">
+			<p style="margin-left:20px;">{{ customer_name|title }}</p>
+			<button id="save-chat" class="btn btn-primary">Save Chat</button>
+		</div>
+		<div class="messages">
+			<div id="message-list">
+			<ul id="chatID">
+				<li class="replies">{{ ques }}</li>
+			</ul>
+			</div>
+
+		</div>
+
+
+		<div class="message-input">
+			<div class="wrap">
+			<input type="text" id="chat-message-input" placeholder="Write your message..." />
+			<button id="chatCustomer-message-submit" class="submit">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+
+$(".messages").animate({
+    scrollTop: $(document).height()
+}, "fast");
+var roomName = "{{ secret_key|escapejs }}";
+var userEmail = "{{ uu_id|escapejs }}";
+
+
+<!------- If user clicks yes --------->
+
+
+var chatCustomerSocket = new ReconnectingWebSocket(
+    'ws://' + window.location.host +
+    '/ws/chat_to_customer/' + roomName +'/'+ userEmail + '/');
+
+document.querySelector('#chatCustomer-message-submit').onclick = function(e) {
+	var messageInputDom = document.querySelector('#chat-message-input');
+    var message = messageInputDom.value;
+	if(message != ''){
+    chatCustomerSocket.send(JSON.stringify({
+        'message': message,
+        'secret_key': '{{ secret_key }}',
+        'user_id': '{{ u_id }}',
+    }));
+    messageInputDom.value = '';
+    }
+};
+
+document.querySelector('#chat-message-input').onkeyup = function(e) {
+    if (e.keyCode === 13) { // enter, return
+        document.querySelector('#chatCustomer-message-submit').click();
+    }
+};
+
+chatCustomerSocket.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    var message = data['message'];
+    var u_id = data['id']
+    var ul = document.getElementById("chatID");
+    var li2 = document.createElement("li");
+    if(u_id == '{{ u_id }}'){
+    li2.setAttribute("class", "sent");
+    }
+    else{
+    li2.setAttribute("class", "replies");
+    }
+    li2.appendChild(document.createTextNode(message));
+    ul.appendChild(li2);
+    $(".messages").animate({
+        scrollTop: $(document).height()
+    }, "fast");
+
+
+};
+<!----------- Save chat -------------->
+$(document).ready(function(){
+$("#save-chat").click(function(){
+  var sent = {}
+  var replies = {}
+  var chat = {}
+
+  counter = 0
+  $("ul li.replies").each(function(){
+  replies[counter]  = $(this).text()
+  counter++
+  })
+
+  counter1 = 0
+  $("ul li.sent").each(function(){
+  sent[counter1]  = $(this).text()
+  counter1++
+  })
+  $.each(replies, function(key, value){
+  chat[value] = sent[key]
+  })
+  console.log(chat)
+  $.ajax({
+  url: '{% url "save_chat_customer" %}',
+  dataType: 'json',
+  data: { 'message': JSON.stringify(chat), 'secret_key': '{{ secret_key }}', 'cust_id': '{{ uu_id }}', 'is_bot': 'no' },
+  success: function(data){
+  		alert("conversation has been saved.")
+    }
+
+  });
+
+});
+});
+</script>
+{% endblock %}

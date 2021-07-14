@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>{% block title %}  {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+
+
+    <link href="{% static 'bot/css/styles.css' %}" rel="stylesheet" id="">
+	<!--<script src='https://kit.fontawesome.com/a076d05399.js'></script>-->
+	<script src='{% static "bot/js/kit_fontawesome.js" %}'></script>
+    <style>
+    input {
+        font-size: 14px !important;
+        border: 1px solid #c2c2c2;
+        }
+        .dropdown-item {
+        font-size: 14px;
+    }
+    .hidden-element{
+display: none;
+}
+    </style>
+    {% block style %}
+
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+<a class="navbar-brand" href="{% url 'employee_page' secret_key=secret_key %}" style="margin-top: -15px;">{{ user.company.name }}</a>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+
+
+        <li class="nav-item dropdown">
+        <a class="nav-link remove-notify" href="#" id="note_yes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class='far fa-bell' style='font-size:24px'></i>
+        </a>
+
+                {% if note_number == 0 %}
+            <span class="notify_status"  id="notification_yes"></span>
+            {% else %}
+            <span class="notification notify_status" id="notification_yes">{{ note_number }}</span>
+            {% endif %}
+
+
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" id="div_yes">
+            {% for i in notification %}
+            <a user-pk="{{ i.customer.u_field }}" class="dropdown-item note-read note-read-read" href="#" data-pk="{{ i.pk }}">{{ i.message|truncatechars:30 }}</a>
+            {% empty %}
+            <p>No notification</p>
+            {% endfor %}
+        </div>
+      </li>
+        <li class="nav-item dropdown">
+          <a class="dropdown-toggle" href="#" id="userDropDown" role="button" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">Profile</a>
+          <div class="dropdown-menu" aria-labelledby="userDropDown">
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePasswordModal">Change Password</a>
+          <a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a>
+            </div>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>
+<!----- Change password Modal  ------->
+{% include 'bot/change_password.html' %}
+
+{% block content %}
+
+{% endblock %}
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="{% static 'bot/js/reconnecting-websocket.js' %}"></script>
+<script src="{% static 'bot/js/scripts.js' %}"></script>
+<script>
+$(document).ready(function(){
+
+<!------- Change Password  ---------->
+          $('#change-password-form').submit(function() {
+
+
+         form = $('#change-password-form')
+                     $.ajax({ // create an AJAX call...
+                         data: form.serialize(),
+                         type: 'post',
+                         url: "{% url 'change_password' %}",
+                         success: function(data) {
+                             if(data['status'] == false){
+
+                             $(".form-error").html(data['message'])
+
+                             }
+                             else{
+                                 alert("password has been changed successfully.")
+                                 location.reload();
+                             }
+                         },
+                         error: function(data){
+                         alert("Something went wrong. Please refresh and try again.")
+                         }
+                     });
+                     return false;
+                 });
+ <!--------------------->
+var key = "{{ secret_key|escapejs }}";
+var emp_id = "{{ user.pk|escapejs }}";
+
+var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+var alertEmployeeSocket = new ReconnectingWebSocket(
+    ws_scheme + window.location.host +
+    '/alert_employee/'  + key +'/'+ emp_id + '/');
+
+
+alertEmployeeSocket.onmessage = function(e) {
+
+var data = JSON.parse(e.data)
+var last_ques = data['last_ques']
+var user_id = data['user_id']
+var note_id = data['note_id']
+
+get_notification("notification_yes")
+var ques = '<a user-pk="'+user_id+ '" class="dropdown-item note-read note-read-read" href="#" data-pk="' + note_id + '">' + last_ques + '</a>'
+$('#div_yes').prepend(ques);
+};
+
+<!---------- On note click ------------>
+$(".remove-notify").click(function(){
+$.ajax({
+    url: '{% url "remove_emp_notification" %}',
+    data: {'user': '{{ user.pk }}'},
+    datType: 'json',
+    success: function(data){
+    }
+
+
+});
+if ($(this).parent().find("span.notify_status").hasClass("notification") ){
+$(this).parent().find("span.notify_status").removeClass("notification")
+$(this).parent().find("span.notify_status").html("")
+}
+
+});
+<!-------- Remove Unread  ----------->
+$(document).on('click', '.note-read', function() {
+<!--$(".note-read").click(function(){-->
+if ($(this).hasClass("note-read-read")){
+$(this).removeClass("note-read-read")
+var pk = $(this).attr("data-pk")
+var user_pk = $(this).attr("user-pk")
+$.ajax({
+    url: "{% url 'change_emp_read_status_note' %}",
+    data: {"pk": pk},
+    dataType: 'json',
+    success: function(data){
+
+    }
+})
+last_quest = $(this).text().trim()
+
+window.location.href = '/chat_customer/{{ secret_key }}/' +user_pk+'/' + last_quest;
+}
+
+});
+<!----------------->
+});
+</script>
+{% block script %}
+
+{% endblock %}
+</html>

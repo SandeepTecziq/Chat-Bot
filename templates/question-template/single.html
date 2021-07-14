@@ -1,0 +1,44 @@
+{% load static %}
+<div class="reply-div" data-child="{{ question_data.child_id }}" data-number="{{ question_data.number }}">
+    <div class="reply-main-text">
+        <p class="mb-0">{{ question_data.question }}</p>
+    </div>
+    {% if question_data.detail.text %}
+    <div class="reply-optional-text">
+        <p class="text-center mt-2"><b>{{ question_data.detail.text }}</b></p>
+    </div>
+    {% endif %}
+    {% if question_data.detail.description %}
+    <div class="reply-description mt-2">
+    {{ question_data.detail.description }}
+    </div>
+    {% endif %}
+
+    {% if question_data.detail.image %}
+    <div class="reply-image">
+    <img src="{{ question_data.detail.image }}" class="img-fluid">
+    </div>
+    {% endif %}
+    {% if question_data.detail.url %}
+    <div class="reply-url" style="word-break:break-all">
+    <a href="{{ question_data.detail.url }}" target="_blank">{{ question_data.detail.url }}</a>
+    </div>
+    {% endif %}
+    {% if question_data.is_option %}
+        <div class="reply-options">
+        {% for key, value in question_data.detail.options.items %}
+            {% if question_data.question == 'Do you want to book appointment?'  and forloop.counter == 1 %}
+            <button class="sent-span btn btn-primary book-appointment" data-number="{{ key }}"
+                    data-pk="{{ question_data.company_pk }}" data-child="{{ value.1 }}">
+                {{ value.0 }}
+            </button>
+            {% else %}
+            <button class="sent-span btn btn-primary select-option" data-number="{{ key }}"
+                    data-title-pk="{{ question_data.title_pk }}" data-child="{{ value.1 }}">
+                {{ value.0 }}
+            </button>
+            {% endif %}
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>

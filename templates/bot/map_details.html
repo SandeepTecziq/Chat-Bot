@@ -1,0 +1,509 @@
+{% for map in maps %}
+{% if map.form_type == 'text-form' %}
+<form class="text-form create-question-form" data-saved="saved" data-update="true" method="post">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+    <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+    </div>
+    <div class="primary-fields">
+        <input type="text" name="number" class="form-number" disabled="disabled" required  value="{{ map.number }}">
+        <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question"
+               required  value="{{ map.text }}">
+        <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+        </select>
+        <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+                data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+        <span class="unsaved-span">(unsaved)</span>
+    </div>
+    <div class="secondary-fields">
+        <input type="url" name="url" class="url-input" placeholder="Add URL (Optional)"  value="{{ map.single_chat_question.url }}">
+        {% if map.single_chat_question.image %}
+        <a href="{{ map.single_chat_question.image.url }}">Current Image</a>
+                Check to remove Image: <input type="checkbox" name="text-form-remove-image">
+                <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Update Image
+        </label>
+        <span class="file-selected"></span>
+        {% else %}
+        <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Choose Image
+        </label>
+        <span class="file-selected"></span>
+        {% endif %}
+    </div>
+        <div class="hidden-input hidden-element">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'card-form' %}
+<form  method="post" class="card-form create-question-form" data-update="true" data-saved="saved">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}"  hidden>
+    <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+    </div>
+    <div class="primary-fields">
+        <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+        <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question"
+               required  value="{{ map.text }}">
+        <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+        </select>
+        <input type="button" class="remove-question button-submit-blank btn" value="Remove" data-pk="{{ map.pk }}"
+        data-target="#deleteQuestionModal"  data-toggle="modal" >
+        <span class="unsaved-span">(unsaved)</span>
+
+    </div>
+    <div class="secondary-fields">
+        <input type="url" name="url" class="url-input" placeholder="Add URL (Optional)"  value="{{ map.single_chat_question.url }}">
+        <input type="text" name="single_text" class="single-text" placeholder="Card Title (Optional)"
+                value="{{ map.single_chat_question.single_text }}">
+        {% if map.single_chat_question.image %}
+        <a href="{{ map.single_chat_question.image.url }}">Current Image</a>
+                Check to remove Image: <input type="checkbox" name="text-form-remove-image">
+                <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Update Image
+        </label>
+        <span class="file-selected"></span>
+        {% else %}
+        <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Choose Image
+        </label>
+        <span class="file-selected"></span>
+        {% endif %}
+        <br>
+
+        <textarea name="description" cols="40" rows="10" class="form-description" placeholder="Card Body" >
+            {{ map.single_chat_question.description }}
+        </textarea>
+    </div>
+        <div class="hidden-input hidden-element">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'text-option-form' %}
+<form  method="post" class="text-option-form create-question-form" data-update="true" data-saved="saved">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+        <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+        </div>
+        <div class="primary-fields">
+            <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+            <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question"
+                    value="{{ map.text }}" required >
+            <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+            </select>
+            <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+                   data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+            <span class="unsaved-span">(unsaved)</span>
+        </div>
+        <div class="secondary-fields">
+            <input type="url" name="url" class="url-input" placeholder="Add URL (Optional)" value="{{ map.single_chat_question.url }}">
+            {% if map.single_chat_question.image %}
+        <a href="{{ map.single_chat_question.image.url }}">Current Image</a>
+                Check to remove Image: <input type="checkbox" name="text-form-remove-image">
+                <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Update Image
+        </label>
+        <span class="file-selected"></span>
+        {% else %}
+        <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Choose Image
+        </label>
+        <span class="file-selected"></span>
+        {% endif %}
+        </div>
+        <div class="tertiary-fields">
+            {% for key, value in map.single_chat_question.options.items %}
+            <div class="item">
+                <input class="form-number" name="option-number-name" value="{{ key }}">
+                <input name="option-text-name" class="option-text" required placeholder="Option" value="{{ value.0 }}">
+                <input class="remove-question-option button-submit-blank btn" value="Remove" type="button">
+                <input name="option-text" class="option-child-id parent-{{ key }}" hidden value="{{ value.1 }}">
+            </div>
+            {% endfor %}
+
+
+            <div class="add-it">
+                <button class="add-option button-submit-blank btn">Add option</button>
+            </div>
+        </div>
+        <div class="hidden-input hidden-element">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'card-option-form' %}
+<form  method="post" class="card-option-form create-question-form" data-update="true" data-saved="saved">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+        <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+        </div>
+        <div class="primary-fields">
+            <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+            <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question" required  value="{{ map.text }}">
+            <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+            </select>
+            <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+                   data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+            <span class="unsaved-span">(unsaved)</span>
+        </div>
+        <div class="secondary-fields">
+            <input type="url" name="url" class="url-input" placeholder="Add URL (Optional)"  value="{{ map.single_chat_question.url }}">
+            <input type="text" name="single_text" class="single-text" placeholder="Card Title (Optional)"
+                   value="{{ map.single_chat_question.single_text }}">
+            {% if map.single_chat_question.image %}
+        <a href="{{ map.single_chat_question.image.url }}">Current Image</a>
+                Check to remove Image: <input type="checkbox" name="text-form-remove-image">
+                <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Update Image
+        </label>
+        <span class="file-selected"></span>
+        {% else %}
+        <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Choose Image
+        </label>
+        <span class="file-selected"></span>
+        {% endif %}
+            <br>
+
+            <textarea name="description" cols="40" rows="10" class="form-description" placeholder="Card Body" >
+                {{ map.single_chat_question.description }}
+</textarea>
+        </div>
+        <div class="tertiary-fields">
+            {% for key, value in map.single_chat_question.options.items %}
+            <div class="item">
+                <input class="form-number" name="option-number-name" value="{{ key }}">
+                <input name="option-text-name" class="option-text" required placeholder="Option" value="{{ value.0 }}">
+                <input class="remove-question-option button-submit-blank btn" value="Remove" type="button">
+                <input name="option-text" class="option-child-id parent-{{ key }}" hidden value="{{ value.1 }}">
+            </div>
+            {% endfor %}
+
+            <div class="add-it">
+                <button class="add-option button-submit-blank btn">Add option</button>
+            </div>
+        </div>
+        <div class="hidden-input hidden-element">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'image-carousel-form' %}
+<form  method="post" class="image-carousel-form create-question-form" data-update="true" data-saved="saved" enctype="multipart/form-data">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+    <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+    </div>
+    <div class="primary-fields">
+        <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+        <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question" required
+         value="{{ map.text }}">
+        <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+        </select>
+        <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+               data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+        <span class="unsaved-span">(unsaved)</span>
+    </div>
+    <div class="tertiary-fields">
+        {% for option in map.carousel_chat_question.all %}
+        <div class="item">
+            <input type="text" class="option-qry-pk" name="option-qry-pk" value="{{ option.pk }}" hidden>
+            {% if option.image %}
+        <a href="{{ option.image.url }}" class="uploaded-image-link">Current Image</a>
+            <input type="text" name="image-count" hidden value="1" class="image-count-input"> <!----- to ignore number og images ----->
+                <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Update Image
+        </label>
+        <span class="file-selected"></span>
+        {% endif %}
+            <input type="text" name="text" class="form-text-carousel" placeholder="Text" value="{{ option.text }}">
+            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
+            <div class="not-required-fields hidden-element">
+                <input type="text" name="option" class="form-option" placeholder="Option" >
+                <textarea name="description" cols="40" rows="10" class="form-description" >
+</textarea>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="add-it">
+            <button class="add-option button-submit-blank btn">Add Frame</button>
+        </div>
+    </div>
+    <div class="hidden-input hidden-element">
+        <input name="total-item-number" class="total-item-number" hidden value="{{ map.carousel_chat_question.count }}">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'card-carousel-form' %}
+<form  method="post" class="card-carousel-form create-question-form" data-update="true" data-saved="saved" enctype="multipart/form-data">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+    <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+    </div>
+    <div class="primary-fields">
+        <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+        <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question" required
+            value="{{ map.text }}">
+        <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+        </select>
+        <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+               data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+        <span class="unsaved-span">(unsaved)</span>
+    </div>
+    <div class="tertiary-fields">
+        {% for option in map.carousel_chat_question.all %}
+        <div class="item">
+            <input type="text" class="option-qry-pk" name="option-qry-pk" value="{{ option.pk }}" hidden>
+            <input type="text" name="text" class="form-text-carousel" placeholder="Text" value="{{ option.text }}">
+
+            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
+            <input name="option-text" class="option-child-id" hidden value="{{ option.child_pk }}">
+            <br>
+            <textarea name="description" cols="40" rows="10" class="form-description" >{{ option.description }}
+</textarea>
+
+            <div class="not-required-fields hidden-element">
+                <input type="text" name="option" class="form-option" placeholder="Option" >
+                <input type="file" name="image" accept="image/*" >
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="add-it">
+            <button class="add-option button-submit-blank btn">Add Frame</button>
+        </div>
+    </div>
+
+        <div class="hidden-input hidden-element">
+            <input name="total-item-number" class="total-item-number" hidden value="{{ map.carousel_chat_question.count }}">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'image-carousel-option-form' %}
+<form  method="post" class="image-carousel-option-form create-question-form" data-update="true" data-saved="saved" enctype="multipart/form-data">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+    <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+    </div>
+    <div class="primary-fields">
+        <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+        <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question" required
+         value="{{ map.text }}">
+        <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+        </select>
+        <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+               data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+        <span class="unsaved-span">(unsaved)</span>
+    </div>
+    <div class="tertiary-fields">
+        {% for option in map.carousel_chat_question.all %}
+        <div class="item">
+            <input type="text" class="option-qry-pk" name="option-qry-pk" value="{{ option.pk }}" hidden>
+            <input type="text" name="number_option" class="form-number" placeholder="Add URL (Optional)"
+                   value="{{ option.number }}" disabled="disabled" >
+            <input type="text" name="option" class="form-option" placeholder="Option" value="{{ option.option }}" >
+            {% if option.image %}
+        <a href="{{ option.image.url }}" class="uploaded-image-link">Current Image</a>
+            <input type="text" name="image-count" hidden value="1" class="image-count-input"> <!----- to ignore number og images ----->
+                <label class="custom-file-upload">
+        <input type="file" name="image" accept="image/*" >
+            Update Image
+        </label>
+        <span class="file-selected"></span>
+        {% endif %}
+            <input type="text" name="text" class="form-text-carousel" placeholder="Text" value="{{ option.text }}" >
+            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
+            <input type="text" name="child_id" class="form-option-child-id parent-{{ option.number }}" hidden="hidden" value="{{ option.child_id }}">
+
+            <div class="not-required-fields hidden-element">
+                <textarea name="description" cols="40" rows="10" class="form-description" >
+</textarea>
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <div class="add-it">
+            <button class="add-option button-submit-blank btn">Add Frame</button>
+        </div>
+    </div>
+    <div class="hidden-input hidden-element">
+        <input name="total-item-number" class="total-item-number" hidden value="{{ map.carousel_chat_question.count }}">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+
+{% elif map.form_type == 'card-carousel-option-form' %}
+<form  method="post" class="card-carousel-option-form create-question-form" data-update="true" data-saved="saved" enctype="multipart/form-data">
+        {% csrf_token %}
+    <input type="text" class="current-map-pk" name="current-map-pk" value="{{ map.pk }}" hidden>
+    <div class="error-fields">
+        <p class="error-list error-question-text"></p>
+    </div>
+    <div class="primary-fields">
+        <input type="text" name="number" class="form-number" disabled="disabled" required value="{{ map.number }}">
+        <input type="text" name="question" class="form-text-single" placeholder="Enter Your Question" required
+         value="{{ map.text }}">
+        <select class="parent-select" data-parent="{{ map.parent }}" name="parent">
+
+        </select>
+        <input type="button" class="remove-question button-submit-blank btn" value="Remove"
+               data-target="#deleteQuestionModal"  data-toggle="modal" data-pk="{{ map.pk }}">
+        <span class="unsaved-span">(unsaved)</span>
+    </div>
+    <div class="tertiary-fields">
+        {% for option in map.carousel_chat_question.all %}
+        <div class="item">
+            <input type="text" class="option-qry-pk" name="option-qry-pk" value="{{ option.pk }}" hidden>
+            <input type="text" name="number_option" class="form-number" placeholder="Add URL (Optional)"
+                   value="{{ option.number }}" disabled="disabled" >
+            <input type="text" name="option" class="form-option" placeholder="Option" value="{{ option.option }}" >
+            <input type="text" name="text" class="form-text-carousel" placeholder="Text" value="{{ option.text }}">
+            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
+            <input type="text" name="child_id" class="form-option-child-id parent-{{ option.number }}" hidden="hidden" value="{{ option.child_id }}">
+            <br>
+
+            <textarea name="description" cols="40" rows="10" class="form-description" >{{ option.description }}
+</textarea>
+            <div class="not-required-fields hidden-element">
+                <input type="file" name="image" accept="image/*" >
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <div class="add-it">
+            <button class="add-option button-submit-blank btn">Add Frame</button>
+        </div>
+    </div>
+    <div class="hidden-input hidden-element">
+        <input name="total-item-number" class="total-item-number" hidden value="{{ map.carousel_chat_question.count }}">
+            is_option: <input type="text" name="is_option" class="form-is-option" required  value="{{ map.is_option }}">
+            Title: <input type="text" name="chat_title" class="form-chat-title" required
+                          value="{{ map.chat_title.pk }}">
+            <span class="child-p">
+                <input type="text" name="child_id" class="form-child-id parent-{{ map.number }}"  value="{{ map.child_id }}">
+            </span>
+                <span class="u-id-p">
+                    <input type="text" name="u_id" class="form-u-id"  value="{{ map.u_id }}">
+                </span>
+            Type: <input type="text" name="carousel_type" class="form-carousel-type" required
+                         value="{{ map.carousel_type }}" >
+            Form_Type: <input type="text" name="form_type" hidden="hidden" class="form_type" required
+                              value="{{ map.form_type }}" >
+        </div>
+</form>
+{% endif %}
+{% endfor %}

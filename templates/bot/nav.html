@@ -1,0 +1,179 @@
+{% load static %}
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <div class="nav-company-logo">
+      <img src="{% static 'icons/Botlogo.png' %}" class="top-nav-icon" style="width: 50px;">
+      <span class="text-orange">{{ company_qry.name|upper }}</span>
+    </div>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link remove-notify" href="#" id="note_yes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="{% static 'icons/bell.png' %}" class="top-nav-icon">
+        </a>
+            {% if note_number.1 == 0 %}
+            <span class="notify_status"  id="notification_yes"></span>
+            {% else %}
+            <span class="notification notify_status" id="notification_yes">{{ note_number.1 }}</span>
+            {% endif %}
+        <div class="dropdown-menu notification-menu" aria-labelledby="navbarDropdownMenuLink" id="div_yes">
+            {% for i in notification %}
+                {% if i.note_type == 'note_yes' %}
+                    {% if i.read_status %}
+                    <button type="button" data-toggle="modal" data-target="#EmployeeModal" class="dropdown-item note-read" data-pk="{{ i.pk }}" data-whatever="{{ i.customer.u_field }}" data-message="{{ i.message }}">
+                        {{ i.message|truncatechars:30 }} - <b>{{ i.company.name }}</b>
+                    </button>
+                    {% else %}
+                    <button type="button" data-toggle="modal" data-target="#EmployeeModal" class="dropdown-item note-read note-read-read" data-pk="{{ i.pk }}" data-whatever="{{ i.customer.u_field }}" data-message="{{ i.message }}">
+                        {{ i.message|truncatechars:30 }} - <b>{{ i.company.name }}</b>
+                    </button>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link remove-notify" href="#" id="note_no" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="{% static 'icons/notification.png' %}" class="top-nav-icon">
+        </a>
+            {% if note_number.0 == 0 %}
+            <span class="notify_status"  id="notification_no"></span>
+            {% else %}
+            <span class="notification notify_status" id="notification_no">{{ note_number.0 }}</span>
+            {% endif %}
+
+        <div class="dropdown-menu notification-menu" aria-labelledby="navbarDropdownMenuLink" id="div_no">
+            {% for i in notification %}
+                {% if i.note_type == 'note_no' %}
+                    <button {% if i.read_status %} class="dropdown-item note-read"{% else %} class="dropdown-item note-read note-read-read" {% endif %} data-pk="{{ i.pk }}">
+                        {{ i.message|truncatechars:30 }} - <b>{{ i.company.name }}</b>
+                    </button>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+          <a class="dropdown-toggle nav-link" href="#" id="userDropDown" role="button" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">
+            <!--{% if company_qry.image %}-->
+            <!--<img src="{{ company_qry.image.url }}" class="top-nav-user-img">-->
+            <!--{% else %}-->
+            <img src="{% static 'icons/robot_active.png' %}" class="top-nav-user-img">
+            <!--{% endif %}-->
+
+          </a>
+          <div class="dropdown-menu" aria-labelledby="userDropDown">
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePasswordModal">Change Password</a>
+          <a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a>
+            </div>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <div class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" role="button" href="#"><i class="fas fa-bars"></i></a>
+          </li>
+
+
+          <li class="nav-item">
+            <a href="{% url 'bot_list' %}" class="nav-link">
+              {% if bot_list == 'active' %}
+              <img src="{% static 'icons/chat_map_active.png' %}" class="aside-link-icons">
+              <p class="active">Available Bots</p>
+              {% else %}
+              <img src="{% static 'icons/chat_map.png' %}" class="aside-link-icons">
+              <p>Available Bots</p>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'question_list' %}" class="nav-link">
+              {% if question_list == 'active' %}
+              <img src="{% static 'icons/listing_active.png' %}" class="aside-link-icons">
+              <p class="active">Question Collection</p>
+              {% else %}
+              <img src="{% static 'icons/listing.png' %}" class="aside-link-icons">
+              <p>Question Collection</p>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'create_service_provider' %}" class="nav-link">
+              {% if create_service_provider == 'active' %}
+              <img src="{% static 'icons/booking_active.png' %}" class="aside-link-icons">
+              <p class="active">Booking</p>
+              {% else %}
+              <img src="{% static 'icons/booking.png' %}" class="aside-link-icons">
+              <p>Booking</p>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'create_user' %}" class="nav-link">
+              {% if create_user == 'active' %}
+              <img src="{% static 'icons/user_active.png' %}" class="aside-link-icons">
+              <p class="active">Users</p>
+              {% else %}
+              <img src="{% static 'icons/user.png' %}" class="aside-link-icons">
+              <p>Users</p>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'chat_history' %}" class="nav-link">
+              {% if chat_history == 'active' %}
+              <img src="{% static 'icons/chat_history_active.png' %}" class="aside-link-icons">
+              <p class="active">Chat History</p>
+              {% else %}
+              <img src="{% static 'icons/chat_history.png' %}" class="aside-link-icons">
+              <p>Chat History</p>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'facebook_detail' %}" class="nav-link">
+              {% if facebook_detail == 'active' %}
+              <img src="{% static 'icons/integration_active.png' %}" class="aside-link-icons">
+              <p class="active">Integration</p>
+              {% else %}
+              <img src="{% static 'icons/integration.png' %}" class="aside-link-icons">
+              <p>Integration</p>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'subscription_list' %}" class="nav-link">
+              {% if subscription_list == 'active' %}
+              <img src="{% static 'icons/subscription_active.png' %}" class="aside-link-icons">
+              <p class="active">Pricing</p>
+              {% else %}
+              <img src="{% static 'icons/subscription.png' %}" class="aside-link-icons">
+              <p>Pricing</p>
+              {% endif %}
+            </a>
+          </li>
+            <li class="nav-item">
+            <a href="{% url 'faq_page' %}" class="nav-link">
+              {% if faq_page == 'active' %}
+              <img src="{% static 'icons/faq_active.png' %}" class="aside-link-icons">
+              <p class="active">FAQs</p>
+              {% else %}
+              <img src="{% static 'icons/faq.png' %}" class="aside-link-icons">
+              <p>FAQs</p>
+              {% endif %}
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>

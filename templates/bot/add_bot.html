@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Add Bot {% endblock %}
+
+    {% block style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <style>
+    .input-container{
+     margin-bottom: 15px;
+     }
+    .row{
+    margin:20px 0;
+    }
+ .label-style, .label-style:hover{
+font-size: 12px;
+color: #949494;
+margin-bottom:3px;
+display: inline-block;
+font-weight: normal !important;
+}
+ .errorlist, .error{
+ color: red;
+ }
+ input, select{
+ width: 100%;
+ height: 35px;
+ }
+ .button-submit-blank{
+ min-width: 100px;
+ margin-top: 15px;
+ }
+ .choose-language.bootstrap-select{
+ width: 100% !important;
+ max-width: 400px;
+ }
+ .choose-language.bootstrap-select > .dropdown-toggle{
+     background-color: #fff;
+    border-color: #fff;
+    border: 1px solid #949494;
+    border-radius: 0;
+ }
+ .border-right{
+ height: auto;
+ ]
+ .carousel-control-next span.fa, .carousel-control-previous span.fa{
+ font-weight: 600;
+ }
+
+    </style>
+    {% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h2 class="float-left">Add Bot</h2>
+    <a href="{% url 'bot_list' %}" class="btn button-submit float-right">Back</a>
+</div>
+<div class="clearfix"></div>
+<form class="form-create" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-4 border-right">
+            <div class="input-container">
+            <p class="label-style">Name</p>
+                {{ form.name }}
+                {{ form.name.errors }}
+            </div>
+            <div class="input-container">
+            <p class="label-style">Bot Name</p>
+                {{ form.bot_name }}
+                {{ form.bot_name.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Color (Hex code only)</p>
+                {{ form.color }}
+                {{ form.color.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Image</p>
+                {{ form.image }}
+                {{ form.image.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Language</p>
+                {{ form.language }}
+                {{ form.language.errors }}
+            </div>
+        </div>
+        <div class="col-sm-4 border-right">
+            <div class="input-container">
+                <p class="label-style">Bot title</p>
+                {{ form.bot_title }}
+                {{ form.bot_title.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Question for available options</p>
+                {{ form.intro_ques }}
+                {{ form.intro_ques.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Question after click on bot option</p>
+                {{ form.bot_ques }}
+                {{ form.bot_ques.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Introduction text on login page</p>
+                {{ form.intro_text_login }}
+                {{ form.intro_text_login.errors }}
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="input-container">
+                <p class="label-style">Text Color</p>
+                {{ form.head_text_color }}
+                {{ form.head_text_color.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Service provider Title</p>
+                {{ form.service_provider }}
+                {{ form.service_provider.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Instruction line for user to select service provider</p>
+                {{ form.provider_line }}
+                {{ form.provider_line.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Instruction line for user to select slot</p>
+                {{ form.slot_line }}
+                {{ form.slot_line.errors }}
+            </div>
+        </div>
+    </div>
+    <button class="btn button-submit-blank" type="submit">Add</button>
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
+{% endblock %}
+

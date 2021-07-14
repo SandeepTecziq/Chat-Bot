@@ -1,0 +1,210 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Templates {% endblock %}
+{% block content %}
+        <!-- Integration Heading -->
+
+        <section class="bg-contrast mt-8">
+                    <div class="container py-4">
+                        <div class="row py-4">
+                            <div class="col-lg-12 text-center">
+                                <h1 class="font-md-lg bold text-center">Ready to use templates to get you<br> started at a blink of an eye</h1>
+                                <p class="lead text-center">Select from various readymade task specific ChatBots with predefined Chatmaps Button – Let’s Get Started</p>
+                                <a class="btn btn-rounded btn-primary px-3 mt-5" href="{% url 'user_login' %}?action=signup "> <span class="d-lg-inline">Let’s Get Started</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+        <div class="container-fluid bg-yellowish pt-5 pb-6">
+                <section class="section block">
+                    <div class="container-fluid py-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="section-heading">
+                                    <h2 class="mb-4">Why use a template?</h2>
+                                    <p>Templates help you get started fast. Based on our prior knowledge of industry and specific tasks we have created workflows and these workflows are combined to form a template. These are starting points for you and are totally customizable. </p>
+                                    <!-- <p>&#10004; free to use &nbsp;&nbsp; &#10004; wide choice &nbsp;&nbsp; &#10004; easy setup</p>
+                                    <a href="#" class="text-primary bold">Learn more &nbsp;&nbsp; →</a> -->
+                                </div>
+                            </div>
+                            <div class="col-md-5 ml-md-auto">
+                                <img src="{% static 'teczbot/img/chatbot2.png' %}" class="img-responsive mx-auto">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        <section class="bg-contrast mt-3">
+                    <div class="container py-4">
+                        <div class="section-heading mb-3">
+                            <h2 class="mb-4">Explore Templates</h2>
+                        </div>
+                        <div class="row explore">
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/doctor.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Doctor Appointment Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/drink.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Coffee Shops Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/dinner-table.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Restaurant Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/handyman.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Handyman Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/home.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Real Estate Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/travel.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Travel & Tourism Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/customer.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Customer Survey Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/sale.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Discount Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/student.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Education Institution Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 p-2 mt-3">
+                                <div class="border-left p-2">
+                                    <img src="{% static 'teczbot/img/icons/sell.png' %}" height="50" width="50">
+                                    <h5 class="mb-0 mt-0 font-15 f-w-500">Sales & Lead Bot</h5>
+                                    <p class="font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's,</p>
+                                    <a class="btn btn-rounded btn-outline mr-3 px-3" href="#"> <span class="d-md-none d-lg-inline">Test Bot</span> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section block bg-contrast mt-5 mb-5">
+                    <div class="container py-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                    <div class="section-heading">
+                                    <h2>How to customize and use a template?</h2>
+                                    <p>A template consists of multiple workflows called Chatmapsthat decide the flow of conversation. A single template can have multiple chatmaps thus giving you the option to lead the conversation with your users.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-7 p-0">
+                                <img src="{% static 'teczbot/img/Launch.png' %}" class="mx-auto w-100 img-responsive">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- <section class="bg-contrast"> -->
+                    <!-- <div class="container py-4"> -->
+                        <!-- <div class="row py-4"> -->
+                            <!-- <div class="col-lg-7"> -->
+                                <!-- <div class="section-heading mb-3"> -->
+                                    <!-- <h2>Our most popular ChatBots</h2> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
+                        <!-- <div class="row gap-y"> -->
+                            <!-- <div class="col-md-12 col-lg-6"> -->
+                                <!-- <div class="card"> -->
+                                    <!-- <div class="card-body d-flex flex-column p-5"> -->
+                                        <!-- <div class="row"> -->
+                                            <!-- <div class="col-md-6"> -->
+                                                <!-- <img src="img/default.png" class="img-responsive mx-auto"> -->
+                                            <!-- </div> -->
+                                            <!-- <div class="col-md-6"> -->
+                                                <!-- <h6 class="bold font-l">Lead Genereation Template</h6> -->
+                                                <!-- <p>Support customers around the clock and automate lead generation.</p> -->
+                                                <!-- <a href="#" class="text-dark bold">Read more</a> -->
+                                            <!-- </div> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                            <!-- <div class="col-md-6 col-lg-3"> -->
+                                <!-- <div class="card"> -->
+                                    <!-- <div class="card-body d-flex flex-column p-5"> -->
+                                        <!-- <div class="bg-warning p-3 rounded-circle center-flex mr-3 mb-3" style="width: 60px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones stroke-contrast"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg></div> -->
+                                        <!-- <h6 class="bold font-l">Customer Service</h6> -->
+                                        <!-- <!-- <p>Support customers around the clock and automate lead generation.</p> --> -->
+                                        <!-- <p>Automatic answering repetitive...</p> -->
+                                        <!-- <a href="#" class="text-dark bold">Read more</a> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                            <!-- <div class="col-md-6 col-lg-3"> -->
+                                <!-- <div class="card"> -->
+                                    <!-- <div class="card-body d-flex flex-column p-5"> -->
+                                        <!-- <div class="bg-warning p-3 rounded-circle center-flex mr-3 mb-3" style="width: 60px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones stroke-contrast"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg></div> -->
+                                        <!-- <h6 class="bold font-l">Sales Template</h6> -->
+                                        <!-- <p>Support customers and promote...</p> -->
+                                        <!-- <a href="#" class="text-dark bold">Read more</a> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    <!-- </div> -->
+                <!-- </section> -->
+
+                <section class="section block bg-contrast mt-5 mb-5">
+                    <div class="container py-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h1 class="mb-0">Let’s Get you Started</h1>
+                                <p class="lead mt-0">Signup and get started with your first free ChatBot.</p>
+                            </div>
+                            <div class="col-md-5 ml-md-auto">
+                                <a href="{% url 'user_login' %}" class="btn btn-rounded btn-info w-100" type="submit">Signup for free</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+        
+{% endblock %}

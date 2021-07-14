@@ -1,0 +1,99 @@
+{% extends 'base_superuser.html' %}
+
+{% block title %}Create Subscription Plan{% endblock %}
+{% block content %}
+<div class="row page-content">
+    <div class="col-sm-4">
+
+        <div class="block-heading">
+            <h4>Create Subscription Plan</h4>
+        </div>
+        <div class="block-content border-right">
+            <form method="post" id="RegistrationForm">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+          <div class="form-group">
+            {{ form.name }}
+            {{ form.name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.price }}
+            {{ form.price.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.currency }}
+            {{ form.currency.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.bot_allowed }}
+            {{ form.bot_allowed.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.is_default }}
+            {{ form.is_default.errors }}
+          </div>
+                <div class="form-button">
+        <button name='signup_submit' type="submit" class="btn button-submit ml-auto mr-auto">Submit</button>
+                </div>
+        </form>
+        </div>
+
+    </div>
+    <div class="col-sm-8" style="padding:0">
+
+        <div class="block-heading">
+            <h4 class="">Subscription Plans</h4>
+        </div>
+        <div class="block-content" style="padding:0">
+            <table class="table" style="padding:20px;" id="subscription-id">
+
+  <thead>
+    <tr>
+      <th scope="col">S.No.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Currency</th>
+      <th scope="col">Bot Allowed</th>
+      <th scope="col">Is Default</th>
+      <th scope="col"></th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for plan in plans %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ plan.name }}</td>
+      <td>{{ plan.price }}</td>
+      <td>{{ plan.currency }}</td>
+      <td class="bot-td">{{ plan.bot_allowed }}</td>
+        <td>{{ plan.is_default }}</td>
+        <td>
+            <a class="btn button-submit-blank" href="{% url 'activate_subscription_plan' pk=plan.pk %}">
+                {% if plan.is_active %}
+                Deactivate
+                {% else %}
+                Activate
+                {% endif %}
+            </a>
+            <a class="btn button-submit-blank" href="{% url 'delete_subscription_plan' pk=plan.pk %}">Delete</a>
+        </td>
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+</table>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+$("#subscription-id").DataTable();
+})
+</script>
+{% endblock %}

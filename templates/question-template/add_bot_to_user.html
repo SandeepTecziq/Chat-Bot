@@ -1,0 +1,19 @@
+<form method="post" id="RegistrationForm">
+            {% csrf_token %}
+            <input name="user_pk" value="{{ user.pk }}" hidden>
+            {{ form.non_field_errors }}
+                <div class="form-group">
+                <select class="select-bot selectpicker" multiple name="add_bot_to_user">
+                        {% for i in company_bots %}
+                            {% if i in user.bots.all %}
+                    <option value="{{ i.pk }}" selected>{{ i.name }}</option>
+                            {% else %}
+                        <option value="{{ i.pk }}">{{ i.name }}</option>
+                    {% endif %}
+                        {% endfor %}
+                 </select>
+          </div>
+                <div class="form-button">
+        <button name='add_bot_submit' type="submit" class="btn button-submit ml-auto mr-auto">Submit</button>
+                </div>
+        </form>

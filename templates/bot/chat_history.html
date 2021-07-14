@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %} Chat History {% endblock %}
+
+    {% block style %}
+    <style>
+
+    </style>
+    {% endblock %}
+
+
+{% block content %}
+<div class="page-heading">
+    <h2>Chat History</h2>
+</div>
+<div class="table-div" style="padding-top:0">
+    <div class="table-search-box ml-auto">
+        <form class="search-user-form">
+            <span class="fa fa-filter"></span>
+            <select id="search-field">
+                <option value="1">By Date (month date year)</option>
+                <option value="2">By User</option>
+                <option value="3">By Talker</option>
+                <option value="4">If trained</option>
+            </select>
+      <input  id="search-user" type="search" aria-label="Search">
+            <span class="fa fa-search"></span>
+    </form>
+                  </div>
+<table class="table" style="padding:20px;" id="question-list-id">
+
+  <thead>
+    <tr>
+      <th scope="col">Sn</th>
+      <th scope="col">Date</th>
+      <th scope="col">User</th>
+      <th scope="col">Talked With</th>
+      <th scope="col">If Trained</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for history in histories %}
+  {% if history.q_count > 0 %}
+    <tr>
+      <th scope="row">{{ history.pk }}</th>
+      <td>{{ history.date }}</td>
+      <td>{{ history.customer.email }} ({{ history.customer.name }})</td>
+        {% if history.talker.role == 'admin' %}
+      <td>{{ history.company.bot_name }} (Bot)</td>
+        {% else %}
+      <td>{{ history.talker.username }}</td>
+        {% endif %}
+        <td>{{ history.trained_status }}</td>
+      <td>
+         <a href="{% url 'get_conversation' secret_key=history.company.secret_key id=history.pk %}" class="btn button-submit-blank edit-button">
+             View Chat
+         </a>
+      </td>
+    </tr>
+  {% endif %}
+  {% endfor %}
+
+  </tbody>
+</table>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready( function () {
+    var table = $('#question-list-id').DataTable({
+    "order": [[ 0, "desc" ]]
+    });
+
+    $('#search-user').on('change keyup', function(){
+    var search = $("#search-field").val()
+    table
+    .column(search)
+    .search(this.value)
+    .draw();
+
+  });
+
+});
+</script>
+{% endblock %}

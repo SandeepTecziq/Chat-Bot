@@ -1,0 +1,428 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+{% block content %}
+        <!-- Integration Heading -->
+        <header class="header integrations-header section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 mx-auto text-center">
+                        <h1 class="bold font-md-lg">A CHATBOT providing ease of integration and ease of use for your online business </h1>
+                        <p class="lead text-muted">Create your own ChatMaps to navigate and guide your customers through an intelligent Chatbot and give them a 24x7 seamless customer service</p>
+                        <nav class="nav mt-5" style="display: inline-flex;">
+                            <a href="{% url 'user_login' %}?action=signup" class="nav-link mr-3 btn btn-rounded btn-primary">Start now </a>
+                            <a href="{% url 'pricing' %}" class="nav-link btn btn btn-rounded btn-outline-warning"><i class="fas fa-tag mr-3"></i> Plans &amp; pricing</a></nav>
+                    </div>
+                </div>
+            </div>
+            <div class="bubbles-wrap">
+                <div class="bubbles-container"></div>
+            </div>
+        </header>
+		
+		
+        <!-- Sliderertical -->
+
+		
+		
+		<!-- ./Every thing you need - Tabs -->
+        <section class="section">
+            <div class="container">
+                <div class="section-heading text-center">
+                    <h2 class="bold">Everything you need in a CHATBOT Platform</h2>
+                </div>
+                <nav class="slide nav nav-tabs nav-outlined nav-rounded justify-content-around justify-content-md-center mb-5"><a class="nav-item nav-link active" data-toggle="tab" href="#dashboard-tab">Templates</a> <a class="nav-item nav-link" data-toggle="tab" href="#tasks-tab">Multilingual</a> <a class="nav-item nav-link" data-toggle="tab" href="#calendar-tab">Coverage</a> <a class="nav-item nav-link" data-toggle="tab" href="#inbox-tab">Integration</a></nav>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="dashboard-tab">
+                        <div class="row gap-y align-items-center">
+                            <div class="col-md-6 mr-md-auto">
+                                <div class="browser shadow" data-aos="fade-right"><img src="{% static 'teczbot/img/screens/dash/4.png' %}" class="img-responsive" alt=""></div>
+                            </div>
+                            <div class="col-md-5">
+                                <p class="rounded-pill py-2 px-4 bold badge badge-info">Awesome feature</p>
+                                <h2 class="display-4 light">Templates</h2>
+                                <p>When buying Dashcore you will get right in your hand a powerful tool to boost your design. You will get not just a template but a complete ready-to-use HTML code snippets to start right away with your projectReadymade templates to help you get started with your Bot journey in shortest time possible. Customize the templates to match your specific business need and give your customers a personal experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tasks-tab">
+                        <div class="row gap-y align-items-center">
+                            <div class="col-md-6 order-md-2 ml-md-auto">
+                                <div class="browser shadow" data-aos="fade-left"><img src="{% static 'teczbot/img/screens/dash/3.png' %}" alt="" class="img-responsive"></div>
+                            </div>
+                            <div class="col-md-5 mr-md-auto">
+                                <h2 class="display-4 light">Multilingual</h2>
+                                <p class="lead">Option to talk to your customers in your native language and the customers can choose to reply in the language of their choice.</p>
+                                <hr class="mt-5">
+                                <p class="small text-secondary">Go global with a local touch so as not to miss any potential customer. With multilingual support it is much easier for you to get the conversation started and turn your potential customers to customers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="calendar-tab">
+                        <div class="row gap-y align-items-center">
+                            <div class="col-md-6 mr-md-auto">
+                                <div class="browser shadow-box" data-aos="fade-right"><img src="{% static 'teczbot/img/screens/dash/2.png' %}" alt="" class="img-responsive"></div><img src="{% static 'teczbot/img/screens/dash/2.1.png' %}" alt="" class="absolute img-responsive shadow rounded" style="right: 0; top: 0">
+                            </div>
+                            <div class="col-md-5">
+                                <h2 class="display-4 light">Coverage</h2>
+                                <p class="lead text-secondary">Automate all conversations aspects of your business</p>
+                                <p>Choose between single or multiple Bots to cover all aspects of your business. Whatever be your business the flexibility of the Bot lets you create Bot for each and every occasion. Customer support, sales, marketing, promotion, booking, human resource and lot more areas can be covered</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="inbox-tab">
+                        <div class="row gap-y align-items-center">
+                            <div class="col-md-6 order-md-2 ml-md-auto">
+                                <div class="browser shadow" data-aos="fade-left"><img src="{% static 'teczbot/img/screens/dash/1.png' %}" alt="" class="img-responsive"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <p class="rounded-pill py-2 px-4 bold badge badge-info">Multi Platform Presence</p>
+                                <h2 class="display-4 light">Integration</h2>
+                                <p class="lead">With multiple integration option available you are always there for your existing and potential customers whatever platform they are reaching to you. Readily and easily integrate the Bot with your existing website, facebook, mobile app and lot more</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ./Single testimonial - Left -->
+        <section class="singl-testimonial shadow">
+            <div class="container-fluid py-0">
+                <div class="row align-items-center gradient gradient-blue-navy text-contrast">
+                    <div class="col-md-3 mx-auto py-4 py-md-0">
+                        <p class="rounded-pill py-2 px-4 text-uppercase mb-0 badge badge-contrast">TECZBOT IS GREAT FOR</p>
+                        <p class="font-md bold mt-1 text-contrast">Any business looking for 24x7 availability, promote services and automate process</p>
+                        <hr class="my-4">
+                        <div class="small text-contrast"><span class="bold d-block">Vlees Shop Team,</span> Doing great since 2010</div>
+                    </div>
+                    <div class="col-12 col-md-7 image-background cover" style="background-image: url({% static 'teczbot/img/testimonials/1.jpg' %});"></div>
+                </div>
+            </div>
+        </section>
+        <!-- Extend Core -->
+        <section class="section extending-core border-top bg-light edge bottom-right">
+            <div class="shapes-container">
+                <div class="shape shape-circle">
+                    <div></div>
+                </div>
+            </div>
+            <div class="container pb-9">
+                <div class="row gap-y align-items-center">
+                    <div class="col-lg-6">
+                        <div class="section-heading">
+                            <p class="text-primary bold small text-uppercase">enterprise integration</p>
+                            <h2>Extend TeczBot</h2>
+                            <p>We understand that it’s not only your website that need the power of an intelligent BOT but other channels like your mobile application, your social media accounts and other channels. With TeczBot you get the freedom to integrate with any channel you want and we even have web api’s for developers to use them in any way they want to extract the benefits of Chatbot.</p>
+                        </div>
+                        <!--<a href="#" class="btn btn-rounded btn-outline bw-2 mr-3">Know More</a>-->
+                        <a href="{% url 'user_login' %}?action=signup" class="btn btn-rounded btn-solid bw-2 bold text-contrast">Register Account</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="icons-wrapper position-relative">
+                            <div class="floating icon icon-xl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 100%; top: 30%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/blossom.svg' %}" class="img-responsive" alt=""></div>
+                            <div class="floating icon icon-xxl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 60%; top: -10%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/dockbit.svg' %}" class="img-responsive" alt=""></div>
+                            <div class="floating icon icon-xxl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 25%; top: 0%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/zapier.svg' %}" class="img-responsive" alt=""></div>
+                            <div class="floating icon icon-2xl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 0%; top: 50%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/bitnami.svg' %}" class="img-responsive" alt=""></div>
+                            <div class="floating icon icon-2xxl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 23%; top: 70%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/slack.svg' %}" class="img-responsive" alt=""></div>
+                            <div class="floating icon icon-xxl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 65%; top: 44%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/monero.svg' %}" class="img-responsive" alt=""></div>
+                            <div class="floating icon icon-xl bg-contrast rounded-circle p-3 shadow m-0 absolute d-flex justify-content-center align-items-center" style="left: 95%; top: 83%;" data-aos="fade-left"><img src="{% static 'teczbot/img/integration/dropbox.svg' %}" class="img-responsive" alt=""></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Pricing -->
+        <section class="bg-light edge top-left">
+            <div class="container bring-to-front pb-0 pt-3">
+                <div class="">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 col-lg-8 text-center">
+                            <h2>Pricing Plans</h2>
+                            <p class="lead text-muted">Because everyone’s requirement is different, so presenting multiple plans that fit your needs and can be scaled as you require.</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="btn-group btn-group-toggle pricing-table-basis" data-toggle="buttons"><label class="btn btn-primary active"><input type="radio" name="pricing-value" value="monthly" autocomplete="off" checked="checked"> Monthly basis</label> <label class="btn btn-primary"><input type="radio" name="pricing-value" value="yearly" autocomplete="off"> Annual basis</label></div>
+                        <p>Save up to 30% off on annual plans</p>
+                    </div>
+                </div>
+                <div class="row align-items-center no-gutters">
+                    <div class="col-lg-3" >
+                        <div class="card border-0 rounded-lg shadow-lg mb-4 mb-md-0" data-aos="fade-up">
+                            <div class="card-body py-4">
+                                <div class="row">
+                                    <div class="col-xl-9 mx-auto">
+                                        <div class="pricing text-center mb-5">
+                                            <h5 class="bold text-uppercase text-primary">Standard</h5>
+                                            <hr class="my-4">
+                                            <p>Everything you can get from a professional solution to keep your business on its way to success</p>
+                                            <div class="pricing-value"><span class="price display-lg-4 semibold odometer text-dark" data-monthly-price="0.99" data-yearly-price="0.78">0.99</span></div>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Lorem ipsum dolor sit amet ipsa</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Ab architecto blanditiis consectetur</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Blanditiis dignissimos ipsa ipsam odio</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Dolorem ducimus ea earum ipsam laborum</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div><a href="#!" class="btn btn-primary btn-lg btn-block rounded-top-0 rounded-bottom py-4">Get it now <i data-feather="arrow-right" class="ml-3"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 pt-lg-5" >
+                        <div class="card border-0 rounded-lg shadow-lg mb-4 mb-md-0" data-aos="fade-up">
+                            <div class="card-body py-4">
+                                <div class="row">
+                                    <div class="col-xl-9 mx-auto">
+                                        <div class="pricing text-center mb-5">
+                                            <h5 class="bold text-uppercase text-primary">Standard</h5>
+                                            <hr class="my-4">
+                                            <p>Everything you can get from a professional solution to keep your business on its way to success</p>
+                                            <div class="pricing-value"><span class="price display-lg-4 semibold odometer text-dark" data-monthly-price="0.99" data-yearly-price="0.78">0.99</span></div>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Lorem ipsum dolor sit amet ipsa</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Ab architecto blanditiis consectetur</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Blanditiis dignissimos ipsa ipsam odio</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Dolorem ducimus ea earum ipsam laborum</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div><a href="#!" class="btn btn-primary btn-lg btn-block rounded-top-0 rounded-bottom py-4">Get it now <i data-feather="arrow-right" class="ml-3"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 pt-lg-6" >
+                        <div class="card border-0 rounded-lg shadow-lg mb-4 mb-md-0" data-aos="fade-up">
+                            <div class="card-body py-4">
+                                <div class="row">
+                                    <div class="col-xl-9 mx-auto">
+                                        <div class="pricing text-center mb-5">
+                                            <h5 class="bold text-uppercase text-primary">Standard</h5>
+                                            <hr class="my-4">
+                                            <p>Everything you can get from a professional solution to keep your business on its way to success</p>
+                                            <div class="pricing-value"><span class="price display-lg-4 semibold odometer text-dark" data-monthly-price="0.99" data-yearly-price="0.78">0.99</span></div>
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Lorem ipsum dolor sit amet ipsa</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Ab architecto blanditiis consectetur</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Blanditiis dignissimos ipsa ipsam odio</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="media align-items-center mb-3">
+                                                    <div class="icon-md bg-primary p-2 rounded-circle center-flex mr-3"><i data-feather="check" class="stroke-contrast"></i></div>
+                                                    <div class="media-body">Dolorem ducimus ea earum ipsam laborum</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div><a href="#!" class="btn btn-primary btn-lg btn-block rounded-top-0 rounded-bottom py-4">Get it now <i data-feather="arrow-right" class="ml-3"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 pt-lg-5">
+                        <div class="card border-0 rounded-lg shadow-lg mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="200">
+                            <div class="card-body py-4">
+                                <div class="row">
+                                    <div class="col-xl-10 mx-auto">
+                                        <div class="text-center">
+                                            <h5 class="bold text-uppercase text-warning">Custom</h5>
+                                            <hr class="my-4">
+                                            <p class="lead bold">Need a custom design?</p>
+                                            <p class="text-muted">We offer more than an Enterprise solution, contact us now and request a custom build for your business.</p>
+                                            <div class="row no-gutters">
+                                                <div class="col-6 border-right">
+                                                    <div class="text-center p-3"><i data-feather="dollar-sign" width="32" height="32" class="stroke-secondary"></i>
+                                                        <p class="mb-0">Large Sales Volume</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 border-">
+                                                    <div class="text-center p-3"><i data-feather="bell" width="32" height="32" class="stroke-secondary"></i>
+                                                        <p class="mb-0">Custom Feature</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 border-right border-top">
+                                                    <div class="text-center p-3"><i data-feather="activity" width="32" height="32" class="stroke-secondary"></i>
+                                                        <p class="mb-0">Important Feature</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 border- border-top">
+                                                    <div class="text-center p-3"><i data-feather="box" width="32" height="32" class="stroke-secondary"></i>
+                                                        <p class="mb-0">Unique Feature</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><a href="#!" class="btn btn-light btn-lg btn-block rounded-top-0 rounded-bottom py-4">Contact us <i data-feather="arrow-right" class="ml-3"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative mt-n12">
+            <div class="shape-divider shape-divider-bottom shape-divider-fluid-x text-dark"><svg viewBox="0 0 2880 48" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z"></path>
+                </svg></div>
+        </div>
+        <!-- ./Pricing Includes -->
+        <section class="bg-dark">
+            <div class="container pt-15 pb-5">
+                <h1 class="bold text-contrast text-center pb-5">All Plans Include</h1>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="media pb-3">
+                            <div class="bg-warning p-3 rounded-circle center-flex mr-3"><i data-feather="phone-call" class="stroke-contrast"></i></div>
+                            <div class="media-body">
+                                <h6 class="text-contrast">First class support</h6>
+                                <p class="text-muted">We walk the talk so with all the plans you get 24x7 support just as your own customers will get a non-interrupted and awesome experience</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="media pb-3">
+                            <div class="bg-warning p-3 rounded-circle center-flex mr-3"><i data-feather="message-square" class="stroke-contrast"></i></div>
+                            <div class="media-body">
+                                <h6 class="text-contrast">Unlimited Messaging</h6>
+                                <p class="text-muted">Why restrict the conversation! So with all plans you get unlimited amount of messages both automated and live support staff</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="media pb-3">
+                            <div class="bg-warning p-3 rounded-circle center-flex mr-3"><i data-feather="check-square" class="stroke-contrast"></i></div>
+                            <div class="media-body">
+                                <h6 class="text-contrast">Full Integration</h6>
+                                <p class="text-muted">All types of integration with multiple apps is available without restriction so you can truly avail the full power of your chatbot</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="media pb-3">
+                            <div class="bg-warning p-3 rounded-circle center-flex mr-3"><i data-feather="copy" class="stroke-contrast"></i></div>
+                            <div class="media-body">
+                                <h6 class="text-contrast">Pre-Built Templates</h6>
+                                <p class="text-muted">Lot of prebuilt templates for different businesses and different scenarios are available to quick setup or can be used as a guideline</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="media pb-3">
+                            <div class="bg-warning p-3 rounded-circle center-flex mr-3"><i data-feather="edit" class="stroke-contrast"></i></div>
+                            <div class="media-body">
+                                <h6 class="text-contrast">Booking Slots</h6>
+                                <p class="text-muted">Different type of bookings like appointment booking with doctors, appointment booking for services or hotel table bookings, etc are all available with no limit to slots or service providers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="media pb-3">
+                            <div class="bg-warning p-3 rounded-circle center-flex mr-3"><i data-feather="map" class="stroke-contrast"></i></div>
+                            <div class="media-body">
+                                <h6 class="text-contrast">Unlimited Chatmaps</h6>
+                                <p class="text-muted">In a single chatbot create unlimited chatmaps to cover different services or promotions or guidelines so no area is left untouched</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- ./Get Theme CTA -->
+        <section class="bg-dark">
+            <div class="container">
+                <div class="section-heading">
+                    <div class="row">
+                        <div class="col-12 col-md-10 col-lg-8 mx-auto text-center">
+                            <h2 class="text-contrast">TeczBot saves <span class="typed" data-strings='["Time", "Costs", "Trouble"]'></span></h2>
+                            <p class="lead text-muted">TeczhBot – The chatbot platform that saves you tons of hardwork, it is easy to integrate, customize and cmes with tons of features. It helps you being available to your customers whenever they need you and add it keeps on marketing and selling for you even when you are not available</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="handwritten highlight font-md text-white">Let’s GET Started</p><a href="{% url 'user_login' %}?action=signup" class="btn btn-lg btn-solid text-contrast px-4">Register Now </a>
+                </div>
+            </div>
+        </section>
+        <div class="position-relative">
+            <div class="shape-divider shape-divider-bottom shape-divider-fluid-x text-contrast"><svg viewBox="0 0 2880 48" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z"></path>
+                </svg></div>
+        </div>
+        <!-- ./Footer - Stay in Touch -->
+        <footer class="site-footer section text-center block bg-contrast">
+            <div class="container py-4">
+                <h2 class="font-md regular">Stay updated</h2>
+            </div>
+            <p class="text-secondary mb-5">By registering with us you will receive right in your inbox all new features and updates</p>
+            <div class="row">
+                <div class="col-12 col-md-6 mx-auto overflow-hidden">
+                    <form action="srv/register.php" class="form" data-response-message-animation="slide-in-left">
+                        <div class="input-group"><input type="email" name="Subscribe[email]" class="form-control rounded-circle-left" placeholder="Enter your email" required>
+                            <div class="input-group-append"><button class="btn btn-rounded btn-primary" type="submit">Register</button></div>
+                        </div>
+                    </form>
+                    <div class="response-message"><i class="fas fa-envelope font-lg"></i>
+                        <p class="font-md m-0">Check your email</p>
+                        <p class="response">We sent you an email with a link to get started. You’ll be in your account in no time.</p>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-5">
+            <nav class="nav social-icons justify-content-center mt-4"><a href="#" class="mr-3 font-regular text-secondary"><i class="fab fa-facebook-f"></i></a> <a href="#" class="mr-3 font-regular text-secondary"><i class="fab fa-twitter"></i></a> <a href="#" class="mr-3 font-regular text-secondary"><i class="fab fa-instagram"></i></a> <a href="#" class="mr-3 font-regular text-secondary"><i class="fas fa-rss"></i></a> <a href="#" class="font-regular text-secondary"><i class="fab fa-linkedin-in"></i></a></nav>
+            <p class="small copyright text-secondary">© 2020 TeczBot, <em>by</em> <a class="brand bold" href="http://www.5studios.net">Tecziq</a></p>
+        </footer>
+        <!-- ./Footer - Four Columns -->
+       {% endblock %}

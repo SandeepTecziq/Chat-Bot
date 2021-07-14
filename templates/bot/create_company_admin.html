@@ -1,0 +1,184 @@
+{% extends 'base_superuser.html' %}
+{% load static %}
+{% block title %} Add Company {% endblock %}
+
+    {% block style %}
+    <style>
+         body{
+    background-color: #f2f2f2;
+    }
+    form{
+    padding: 20px;
+    }
+    .row{
+    margin:20px 0;
+    }
+ label{
+ width: 100%;
+ font-weight: 600;
+ }
+ .form-container{
+     padding: 10px;
+    border: 1px solid #c2c2c2;
+    border-radius: 10px;
+    background-color: #fafafa;
+    margin-top: 10px;
+ }
+ .errorlist, .error{
+ color: red;
+ }
+    </style>
+    {% endblock %}
+
+{% block content %}
+    {% if created %}
+    <div class="alert alert-success" role="alert" style="text-align: center;font-size: 14px;">
+  New company has been added.
+</div>
+    {% endif %}
+    <form class="form-create" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="form-container">
+  <h1 class="h3 mb-3 font-weight-normal">Company Details</h1>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Name:
+                    {{ company_form.name }}
+                    {{ company_form.name.errors }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label>Secret Key:
+                    {{ company_form.secret_key }}
+                    {{ company_form.secret_key.errors }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label>Bot Name:
+                    {{ company_form.bot_name }}
+                    {{ company_form.bot_name.errors }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label>Color:
+                    {{ company_form.color }}
+                    {{ company_form.color.errors }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Question for available options:
+                    {{ company_form.intro_ques }}
+                    {{ company_form.intro_ques.errors }}
+                </label>
+            </div>
+            <div class="col-sm-6">
+                <label>Question after click on bot option:
+                    {{ company_form.bot_ques }}
+                    {{ company_form.bot_ques.errors }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Introduction text on login page:
+                    {{ company_form.intro_text_login }}
+                    {{ company_form.intro_text_login.errors }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label>Bot title:
+                    {{ company_form.bot_title }}
+                    {{ company_form.bot_title.errors }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label>Text Color:
+                    {{ company_form.head_text_color }}
+                    {{ company_form.head_text_color.errors }}
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Text Color:
+                    {{ company_form.service_provider }}
+                    {{ company_form.service_provider.errors }}
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label>Language:
+                    {{ company_form.language }}
+                    {{ company_form.language.errors }}
+                </label>
+            </div>
+            <div class="colo-sm-3">
+                <label>
+                    Image:
+                    {{ company_form.image }}
+                </label>
+            </div>
+        </div>
+        </div>
+        <div class="form-container">
+  <h1 class="h3 mb-3 font-weight-normal">Admin Details</h1>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Username:
+                    {{ user_form.username }}
+                    {{ user_form.username.errors }}
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>First Name:
+                    {{ user_form.first_name }}
+                    {{ user_form.first_name.errors }}
+                    </label>
+                </div>
+                <div class="col-sm-3">
+                    <label>Last Name:
+                    {{ user_form.last_name }}
+                    {{ user_form.last_name.errors }}
+                    </label>
+                </div>
+
+                <div class="col-sm-3">
+                    <label>email:
+                    {{ user_form.email }}
+                    {{ user_form.email.errors }}
+                    </label>
+                </div>
+                <div class="col-sm-3">
+                    <label>Password:
+                    {{ user_form.password }}
+                    {{ user_form.password.errors }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit" style="width:100px;margin-top:10px;font-size:14px;font-weight:600;">Create</button>
+
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+    $("input, select").addClass("form-control")
+    <!-------->
+    $(".form-create").validate({
+    rules: {
+    email: {
+    'required': true,
+    }
+    }
+    });
+    });
+</script>
+{% endblock %}
+

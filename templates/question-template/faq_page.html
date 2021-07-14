@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} FAQs {% endblock %}
+{% block style %}
+<style>
+.doc-button{
+padding: 10px;
+background-color: #ff8a00;
+font-weight: 600;
+font-size: 14px;
+border-radius: 2px;
+}
+.code-snippet{
+    background-color: #f2f2f2;
+    font-size: 14px;
+    padding: 10px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h2>FAQs</h2>
+</div>
+<div class="ques-ans">
+    <div id="accordion">
+  <div class="card">
+    <div class="card-header cursor-pointer" id="headingBotOnPage" data-toggle="collapse" data-target="#collapseBotOnPage" aria-expanded="true" aria-controls="collapseBotOnPage">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed color-94 text-decoration-none" >
+          How can I add my bot to webpage?
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseBotOnPage" class="collapse" aria-labelledby="headingBotOnPage" data-parent="#accordion">
+      <div class="card-body">
+          <p class="font-14 mb-2">Put this code in bottom of &lt;body&gt; tag. </p>
+          <div class="code-snippet">
+              &lt;a class="open-chat-button" id="show-button" onclick="ShowChat()"&gt;Start Chat&lt;/a&gt;
+              &lt;div class="iframe-container fix-element" id="iframe-container"&gt;
+                  &lt;spn class="iframe-close-button" onclick="HideChat()"&gt;X&lt;/spn&gt;
+                  &lt;iframe src="https://teczbot.com/get_user_detail/&lt;your-secret-key&gt;0" class="chat-container-iframe"&gt;&lt;/iframe&gt;
+              &lt;/div&gt;
+          </div>
+          <p class="font-14 mt-3 mb-2">Put this code in &lt;head&gt; tag. </p>
+          <div class="code-snippet">
+              &lt;link href="https://teczbot.com/static/bot/css/web.css" rel="stylesheet"&gt;
+          <br>&lt;script src="https://teczbot.com/static/bot/js/web.js"&gt;&lt;/script&gt;
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header cursor-pointer" id="headingFbBot" data-toggle="collapse" data-target="#collapseFbBot" aria-expanded="false" aria-controls="collapseFbBot">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed color-94 text-decoration-none">
+          What is the process to integrate Facebook Messanger Bot?
+        </button>
+      </h5>
+    </div>
+    <div id="collapseFbBot" class="collapse" aria-labelledby="headingFbBot" data-parent="#accordion">
+      <div class="card-body">
+          <p class="font-14">Please check this document to integrate Facebook Messanger Bot.</p>
+          <a href="{% static 'pdf/addFacebook.pdf' %}" target="_blank" class="doc-button text-white text-decoration-none">Facebook Bot Instruction</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
+

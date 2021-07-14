@@ -1,0 +1,104 @@
+p, a, input, textarea, span, td, th, select{
+ font-family: 'Lato', sans-serif !important;
+}
+.font-14{
+font-size: 14px !important;
+}
+.color-94{
+color:#949494 !important;
+}
+.cursor-pointer{
+cursor: pointer !important;
+}
+.nav-item{
+	margin:5px;
+}
+
+.navbar .navbar-nav .notification {
+    position: absolute;
+    background-color: #FB404B;
+    text-align: center;
+    border-radius: 10px;
+    min-width: 18px;
+    padding: 0 5px;
+    height: 18px;
+    font-size: 12px;
+    color: #FFFFFF;
+    font-weight: bold;
+    line-height: 18px;
+    top: 0px;
+ }
+ .notification-menu button{
+ margin-bottom:0;
+ float: left;
+ cursor: pointer;
+ }
+
+.note-read-read{
+ background: #ddd;
+ }
+  .notification-menu button:hover{
+background: #eee;
+ }
+.pointer{
+cursor: pointer;
+}
+.notification-menu .note-x{
+float:right;
+}
+.add-question th td{
+text-align: center;
+}
+.add-question tr td{
+padding: 20px;
+}
+#question-list-id_filter{
+display: none;
+}
+.color-gray, .color-gray:hover {
+background: #6c757d;
+border-color: #6c757d;
+margin: 0 10px;
+}
+.add-question th{
+text-align: center;
+}
+.add-question td{
+padding: 20px;
+}
+.edit-button{
+border-radius: 25px;
+width: 100px;
+background: #c54707;
+border-color: #e85911;
+}
+.table-div{
+padding:30px;
+}
+.table-div table{
+padding: 20px;
+border: 1px solid #6c757d;
+}
+.add-ques-container{
+    width: 80%;
+    margin: auto;
+    margin-top: 30px;
+}
+.modal-body-add{
+    max-width: 400px;
+    margin: 20px auto 0;
+    background: #e5e5e5;
+    padding: 40px;
+    border-radius: 7px;
+}
+
+.modal-body-add input{
+height: 45px;
+border-radius: 25px;
+}
+#save-chat{
+    float: right;
+    margin: 10px;
+    background: #32465a;
+    border-color: #32465a;
+}

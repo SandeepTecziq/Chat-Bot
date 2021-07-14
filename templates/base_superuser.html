@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>{% block title %}  {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+
+
+    <link href="{% static 'bot/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'bot/css/bases.css' %}" rel="stylesheet">
+    <script src='{% static "bot/js/kit_fontawesome.js" %}'></script>
+    <style>
+        a.button-submit-blank, a.button-submit-blank:hover{
+        color: #000;
+        }
+    </style>
+    {% block style %}
+
+    {% endblock %}
+</head>
+<body style="font-family: lato">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_subscription_plan' %}">Create Subscription Plan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'company_list' %}">Company List</a>
+          </li>
+        <li class="nav-item dropdown">
+          <a class="dropdown-toggle nav-link" href="#" id="userDropDown" role="button" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">Profile</a>
+          <div class="dropdown-menu" aria-labelledby="userDropDown">
+          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePasswordModal">Change Password</a>
+          <a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a>
+            </div>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+<!----- Change password Modal  ------->
+{% include 'bot/change_password.html' %}
+
+{% block content %}
+
+{% endblock %}
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="{% static 'bot/js/scripts.js' %}"></script>
+<script>
+    $(document).ready(function(){
+    <!------- Change Password  ---------->
+          $('#change-password-form').submit(function() {
+         form = $('#change-password-form')
+                     $.ajax({ // create an AJAX call...
+                         data: form.serialize(),
+                         type: 'post',
+                         url: "{% url 'change_password' %}",
+                         success: function(data) {
+                             if(data['status'] == false){
+
+                             $(".form-error").html(data['message'])
+
+                             }
+                             else{
+                                 alert("password has been changed successfully.")
+                                 location.reload();
+                             }
+                         },
+                         error: function(data){
+                         alert("Something went wrong. Please refresh and try again.")
+                         }
+                     });
+                     return false;
+                 });
+
+    })
+</script>
+{% block script %}
+{% endblock %}
+</html>

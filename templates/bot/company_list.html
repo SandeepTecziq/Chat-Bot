@@ -1,0 +1,61 @@
+{% extends 'base_superuser.html' %}
+
+{% block title %} Companies {% endblock %}
+
+    {% block style %}
+    <style>
+
+    </style>
+    {% endblock %}
+
+
+{% block content %}
+
+<div class="table-div">
+    <div class="table-search-box ml-auto">
+    <form class="search-user-form">
+      <input  id="search-user" type="search" placeholder="Search Company" aria-label="Search">
+      <span class="fa fa-search"></span>
+    </form>
+</div>
+<table class="table" style="padding:20px;" id="question-list-id">
+  <thead>
+    <tr>
+      <th scope="col">S.No.</th>
+      <th scope="col">Company Name</th>
+      <th scope="col">Secret Key</th>
+      <th scope="col">Admin Username</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for company in companies %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ company.name }}</td>
+      <td>{{ company.secret_key }}</td>
+      <td>{{ company.company_name.first.username }}</td>
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready( function () {
+    var table = $('#question-list-id').DataTable();
+
+    $('#search-user').on('change keyup', function(){
+    var search = $("#search-field").val()
+    table
+    .column(1)
+    .search(this.value)
+    .draw();
+
+  });
+
+});
+</script>
+{% endblock %}

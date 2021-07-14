@@ -1,0 +1,256 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Admin Home {% endblock %}
+
+    {% block style %}
+    <style>
+        html,body{
+        height:100%;
+        }
+
+        .form-text-area, .form-text-area:focus{
+        height: 70px;
+        border: 1px solid #949494;
+        outline: #949494;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 6px;
+        width: 100%;
+        }
+        div.item div:first-of-type{
+        padding-left: 0;
+        }
+
+        div.buttons{
+        text-align: right;
+        margin-top: 10px;
+        }
+        .bot-alert{
+        max-width: 380px;
+        background-color: #d9d9d9;
+        border-radius: 6px;
+        padding: 10px;
+
+        }
+        .bot-alert .p-div{
+        padding: 0;
+        }
+        .bot-alert p {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom:0;
+        font-weight: 600;
+        position: relative;
+        top: 3px;
+        }
+        .bot-alert img{
+        max-width: 22px;
+        }
+        .bot-image{
+        width: max-content;
+        }
+        .bot-image .training-bot{
+        max-width: 80px;
+        cursor: pointer;
+        }
+   .train-bot-instruction {
+  position: relative;
+  color: #ff8a00;
+  left:100px;
+  top: 25px;
+  width: 110px;
+  height: 110px;
+  text-align: center;
+  background-color: #fff;
+  border: 1px solid #666;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 50%;
+  -webkit-box-shadow: 2px 2px 4px #949494;
+  -moz-box-shadow: 1px 1px 1px #949494;
+
+  padding: 0 10px;
+}
+.train-bot-instruction:before {
+      content: ' ';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -6px;
+    top: 63px;
+    border: 17px solid;
+    border-color: #949494 transparent transparent #949494;
+    transform: rotate(284deg);
+    display: inline-block;
+}
+.train-bot-instruction:after {
+  content: ' ';
+    transform: rotate(284deg);
+    display: inline-block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: -4px;
+    top: 63px;
+    border: 16px solid;
+    border-color: #fff transparent transparent #fff;
+}
+.train-bot-instruction p{
+font-size: 14px;
+color: #ff8a00;
+text-align: center;
+margin-top:30px;
+}
+.loading-image{
+    position: relative;
+    bottom: 200px;
+    right: 10px;
+}
+.loading-image img{
+position: relative;
+right: 20px;
+}
+
+    </style>
+    {% endblock %}
+
+
+{% block content %}
+<div class="page-heading">
+    <h2 class="float-left">Train Your Bot: {{ company.name }}</h2>
+<a href="{% url 'chat_maps' id=company.pk name=company.name %}" class="btn button-submit float-right">Back</a>
+</div>
+<div class="clearfix"></div>
+<div class="row page-content">
+    <div class="col-sm-7">
+
+        <div class="block-heading">
+            <h4>Add Question</h4>
+        </div>
+        <div class="block-content border-right">
+            <form method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                           {% for form in formset.forms %}
+            <div class="row item">
+
+                <div class="col-sm-5">
+                    {{ form.question }}
+                {{ form.question.errors }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form.answer }}
+                {{ form.answer.errors }}
+                </div>
+                <div class="col-sm-1 align-self-center">
+                    <button class="delete btn button-submit rounded-circle">X</button>
+                </div>
+
+            </div>
+                {% endfor %}
+                <div class="buttons">
+                    <input type="submit" value="Submit" class="btn button-submit">
+                    <button class="add btn button-submit">Add New</button>
+                </div>
+                </form>
+        </div>
+
+    </div>
+    <div class="col-sm-5">
+
+        <div class="block-heading">
+            <h4 class="">Train Bot</h4>
+        </div>
+        <div class="block-content">
+            <div class="trained-status">
+{% if all_saved %}
+                <div class="bot-alert bot-not-trained row">
+                    <div class="col-sm-1 p-0">
+                        <img src="{% static 'icons/bell.png' %}">
+                    </div>
+                    <div class="col-sm-auto p-div">
+                        <p class="color-orange">New Questions Added. It's Time to Train Your Bot.</p>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="bot-alert bot-trained hidden-visible row">
+                    <div class="col-sm-1 p-0">
+                        <img src="{% static 'icons/bell.png' %}">
+                    </div>
+                        <div class="col-sm-auto p-div">
+                        <p class="text-success">Bot has been trained successfully.</p>
+                        </div>
+                </div>
+                <div class="bot-image ml-auto mr-auto">
+
+                    <div class="train-bot-instruction">
+                        <p>Click on the BOT to train it.</p>
+                    </div>
+                    <!--<img src="{% static 'icons/bot_icon.png' %}" class="training-bot" id="train-the-bot">-->
+                    <img src="{% static 'icons/Botlogo.png' %}" class="training-bot" id="train-the-bot">
+                    <div class="loading-image hidden-visible">
+                        Please wait
+                        <img src="{% static 'bot/images/loading_gif.gif' %}" class="training-bot">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+$(document).ready(function(){
+
+<!---- Train the bot ------>
+$(".training-bot#train-the-bot").click(function(){
+
+    $(".train-bot-instruction").addClass("hidden-visible")
+    $(".loading-image").removeClass("hidden-visible")
+
+   $.ajax({
+   url: "{% url 'create_file' %}",
+   dataType: "json",
+   data: {'pk': "{{ id }}"},
+   success: function(data){
+   $(".loading-image").addClass("hidden-visible")
+   $(".train-bot-instruction").removeClass("hidden-visible")
+   if(data['status'] == true){
+    $(".bot-trained").removeClass("hidden-visible")
+    $(".bot-not-trained").addClass("hidden-element")
+
+   }
+   else if(data['status'] == 'less_2'){
+   alert(data['message'])
+   }
+   else if(data['status'] == 'not_found'){
+   alert(data['message'])
+   }
+   },
+   error: function(data){
+   $(".loading-image").addClass("hidden-visible")
+   $(".train-bot-instruction").removeClass("hidden-visible")
+   alert("Something went wrong. Please refresh and try again.")
+   }
+   });
+});
+
+<!-- add form  -->
+$(".add").click(function(){
+addForm(this, "form")
+return false;
+});
+<!-- delete form  -->
+$(".delete").click(function(){
+deleteForm(this, "form")
+return false;
+});
+});
+</script>
+{% endblock %}

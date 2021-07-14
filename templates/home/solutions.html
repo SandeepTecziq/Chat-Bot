@@ -1,0 +1,267 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %} Solutions {% endblock %}
+{% block content %}
+        <!-- Integration Heading -->
+        <header class="header integrations-header section">
+            <div class="shapes-container">
+                <div class="shape shape-circle shape-circle-1" data-aos="fade-down" data-aos-delay="200">
+                    <div></div>
+                </div>
+                <div class="shape shape-circle shape-circle-2" data-aos="zoom-in" data-aos-delay="300">
+                    <div></div>
+                </div>
+                <div class="shape shape-square shape-square-1" data-aos="flip-right" data-aos-delay="400">
+                    <div></div>
+                </div>
+                <div class="shape shape-square shape-square-2" data-aos="flip-left" data-aos-delay="400">
+                    <div></div>
+                </div>
+                <div class="shape shape-square shape-square-3" data-aos="flip-left" data-aos-delay="200">
+                    <div></div>
+                </div>
+                <div class="shape shape-ring shape-ring-1">
+                    <div></div>
+                </div>
+                <div class="shape shape-ring shape-ring-2">
+                    <div></div>
+                </div>
+                <div class="shape pattern pattern-dots">
+                    <div></div>
+                </div>
+                <div class="static-shape background-shape-main"></div>
+            </div>
+            <div class="container" style="padding-bottom: 50px">
+                <section class="section block bg-contrast">
+                    <div class="container py-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <img src="{% static 'teczbot/img/chatbot.png' %}" class="img-responsive mx-auto">
+                            </div>
+                            <div class="col-md-6 ml-md-auto">
+                                <h1 class="display-5 mb-4 bold">Chatbot for Customer Support</h1>
+                                <p class="lead">Better customer relationships for the taking.</p>
+                                <form action="srv/register.php" class="form" data-response-message-animation="slide-in-left">
+                                    <div class="input-group"><input type="email" name="Subscribe[email]" class="form-control rounded-circle-left" placeholder="Enter your business email" required>
+                                        <div class="input-group-append"><button class="btn btn-rounded btn-info" type="submit">Signup free</button></div>
+                                    </div>
+                                    <p>&#10004; Free 14-days trial &nbsp;&nbsp; &#10004; No credit card required<p>
+                                </form>
+                                <div class="response-message"><i class="fas fa-envelope font-lg"></i>
+                                    <p class="font-md m-0">Check your email</p>
+                                    <p class="response">We sent you an email with a link to get started. You’ll be in your account in no time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </header>
+
+        <div class="position-relative">
+                    <div class="shape-divider shape-divider-bottom shape-divider-fluid-x text-dark-black"><svg viewBox="0 0 2880 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z"></path>
+                        </svg></div>
+                </div>
+                <section class="bg-dark-black">
+                    <div class="container">
+                        <div class="section-heading">
+                            <div class="row">
+                                <div class="col-12 col-md-10 col-lg-8 mx-auto text-center">
+                                    <h1 class="display-4 text-contrast mb-4 bold">Your smart agent that never sleeps</h1>
+                                    <p class="lead text-contrast mt-0 mb-0">ChatBot can serve your customers around a clock.</p>
+                                    <p class="lead text-contrast mt-0 mb-0">Take good care of customers even when you need to take a break.</p>
+                                    <img src="{% static 'teczbot/img/chat.png' %}" class="mx-auto img-responsive">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="text-center">
+                            <p class="handwritten highlight font-md">Available on Themeforest!!!</p><a href="https://themeforest.net/item/dashcore-saas-startup-software-template/22397137" class="btn btn-lg btn-alternate text-contrast px-4">Buy Dashcore Now</a>
+                        </div> -->
+                    </div>
+                </section>
+                <div class="position-relative">
+                    <div class="shape-divider shape-divider-bottom shape-divider-fluid-x text-contrast"><svg viewBox="0 0 2880 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z"></path>
+                        </svg></div>
+                </div>
+
+                <section class="section block bg-contrast mt-5 mb-5">
+                    <div class="container py-4">
+                        <div class="mb-10">
+                            <h1 class="display-4 bold">The simple way<br> to explain complex matters</h1>
+                            <p class="lead">Use flexible chatbox responses to lead customers by the hand. solve their<br> problems before they even know they have one.</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1 class="bold mb-0">Create your chatbot today.</h1>
+                                <p class="lead mt-0">Start a free trial to improve your support services.</p>
+                            </div>
+                            <div class="col-md-5 ml-md-auto">
+                                <form action="srv/register.php" class="form" data-response-message-animation="slide-in-left">
+                                    <div class="input-group"><input type="email" name="Subscribe[email]" class="form-control rounded-circle-left" placeholder="Enter your business email" required>
+                                        <div class="input-group-append"><button class="btn btn-rounded btn-info" type="submit">Signup free</button></div>
+                                    </div>
+                                    <p>&#10004; ChatBot templates included &nbsp;&nbsp; &#10004; No coding skills required<p>
+                                </form>
+                                <div class="response-message"><i class="fas fa-envelope font-lg"></i>
+                                    <p class="font-md m-0">Check your email</p>
+                                    <p class="response">We sent you an email with a link to get started. You’ll be in your account in no time.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section block bg-contrast mt-5 mb-5">
+                    <div class="container py-4">
+                        <div class="row">
+                            <div class="col-md-6 mt-5">
+                                <h1 class="display-5 bold">Give your support team a helping hand</h1>
+                                <p class="lead">Incorporate chatbot into your support strategy to relieve your team from performing mundane task.</p>
+                                <p class="lead">Present them with an AI productivity booster that helps create well-balanced support services.</p>
+                            </div>
+                            <div class="col-md-5 ml-md-auto mt-5">
+                                <img src="{% static 'teczbot/img/image1.png' %}" class="img-responsive mx-auto">
+                            </div>
+                            <div class="col-md-6 mt-5">
+                                <img src="{% static 'teczbot/img/image2.png' %}" class="img-responsive mx-auto">
+                            </div>
+                            <div class="col-md-5 mt-5 ml-md-auto">
+                                <h1 class="display-5 bold">Connect ChatBot with support tools</h1>
+                                <p class="lead">Incorporate chatbot into your support strategy to relieve your team from performing mundane task.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-contrast">
+                    <div class="container py-4">
+                        <div class="row py-4">
+                            <div class="col-lg-12">
+                                <h1 class="display-4 bold text-center">Consistent customer<br> service across channels</h1>
+                                <p class="lead text-center">Customers contact brands using multiple communications channels.<br> Make sure you are there for them.</p>
+                            </div>
+                        </div>
+                        <div class="row gap-y">
+                            <div class="col-md-6 col-lg-4">
+                                <h6 class="bold font-l">Support website visitors</h6>
+                                <p>Add chat widget to your website in a few simple steps and help customers browsing your pages.</p>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <h6 class="bold font-l">Integrate with your platform</h6>
+                                <p>Connect ChatBot with your messaging platform to automate your customer communication.</p>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <h6 class="bold font-l">Connect with facebook users</h6>
+                                <p>Use a chatbot on your facebook fan page to let users contact you via their most preffered channel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section block bg-contrast mt-5 mb-5">
+                    <div class="container py-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <img src="{% static 'teczbot/img/image.png' %}" class="mx-auto img-responsive">
+                            </div>
+                            <div class="col-md-5 ml-md-auto">
+                                <h1 class="display-5 bold">Offer multilingual support</h1>
+                                <p class="lead">You can create chatbot responses in various languages. Make sure no customer is left without a response.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-contrast">
+                    <div class="container py-4">
+                        <div class="row py-4">
+                            <div class="col-lg-7">
+                                <h1 class="bold">Ready-to-use templates</h1>
+                                <p class="lead">There is no need to build chatbot from scratch. Our chatbot experts created ready-to-use templates to help you support customers with just a few clicks.</p>
+                            </div>
+                        </div>
+                        <div class="row gap-y">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body d-flex flex-column p-5">
+                                        <div class="bg-success p-3 rounded-circle center-flex mr-3 mb-3" style="width: 60px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones stroke-contrast"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg></div>
+                                        <h6 class="bold font-l">Customer Service</h6>
+                                        <p>Take the first step towards 24/7/365 customer service.</p>
+                                        <a href="#" class="text-primary bold">Try it now &nbsp;&nbsp; &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body d-flex flex-column p-5">
+                                        <div class="bg-success p-3 rounded-circle center-flex mr-3 mb-3" style="width: 60px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones stroke-contrast"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg></div>
+                                        <h6 class="bold font-l">Lead Generation</h6>
+                                        <p>Get your visitors data using smart lead generation bot.</p>
+                                        <a href="#" class="text-primary bold">Try it now &nbsp;&nbsp; &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body d-flex flex-column p-5">
+                                        <div class="bg-success p-3 rounded-circle center-flex mr-3 mb-3" style="width: 60px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones stroke-contrast"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg></div>
+                                        <h6 class="bold font-l">Ecommerce Bot</h6>
+                                        <p>Entire buying process within a chat window.</p>
+                                        <a href="#" class="text-primary bold">Try it now &nbsp;&nbsp; &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-body d-flex flex-column p-5">
+                                        <div class="bg-success p-3 rounded-circle center-flex mr-3 mb-3" style="width: 60px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones stroke-contrast"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg></div>
+                                        <h6 class="bold font-l">Recruitment Bot</h6>
+                                        <p>Speed up the hiring process with the bot.</p>
+                                        <a href="#" class="text-primary bold">Try it now &nbsp;&nbsp; &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-dark mt-5 mb-5">
+                    <div class="container">
+                        <div class="section-heading mb-0">
+                            <div class="row">
+                                <div class="col-12 col-md-10 col-lg-8 mx-auto text-center">
+                                    <h1 class="text-contrast mb-4 bold">Start a free ChatBot trial and build your first chatbot today!</h1>
+                                    <p class="custom-handwritten font-md"></p>
+                                    <form action="srv/register.php" class="form" data-response-message-animation="slide-in-left">
+                                        <div class="input-group"><input type="email" name="Subscribe[email]" class="form-control rounded-circle-left" placeholder="Enter your business email" required>
+                                            <div class="input-group-append"><button class="btn btn-rounded btn-info" type="submit">Signup free</button></div>
+                                        </div>
+                                        <p class="text-contrast">&#10004; Free 14-days trial &nbsp;&nbsp; &#10004; No credit card required<p>
+                                    </form>
+                                    <div class="response-message"><i class="fas fa-envelope font-lg"></i>
+                                        <p class="font-md m-0">Check your email</p>
+                                        <p class="response">We sent you an email with a link to get started. You’ll be in your account in no time.</p>
+                                    </div>                      
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-contrast">
+                    <div class="container pb-5 pt-0">
+                <div class="row small align-items-center">
+                        <div class="col-md-4 text-center text-md-left mt-3">
+                            <span class="mt-2 mb-md-0 bold text-md-left">Start your free trial</span>
+                            <a class="btn btn-rounded btn-primary px-3" href="{% url 'user_login' %}"><i class="fas fa-user-plus d-none d-md-inline mr-md-0 mr-lg-2"></i> <span class="d-md-none d-lg-inline">Signup free</span></a>
+                        </div>
+                        <div class="col-md-8 mt-3">
+                            <nav class="nav justify-content-center justify-content-md-end"><a href="#" class="btn btn-circle btn-sm btn-secondary mr-3"><i class="fab fa-facebook"></i></a> <a href="#" class="btn btn-circle btn-sm btn-secondary mr-3"><i class="fab fa-twitter"></i></a> <a href="#" class="btn btn-circle btn-sm btn-secondary mr-3"><i class="fab fa-youtube"></i></a> <a href="#" class="btn btn-circle btn-sm btn-secondary"><i class="fab fa-instagram"></i></a></nav>
+                        </div>
+                    </div>
+                    </div>
+                </section>
+        
+{% endblock %}

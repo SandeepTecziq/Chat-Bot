@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Make Payment{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h2>Buy Subscription</h2>
+</div>
+<h4>Plan details</h4>
+<p>Name: {{ subscription.name }}</p>
+<p>Subscription Type: {{ subscription_type }}</p>
+<p>Price: {{ price }}</p>
+    <h4>Pay with PayPal</h4>
+    {{ form.render }}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {% endblock %}
+{% block style %}
+<link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+{% if not secret_key %}
+<form class="w-50 mx-auto my-5">
+  <input type="text" class="form-control" name="bot-secret-key" placeholder="Enter secret key end submit">
+  <input class="btn btn-success text-right mt-2" type="submit">
+</form>
+{% endif %}
+{% if secret_key %}
+<span class="open-chat-button" id="show-button" onclick="ShowChat()">Start Chat</span>
+<div class="iframe-container fix-element" id="iframe-container"> <span class="iframe-close-button" onclick="HideChat()">X</span>
+  <iframe src="{% url 'get_user_detail' secret_key=secret_key %}" class="chat-container-iframe"></iframe> </div>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script src="{% static 'bot/js/web.js' %}"></script>
+{% endblock %}

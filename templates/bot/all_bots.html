@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} All Bots {% endblock %}
+
+    {% block style %}
+    <style>
+
+        .chat-map-columns .title-col-box{
+        padding: 5px;
+
+        }
+        .map-container-box{
+            border: 1px solid;
+            padding: 15px;
+        }
+        .map-container-box.border-gray{
+        border-color: #949494;
+        }
+
+        .map-container-box.border-orange{
+        border-color: #ff8a00;
+        }
+        .map-container-box .map-title{
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        }
+        p.h4-p{
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 0;
+        }
+        p.block-text{
+        font-size: 14px;
+        color: #949494;
+        margin-bottom: 0;
+        }
+        .ques-link, .ques-link:hover{
+        font-weight: 600;
+        color: #ff8a00;
+        margin-top: 15px;
+        }
+        .ml-bot-icon{
+        max-width: 120px;
+        }
+        .ml-smile-icon{
+        max-width: 35px;
+        }
+        .pos-rel{
+        position: relative;
+        }
+        .active-chat-map{
+        border-color: #ff8a00 !important;
+        box-shadow: 0 0 2px 0px #ff8a00;
+        }
+        a.create-new-map-class{
+        color: #000;
+        }
+        a.create-new-map-class:hover{
+        text-decoration: none;
+        }
+
+        .map-actions .col-sm-4{
+        padding: 0 1px;
+
+        }
+
+        .map-actions .col-sm-4 a{
+        padding: 5px 2px 0 5px;
+
+        }
+        .map-actions .col-sm-4 button{
+        padding: 0 2px;
+        }
+        .button-submit-blank{
+        margin-bottom: 5px;
+        }
+        .border-gray .button-submit-blank{
+        border-color: #949494;
+        }
+        iframe{
+            width: 350px;
+            height: 450px;
+            border: 1px solid #c2c2c2;
+            border-radius: 6px;
+        }
+        p.active-time{
+            color: #949494;
+            font-size: 14px;
+        }
+        .map-description{
+        margin-bottom: 10px;
+        }
+        .map-description p{
+            color: #949494;
+            font-size: 14px;
+        }
+        .lh-14{
+        line-height: 14px;
+        }
+
+
+    </style>
+    {% endblock %}
+
+
+{% block content %}
+<div class="page-heading">
+    <h2 class="float-left">Available Bots</h2>
+    <p class="float-right">Available Bots: {{ allowed_bot.sum }}</p>
+</div>
+<div class="clearfix"></div>
+
+<div class="row chat-map-columns">
+
+    <div class="col-sm-3 title-col-box">
+        <a href="{% url 'add_bot' %}" class="create-new-map-class">
+            <div class="map-container-box border-gray">
+                <div class="map-title">Add Bot</div>
+            </div>
+        </a>
+    </div>
+    {% for bot in bots %}
+    <div class="col-sm-3 title-col-box">
+        <div {% if bot.active %} class="map-container-box active-chat-map border-orange" {% else %} class="map-container-box border-gray" {% endif %}>
+            <div class="map-icon"></div>
+            <div class="map-title">{{ bot.name }}</div>
+            <div class="map-description">
+                <p class="mb-0"><b>Secret Key:</b> {{ bot.secret_key }}</p>
+
+                <p class="mb-0">
+                    {% if bot.active %}
+                    <b>Active Till:</b> {{ bot.active_bot.subscription.expire_date.date }}
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </p>
+
+            </div>
+            <div class="map-actions">
+                <button data-href="{% url 'room_test' pk=bot.pk lang=bot.language %}" type="button" class="btn button-submit-blank"
+                   data-toggle="modal" data-target="#testChatBotModal" data-key="{{ bot.secret_key }}">Test Bot</button>
+                {% if not bot.active %}
+                    {% if allowed_bot.sum > 0 %}
+                <a href="{% url 'activate_bot' id=bot.pk secret_key=bot.secret_key %}" class="btn button-submit-blank">Activate</a>
+                    {% endif %}
+                {% else %}
+                <a href="{% url 'activate_bot' id=bot.pk secret_key=bot.secret_key %}" class="btn button-submit-blank">Deactivate</a>
+                {% endif %}
+                <a href="{% url 'update_bot_detail' id=bot.pk bot_name=bot.name %}" class="btn button-submit-blank">Configuration</a>
+                <a href="{% url 'chat_maps' id=bot.pk name=bot.name %}" class="btn button-submit-blank">Create Chat Map</a>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!--------- Test Chat Modal ------------>
+<div class="modal fade" id="testChatBotModal" tabindex="-1" role="dialog" aria-labelledby="testChatBotModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="display: block;">
+        <h5 class="modal-title" id="testChatMapModalLabel"></h5>
+          <p class="ml_status text-danger font-12 mb-2 lh-14 hidden-element">
+              <img src="{% static 'page-icons/warning-icon.png' %}" style="width: 15px;" class="mr-2">
+              No question has been added for this bot (or bot has not been trained after adding question). Please go <b>Create Chat Map</b> > <b>Teach Your Bot</b> to add questions if required.
+          </p>
+          <p class="slot_status text-danger font-12 mb-0 lh-14 hidden-element">
+              <img src="{% static 'page-icons/warning-icon.png' %}" style="width: 15px;" class="mr-2">
+              No service provider has been added for this bot (or slot has not been assigned to server provider). Please go <b>Booking</b> in side navigation and add service provider if required.
+          </p>
+      </div>
+      <div class="modal-body pb-0 text-center">
+            <iframe src="" name="test_bot" title="Chat Bot">df</iframe>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready( function () {
+<!----- On Chat Demo Modal Show ------->
+    $('#testChatBotModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var href = button.data('href')
+      var key = button.data('key')
+      var page_url = "{% url 'check_ml_status' %}"
+      var modal = $(this)
+      modal.find('iframe').attr('src', href)
+      CheckMLStatus(key, page_url, modal)
+
+    })
+
+    function CheckMLStatus(key, page_url, modal){
+    $.ajax({
+    url: page_url,
+    dataType: "json",
+    data: {'secret_key': key},
+    success: function(data){
+    if(data['status'] == true){
+        if(data['ml_status'] == false){
+        modal.find("p.ml_status").removeClass("hidden-element")
+        }
+        if(data['slot_status'] == false){
+        modal.find("p.slot_status").removeClass("hidden-element")
+        }
+
+    }
+    else{
+    alert("Something went wrong. Please refresh and try again.")
+    }
+    },
+    error: function(data){
+    alert("Something went wrong. Please refresh and try again.")
+    },
+    });
+    }
+
+});
+
+</script>
+{% endblock %}

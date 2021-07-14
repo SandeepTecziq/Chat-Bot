@@ -1,0 +1,130 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+    <link rel="stylesheet" type="text/css" href="{% static 'project/bootstrap/css/bootstrap.min.css' %}">
+    <link href="{% static 'user_front/css/styles.css' %}">
+    <title> Start Chat </title>
+    <style>
+    html, body{
+    height: 100%;
+    }
+    body{
+    border: 1px solid {{ company.color }};
+    }
+    #DetailForm{
+    margin:10px;
+    padding: 10px;
+    border:1px solid #e2e2e2;
+    }
+    #DetailForm button{
+    background-color: {{ company.color }};
+    width:100%;
+    font-size:14px;
+    font-weight:600;
+    border-color:  {{ company.color }};
+    }
+    .intro-div{
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background: {{ company.color }};
+    color: {{ company.head_text_color }};
+    padding-right: 30px;
+    }
+    .bot-img {
+	display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+	float: left;
+	margin-right: 15px;
+	}
+    </style>
+  </head>
+  <body>
+  <div class="intro-div">
+  {% if company.image %}
+			<div class="bot-img" style="background-image: url('{{ company.image.url }}');margin-right:20px;"></div>
+			{% endif %}
+			<p id="bot-intro-text" class="mb-0">Hi ! I am {{ company.bot_name|title }}.</p>
+			<p style="display: none;" id="curr-lang" class="mb-0">{{ company.language }}</p>
+    <p id="bot-instruction-text" class="mb-0">{{ company.intro_text_login }}</p>
+  </div>
+        <form method="post" id="DetailForm">
+            {% csrf_token %}
+          <div class="form-group">
+            <select name="language-selected" class="form-control" id="language-select">
+              {% for symbol,language in languages.items %}
+              {% if symbol == 'en' %}
+              <option value="{{ symbol }}" selected>{{ language }}</option>
+              {% else %}
+              <option value="{{ symbol }}">{{ language }}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            {{ form.name }}
+            {{ form.name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+
+
+        <button name='send_otp_submit' type="submit" class="btn btn-primary popup-submit">START CHAT</button>
+        </form>
+
+    <!--<script-->
+  <!--src="https://code.jquery.com/jquery-3.4.1.js"-->
+  <!--integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="-->
+  <!--crossorigin="anonymous"></script>-->
+  <script src="{% static 'project/jquery/jquery.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>-->
+  <script src="{% static 'project/bootstrap/js/bootstrap.min.js' %}"></script>
+<script>
+  $(document).ready(function(){
+  $("#language-select").change(function(){
+  var selected = $("#language-select").val()
+  var intro_text = $("#bot-intro-text").text()
+  var instruction_text = $("#bot-instruction-text").text()
+  var curr_lang = $("#curr-lang").text()
+
+  $.ajax({
+  url: "{% url 'intro_change_language' %}",
+  dataType: "json",
+  data: {"intro_text": intro_text, "instruction_text": instruction_text, "selected": selected, "curr_lang": curr_lang},
+  success: function(data){
+  if(data['status'] == true){
+  $("#bot-intro-text").text(data['intro_text'])
+  $("#bot-instruction-text").text(data['instruction_text'])
+  $("#curr-lang").text(selected)
+  $(".popup-submit").text(data['start_chat_key'])
+  $("#id_name").attr("placeholder", data['name_key'])
+  $("#id_email").attr("placeholder", data['email_key'])
+  }
+  else if(data['status'] == false){
+  alert("Something went wrong. Please refresh and try again.")
+  }
+  },
+  error: function(data){
+  alert("Something went wrong. Please refresh and try again.")
+  }
+  });
+  });
+  });
+</script>
+  </body>
+</html>

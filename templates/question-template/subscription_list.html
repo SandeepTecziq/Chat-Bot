@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Pricing {% endblock %}
+{% block style %}
+<style>
+.pricing-wrapper .subscription-plan-container .col-sm-4{
+padding:0;
+}
+.pricing-wrapper .subscription-plan-container .row{
+width: 50%;
+}
+.pricing-wrapper .subscription-plan-container .plan-1{
+cursor: pointer;
+}
+.subscription-text{
+color: #ff8a00;
+text-align: center;
+position: relative;
+font-weight: 600;
+opacity: .5;
+}
+.subscription-name{
+top: 230px;
+}
+.subscription-price{
+bottom: 100px;
+}
+.pricing-wrapper .subscription-month{
+bottom: 115px;
+font-size: 12px;
+}
+.switch-div img{
+cursor: pointer;
+}
+.switch-div .switch-circle{
+position: absolute;
+    top: 2px;
+    width: 40px;
+    left: 2px;
+}
+.row.switch-box{
+max-width: 400px;
+margin-top: 25px;
+}
+.switch-text{
+position: relative;
+top: 10px;
+color: #949494;
+font-weight: 600;
+}
+a.subscription-link:hover{
+text-decoration: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pricing-wrapper">
+    <div class="row ml-auto mr-auto switch-box">
+        <div class="col-sm-4 text-right">
+            <span class="switch-text">Monthly</span>
+        </div>
+        <div class="col-sm-4">
+            <div class="switch-div ml-auto mr-auto" style="width: 100px;position: relative;">
+                <img src="{% static 'icons/rectangle.png' %}" class="img-fluid switch-rect switch-left">
+                <img src="{% static 'icons/circle.png' %}" class="img-fluid switch-circle switch-left">
+            </div>
+        </div>
+        <div class="col-sm-4 text-left">
+            <span class="switch-text">Yearly</span>
+        </div>
+    </div>
+    <div class="subscription-plan-container">
+        <div class="row ml-auto mr-auto">
+            {% if plans.count >= 1 %}
+            <div class="col-sm-4">
+                <a href="{% url 'process_payment' subscription_id=plans.0.u_id subscription_type='monthly' %}"
+                   class="subscription-link monthly-link">
+                    <div class="plan-1">
+                        <p class="subscription-text subscription-name">{{ plans.0.name }}</p>
+                        <img src="{% static 'icons/Group1.png' %}" class="back-icon img-fluid">
+                        <img src="{% static 'icons/Group1_dark.png' %}" class="back-icon-hover hidden-element img-fluid">
+                        <p class="subscription-text subscription-price">{{ plans.0.price }}</p>
+                        <p class="subscription-text subscription-month">PER MONTH</p>
+                    </div>
+                </a>
+                <a href="{% url 'process_payment' subscription_id=plans.0.u_id subscription_type='yearly' %}"
+                   class="subscription-link yearly-link hidden-element">
+                    <div class="plan-1">
+                        <p class="subscription-text subscription-name">{{ plans.0.name }}</p>
+                        <img src="{% static 'icons/Group1.png' %}" class="back-icon img-fluid">
+                        <img src="{% static 'icons/Group1_dark.png' %}" class="back-icon-hover hidden-element img-fluid">
+                        <p class="subscription-text subscription-price">{{ plans.0.price }}</p>
+                        <p class="subscription-text subscription-month">PER MONTH</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% if plans.count >= 2 %}
+            <div class="col-sm-4">
+                <a href="{% url 'process_payment' subscription_id=plans.1.u_id subscription_type='monthly' %}"
+                   class="subscription-link monthly-link">
+                    <div class="plan-1">
+                        <p class="subscription-text subscription-name">{{ plans.1.name }}</p>
+                        <img src="{% static 'icons/Group2.png' %}" class="back-icon img-fluid">
+                        <img src="{% static 'icons/Group2_dark.png' %}" class="back-icon-hover hidden-element img-fluid">
+                        <p class="subscription-text subscription-price">{{ plans.1.price }}</p>
+                        <p class="subscription-text subscription-month">PER MONTH</p>
+                    </div>
+                </a>
+                <a href="{% url 'process_payment' subscription_id=plans.1.u_id subscription_type='yearly' %}"
+                   class="subscription-link yearly-link hidden-element">
+                    <div class="plan-1">
+                        <p class="subscription-text subscription-name">{{ plans.1.name }}</p>
+                        <img src="{% static 'icons/Group2.png' %}" class="back-icon img-fluid">
+                        <img src="{% static 'icons/Group2_dark.png' %}" class="back-icon-hover hidden-element img-fluid">
+                        <p class="subscription-text subscription-price">{{ plans.1.price }}</p>
+                        <p class="subscription-text subscription-month">PER MONTH</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% if plans.count >= 3 %}
+            <div class="col-sm-4">
+                <a href="{% url 'process_payment' subscription_id=plans.2.u_id subscription_type='monthly' %}"
+                   class="subscription-link monthly-link">
+                    <div class="plan-1">
+                        <p class="subscription-text subscription-name">{{ plans.2.name }}</p>
+                        <img src="{% static 'icons/Group3.png' %}" class="back-icon img-fluid">
+                        <img src="{% static 'icons/Group3_dark.png' %}" class="back-icon-hover hidden-element img-fluid">
+                        <p class="subscription-text subscription-price">{{ plans.2.price }}</p>
+                        <p class="subscription-text subscription-month">PER MONTH</p>
+                    </div>
+                </a>
+                <a href="{% url 'process_payment' subscription_id=plans.2.u_id subscription_type='yearly' %}"
+                   class="subscription-link yearly-link hidden-element">
+                    <div class="plan-1">
+                        <p class="subscription-text subscription-name">{{ plans.2.name }}</p>
+                        <img src="{% static 'icons/Group3.png' %}" class="back-icon img-fluid">
+                        <img src="{% static 'icons/Group3_dark.png' %}" class="back-icon-hover hidden-element img-fluid">
+                        <p class="subscription-text subscription-price">{{ plans.2.price }}</p>
+                        <p class="subscription-text subscription-month">PER MONTH</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+
+
+$(".switch-left").click(function(){
+    if($(this).hasClass("switch-left")){
+        $(".switch-circle").animate({
+            marginLeft: "+=56px",
+        }, 300 );
+        $(".switch-rect").removeClass("switch-left").addClass("switch-right")
+        $(".switch-circle").removeClass("switch-left").addClass("switch-right")
+        $(".monthly-link").addClass("hidden-element")
+        $(".yearly-link").removeClass("hidden-element")
+    }
+    else if($(this).hasClass("switch-right")){
+        $(".switch-circle").animate({
+            marginLeft: "-=56px",
+        }, 300 );
+        $(".switch-rect").removeClass("switch-right").addClass("switch-left")
+        $(".switch-circle").removeClass("switch-right").addClass("switch-left")
+        $(".yearly-link").addClass("hidden-element")
+        $(".monthly-link").removeClass("hidden-element")
+    }
+
+});
+
+    <!------ Mouse Hover on Box ------>
+    $(".plan-1").mouseover(function(){
+    $(this).find(".back-icon").addClass("hidden-element")
+    $(this).find(".back-icon-hover").removeClass("hidden-element")
+    $(this).find(".subscription-text").css("opacity", 1)
+    });
+
+    <!------ Mouse Leave from Box ------>
+    $(".plan-1").mouseout(function(){
+    $(this).find(".back-icon-hover").addClass("hidden-element")
+    $(this).find(".back-icon").removeClass("hidden-element")
+    $(this).find(".subscription-text").css("opacity", .5)
+    });
+});
+</script>
+{% endblock %}
+

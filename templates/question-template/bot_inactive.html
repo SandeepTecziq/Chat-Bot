@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Not Available</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'project/bootstrap/css/bootstrap.min.css' %}">
+    <link href="{% static 'user_front/css/styles.css' %}">
+    <style>
+
+    html, body{
+    height: 100%;
+    }
+    body{
+    border: 1px solid {{ company.color }};
+    }
+    #DetailForm{
+    margin:10px;
+    padding: 10px;
+    border:1px solid #e2e2e2;
+    }
+    #DetailForm button{
+    background-color: {{ company.color }};
+    width:100%;
+    font-size:14px;
+    font-weight:600;
+    border-color:  {{ company.color }};
+    }
+    .intro-div{
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background: {{ company.color }};
+    color: {{ company.head_text_color }};
+    padding-right: 30px;
+    }
+    .bot-img {
+	display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+	float: left;
+	margin-right: 15px;
+	}
+	{% if not_found %}
+    body{
+    border: 1px solid #76b61b;
+    }
+    .intro-div{
+    background: #76b61b;
+    color: #ffffff;
+    }
+    {% endif %}
+    </style>
+</head>
+<body class="">
+{% if not_found %}
+<div class="intro-div">
+  {% if company.image %}
+			<div class="bot-img" style="background-image: url('{{ company.image.url }}');margin-right:20px;"></div>
+			{% endif %}
+			<p class="mb-0" id="bot-intro-text">Hi ! I am Bot.</p>
+			<p class="mb-0" style="display: none;" id="curr-lang">{{ company.language }}</p>
+    <p id="bot-instruction-text" class="mb-0">I am out of service</p>
+  </div>
+{% else %}
+    <div class="intro-div">
+  {% if company.image %}
+			<div class="bot-img" style="background-image: url('{{ company.image.url }}');margin-right:20px;"></div>
+			{% endif %}
+			<p class="mb-0" id="bot-intro-text">Hi ! I am {{ company.bot_name|title }}.</p>
+			<p style="display: none;" id="curr-lang">{{ company.language }}</p>
+    <p id="bot-instruction-text" class="mb-0">I am out of service</p>
+  </div>
+{% endif %}
+
+    <div class="mt-5">
+        <div class="img-container text-center">
+            <img src="{% static 'icons/Botlogo.png' %}" class="top-nav-icon" style="width: 50px;">
+        </div>
+        <div class="text-container">
+            <p class="text-center mt-0" style="font-family: lato;">Sorry! I am not available.</p>
+        </div>
+    </div>
+
+
+</body>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</html>

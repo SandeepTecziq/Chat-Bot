@@ -1,0 +1,49 @@
+{% load static %}
+{% if curr_provider %}
+<p class="slot-provider-name">{{ curr_provider.name|title }} | {{ curr_provider.company.name }} |
+    {% if curr_provider.is_active %} Active {% else %} Inactive {% endif %}
+    <span class="change-provider-state">(<span data-pk="{{ curr_provider.pk }}" data-name="{{ curr_provider.name }}" class="">change</span>)</span>
+    <img src="{% static 'bot/images/loading_gif.gif' %}" class="loading-image hidden-element" style="width: 60px;">
+</p>
+<!--<div class="row">-->
+    <!--<div class="col-sm-4">-->
+<!--<p class="slot-provider-name">{{ curr_provider.name }}</p>-->
+    <!--</div>-->
+    <!--<div class="col-sm-8">-->
+
+        <form method="post" class="row" id="create-slot-form">
+            {% csrf_token %}
+        <div class="select-time col-sm-8">
+
+            <span>Time</span>
+            <input type="text" name="start" placeholder="start" data-toggle="tooltip" data-placement="top"
+                   title="Please type in HH:MM(24 hour) format like 10:25"> -
+            <input type="text" name="end" placeholder="end" data-toggle="tooltip" data-placement="top" title="Please type in HH:MM(24 hour) format like 15:30">
+            <input type="text" name="provider" value="{{ curr_provider.pk }}" hidden>
+            : <select class="select-day-drop-down selectpicker" name="select-day-drop-down" title="Select Day" multiple> <!----- data-live-search="true"  -------->
+                <option value="All">All</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+
+            </select>
+            <p class="error-list mb-0 hidden-element"></p>
+        </div>
+            <div class="col-sm-4">
+            <input type="submit" value="Add Slot" class="btn button-submit">
+            </div>
+        </form>
+    <!--</div>-->
+<!--</div>-->
+<div class="slot-list">
+{% for slot in curr_provider.provider_slot.all %}
+<p class="available-slot">{{ slot.start }} - {{ slot.end }} : {{ slot.day.day }}</p>
+{% empty %}
+<p class="available-slot">No slot have been created for this Service Provider.</p>
+{% endfor %}
+</div>
+{% endif %}

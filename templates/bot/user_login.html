@@ -1,0 +1,389 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'project/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'project/fontawesome-free/css/all.css' %}">
+
+    <title>User Login</title>
+
+    <style>
+html,body{
+height:100%;
+}
+.errorlist{
+font-size: 14px;
+color: red;
+}
+.label-style, .label-style:hover{
+font-size: 12px;
+color: #949494;
+margin-bottom:3px;
+display: inline-block;
+}
+.row{
+margin: 0;
+}
+.bg-orange{
+background-color: #FF8A00;
+padding: 15px;
+box-shadow: 10px 0 40px 2px rgba(255, 138, 0, .5);
+}
+.logo_icon{
+max-width: 100px;
+}
+.icon_top_heading{
+text-align: left;
+color: #fff;
+
+padding-left: 0;
+}
+.heading-container h2{
+margin-bottom: 0;
+}
+.intro-line{
+font-weight: 600;
+font-size: 24px;
+color: #fff;
+line-height: 30px;
+}
+.intro-points{
+margin-top: 30px;
+font-size: 18px;
+color: #fff;
+line-height: 18px;
+}
+.heading-container p {
+margin: 0;
+}
+.intro-points p span.fa{
+margin-right: 10px;
+}
+.input-container:not(:last-of-type){
+margin-bottom: 10px;
+}
+.input-container input, .input-container input:focus{
+border-radius: 0;
+border-color: #949494;
+border: 1px solid #949494;
+width: 100%;
+height: 35px;
+padding-left: 10px;
+outline: #949494;
+font-size: 14px;
+}
+.button-container{
+text-align: center;
+margin-top: 25px;
+}
+.button-submit, .button-submit:hover{
+background-color: #FF8A00;
+color: #fff;
+margin-bottom:5px;
+font-size: 12px;
+border-radius: 0;
+}
+.signup-button-container{
+max-width: 300px;
+margin-bottom: 20px;
+}
+.signup-button-container .signup-button{
+font-weight: 600;
+padding: 10px;
+cursor:pointer;
+
+}
+.signup-button-container .signup-button.active{
+border-bottom: 2px solid #ff8a00;
+}
+.form-signin{
+display: none;
+}
+.form-signin.active{
+display: block;
+}
+ul.errorlist{
+list-style: none;
+margin-bottom: 0;
+font-size: 12px;
+display: inline-block;
+}
+.m-h{
+min-height: 650px;
+}
+h2.bot-head{
+font-size: 24px !important;
+}
+nav .navbar-nav .nav-link{
+    color: #002b48 !important;
+    opacity: .7;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-family: "Poppins", sans-serif;
+    font-size: .9rem;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+nav .navbar-nav .nav-link:hover{
+color: #000;
+opacity: 1;
+}
+.nav-logo{
+max-width: 90px;
+}
+.op-4{
+opacity: .4;
+}
+.btn-sec{
+    color: #ffffff;
+    background-color: #506690;
+    border-color: #506690;
+    width: 2rem;
+    height: 2rem;
+}
+.btn-sec i{
+font-size: .625rem;
+}
+    </style>
+  </head>
+    <body style="background-color: #f2f2f2">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light bg-white">
+  <a class="navbar-brand p-0 ml-5" href="{% url 'index' %}">
+    <img src="{% static 'teczbot/img/Botlogo.png' %}" alt="Dashcore" class="nav-logo">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link px-4 py-3" href="{% url 'index' %}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-4 py-3" href="{% url 'pricing' %}">Pricing</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-4 py-3" href="{% url 'templates' %}">Templates</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link px-4 py-3" href="{% url 'solutions' %}">Solutions</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+    <div class="row" style="margin-top: 100px;">
+      <div class="col-sm-10 ml-auto mr-auto">
+        <div class="row bg-white m-h">
+          <div class="col-sm-6" style="margin-left: -15px;">
+            <div class="bg-orange h-100">
+            <div class="row mt-4">
+              <div class="col-sm-4 logo_icon"></div>
+              <div class="col-sm-6 icon_top_heading align-self-center">
+                <div class="heading-container">
+                  <h2 class="bot-head text-white">TECZBOT</h2>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="margin-top:25px;">
+
+              <div class="offset-sm-2 col-sm-9">
+                <div class="intro-line">Build Your chatBot, Connect with customers 24 <span class="font-14">X</span> 7</div>
+              </div>
+              <div class="offset-sm-2 col-sm-10" style="margin-top:20px;">
+                <div class="intro-points">
+                  <p><span class="mr-2">a.</span> Multi language facility</p>
+                  <p><span class="mr-2">b.</span> Ready to use pre-made templates</p>
+                  <p><span class="mr-2">c.</span> Unlimited messages</p>
+                  <p><span class="mr-2">d.</span> Multi platform integration</p>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div class="col-sm-6 align-self-center">
+            <div class="signup-button-container ml-auto mr-auto">
+              <span {% if action != 'signup' %} class="signup-button active" {% else %}class="signup-button" {% endif %} id="login-form-button" data-form="login-form">Login</span>
+              <span {% if action == 'signup' %} class="signup-button active" {% else %}class="signup-button" {% endif %} id="signup-form-button" data-form="signup-form">Sign Up</span>
+            </div>
+            <div class="form-container ml-auto mr-auto" style="max-width: 300px">
+              <form {% if action != 'signup' %} class="form-signin active" {% else %} class="form-signin" {% endif %} id="login-form" method="post">
+                {% csrf_token %}
+                <div class="input-container">
+              <p class="label-style">Username</p>
+              {{ form.username }}
+              {{ form.username.errors }}
+                </div>
+                <div class="input-container">
+              <p class="label-style">Password</p>
+              {{ form.password }}
+              {{ form.password.errors }}
+                  <p class="errorlist">{{ form.non_field_errors.as_text }}</p>
+                </div>
+                <div class="button-container">
+              <button class="btn btn-lg button-submit btn-block" type="submit" name="login-submit">LOGIN</button>
+
+                 <a class="label-style" href="#" data-toggle="modal" data-target="#changePasswordModal">Forgot password?</a>
+
+                </div>
+            </form>
+              <form {% if action == 'signup' %} class="form-signin active" {% else %}class="form-signin" {% endif %} id="signup-form" method="post">
+                {% csrf_token %}
+                <div class="input-container">
+                  <p class="label-style">Company Name</p>
+                   {{ parent_company_form.name.errors }}
+                  {{ parent_company_form.name }}
+
+                </div>
+                <div class="input-container">
+                  <p class="label-style">Username</p>
+                   {{ signup_form.username.errors }}
+                  {{ signup_form.username }}
+
+                </div>
+                <div class="input-container">
+                  <p class="label-style">Email</p>
+                   {{ signup_form.email.errors }}
+                  {{ signup_form.email }}
+
+                </div>
+                <div class="input-container">
+                  <p class="label-style">First Name</p>
+                   {{ signup_form.first_name.errors }}
+                  {{ signup_form.first_name }}
+
+                </div>
+                <div class="input-container">
+                  <p class="label-style">Last Name</p>
+                   {{ signup_form.last_name.errors }}
+                  {{ signup_form.last_name }}
+
+                </div>
+                <div class="input-container">
+                  <p class="label-style">Password</p>
+                   {{ signup_form.password.errors }}
+                  {{ signup_form.password }}
+
+                </div>
+                <div class="input-container">
+                  <p class="label-style">Confirm Password</p>
+                   {{ signup_form.confirm_password.errors }}
+                  {{ signup_form.confirm_password }}
+
+                </div>
+                <p class="errorlist" style="margin-bottom: 0;font-size: 12px;">{{ signup_form.non_field_errors.as_text }}</p>
+                <div class="button-container">
+                  <button class="btn btn-lg button-submit btn-block" type="submit" name="signup-submit">SIGNUP</button>
+                </div>
+
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="mt-4 border-top bg-white p-4">
+      <div class="row small align-item-center">
+        <div class="col-md-4 pt-2">
+                        <a href="https://www.tecziq.com/" class="mb-md-0 text-secondary text-center text-md-left" style="text-decoration: none;">© 2020 TeczBot. All Rights Reserved</a>
+                    </div>
+                    <div class="col-md-8">
+                        <nav class="nav justify-content-center justify-content-md-end">
+                            <a href="#" class="btn btn-circle btn-sm btn-sec mr-3 op-4 rounded-circle"><i class="fab fa-facebook text-white"></i></a>
+                            <a href="https://twitter.com/tecziqsolutions" class="btn btn-circle btn-sm rounded-circle btn-sec mr-3 op-4"><i class="text-white fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-circle btn-sm btn-sec mr-3 op-4 rounded-circle"><i class="fab fa-instagram text-white"></i></a>
+                            <a href="https://www.linkedin.com/company-beta/10292057/" class="btn btn-circle rounded-circle btn-sm btn-sec op-4"><i class="fab fa-linkedin text-white"></i></a>
+                        </nav>
+                    </div>
+      </div>
+    </footer>
+    <!------ Forgot Password Modal ------->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">Forgot your password?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-container ml-auto mr-auto" style="max-width: 300px">
+
+        <form method="post" id="change-password-form">
+            {% csrf_token %}
+          <div class="input-container" style="margin-bottom: 15px;">
+          <p class="label-style">Username</p>
+            {{ forget_password_form.username }}
+            {{ forget_password_form.username.errors }}
+          </div>
+          <p class="errorlist form-error"></p>
+          <button type="submit" value="submit" class="btn button-submit btn-lg">Submit</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<script src="{% static 'project/jquery/jquery.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"-->
+        <!--integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"-->
+        <!--crossorigin="anonymous"></script>-->
+<script src="{% static 'project/bootstrap/js/bootstrap.min.js' %}"></script>
+<script>
+    $(document).ready(function(){
+
+    <!------- Remove Placeholder in Signup form --------->
+    $("input").attr("placeholder", "")
+
+    <!----- Sign Up is invalid ------>
+    {% if not signup_success %}
+    $("#login-form-button, #login-form").removeClass("active")
+    $("#signup-form-button, #signup-form").addClass("active")
+    {% endif %}
+
+    <!--------- Show Form  ------------>
+
+    $(".signup-button").click(function(){
+        $(".signup-button").removeClass("active")
+        $(".form-signin").removeClass("active")
+        $(this).addClass("active")
+        var form = $(this).attr("data-form")
+        $("#"+form).addClass("active")
+    });
+
+    <!------- Change Password  ---------->
+      $('#change-password-form').submit(function() {
+          form = $('#change-password-form')
+           $.ajax({ // create an AJAX call...
+               data: form.serialize(),
+               type: 'post',
+               url: "{% url 'forget_password' %}",
+               success: function(data) {
+                   if(data['status'] == false){
+                      $(".form-error").html(data['message'])
+                   }
+                   else{
+                       alert("New password information is sent on your registered email.")
+                       location.reload();
+                   }
+               },
+               error: function(data){
+               alert("Something went wrong. Please refresh and try again.")
+               }
+           });
+           return false;
+      });
+
+    })
+</script>
+</html>

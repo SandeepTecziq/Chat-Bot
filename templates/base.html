@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+{% load static %}
+<!-- saved from url=(0041)https://adminlte.io/themes/v3/index3.html -->
+<html lang="en" style="height: auto;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'bot/css/nav.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'project/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <link href="{% static 'bot/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'bot/css/bases.css' %}" rel="stylesheet">
+	<script src='{% static "bot/js/kit_fontawesome.js" %}'></script>
+    <style>
+                .navbar-expand .navbar-nav .dropdown-menu {
+    font-size: 14px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    opacity: 1;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.font-12{
+font-size: 12px;
+}
+    </style>
+  {% block style %}
+
+    {% endblock %}
+</head>
+
+<body class="sidebar-mini sidebar-collapse" style="height: auto;font-family: lato !important;">
+<div class="wrapper">
+  {% include 'bot/nav.html' %}
+  <div class="content-wrapper bg-white" style="min-height: 976.13px;">
+      <div class="container-fluid">
+
+          {% block content %}
+
+          {% endblock %}
+      </div>
+      <!------- Employee Modal--------->
+<div class="modal fade" id="EmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Employee List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+<div style="color:#fff;">
+        <span id="customer-id"></span>
+        <span id="message-text"></span>
+</div>
+          <ul>
+        {% for employee in employees %}
+              <li><a href="#" class="alert-employee-class" id="{{ employee.id }}">{{ employee.username }}</a></li>
+		{% endfor %}
+          </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----- Change password Modal  ------->
+{% include 'bot/change_password.html' %}
+    </div>
+
+</div>
+<script src="{% static 'project/jquery/jquery.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="{% static 'project/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src='https://unpkg.com/jquery.nicescroll@3.7.6/jquery.nicescroll.js'></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="{% static 'bot/js/reconnecting-websocket.js' %}"></script>
+<script src="{% static 'bot/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'bot/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bot/js/scripts.js' %}"></script>
+<script src="{% static 'bot/js/nav.js' %}"></script>
+<script src="{% static 'bot/js/ajax-script.js' %}"></script>
+
+<script>
+var roomName = "{{ parent_company.secret_key|escapejs }}";
+var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+var notifySocket = new ReconnectingWebSocket(
+    ws_scheme + window.location.host +
+    '/notify/'  + roomName + '/');
+
+$(document).ready(function(){
+
+<!-------- Scroll in Drop down ------->
+         $(".dropdown-menu").niceScroll({
+             cursorwidth:"10px",
+             autohidemode: scroll,
+             enableobserver: true,
+             zindex: 10000,
+           });
+
+<!-------- Show filename on select Image --------->
+$(".custom-file-upload input").bind("change", function(){
+
+var filename = ""
+filename = $(this).val().split("\\").pop()
+$(this).parent().siblings(".file-selected").html(filename)
+
+});
+
+
+notifySocket.onmessage = function(e) {
+    var data = JSON.parse(e.data)
+    var talk_type = data['talk_type']
+    var last_ques = data['last_quest']
+    var secret_key = data['secret_key']
+    var user_id = data['user_id']
+    var note_id = data['note_id']
+    get_notification(talk_type)
+
+    if(talk_type == 'notification_no'){
+    var ques = '<a class="dropdown-item note-read note-read-read" href="#" data-pk="' + note_id + '">' + last_ques + '</a>'
+    $('#div_no').prepend(ques);
+    }
+    else if(talk_type == 'notification_yes') {
+    var ques = '<a data-message="'+last_ques+'" type="button" data-toggle="modal" data-target="#EmployeeModal" class="dropdown-item note-read note-read-read"  data-whatever="' + user_id + '" href="#" data-pk="' + note_id + '">' + last_ques + '</a>'
+    $('#div_yes').prepend(ques);
+    }
+};
+
+<!------- Change Password  ---------->
+$('#change-password-form').submit(function() {
+     form = $('#change-password-form')
+     page_url = "{% url 'change_password' %}"
+     ChangePassword(form, page_url)
+     return false;
+});
+
+<!------ Remove Notification ------->
+
+$(".remove-notify").click(function(){
+    var note_type = $(this).attr("id")
+    var secret_key = '{{ secret_key }}'
+    var page_url = "{% url 'remove_note' %}"
+    $this = $(this)
+    RemoveNotification(note_type, secret_key, page_url, $this)
+});
+
+<!-------- Remove Unread  ----------->
+$(document).on('click', '.note-read', function() {
+
+if($(this).parent().is("#div_no")){
+
+prompt("You can copy this question", $(this).text().trim());
+}
+if ($(this).hasClass("note-read-read")){
+$(this).removeClass("note-read-read")
+var pk = $(this).attr("data-pk")
+$.ajax({
+    url: "{% url 'change_read_status_note' %}",
+    data: {"pk": pk},
+    dataType: 'json',
+    success: function(data){
+
+    }
+})
+}
+});
+<!------- Modal popup jquery -------->
+
+$('#EmployeeModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var user_id = button.data('whatever') // Extract info from data-* attributes
+  var msg_text = button.data('message') // Extract info from data-* attributes
+
+  var modal = $(this)
+  modal.find('#customer-id').text(user_id)
+  modal.find('#message-text').text(msg_text)
+})
+
+<!----- send alert to employee----->
+
+$(".alert-employee-class").click(function(){
+var last_ques_yes = $("#message-text").text()
+var user_id = $("#customer-id").text()
+var key = "{{ secret_key|escapejs }}";
+var emp_id = $(this).attr("id");
+
+var alertEmployeeSocket = new ReconnectingWebSocket(
+    ws_scheme + window.location.host +
+    '/alert_employee/'  + key +'/'+ emp_id + '/');
+alertEmployeeSocket.onopen = function(e){
+alertEmployeeSocket.send(JSON.stringify({
+        'last_ques': last_ques_yes,
+        'user_id': user_id,
+        'emp_id': emp_id,
+
+
+    }));
+    };
+$("#EmployeeModal").modal("hide");
+   });
+
+   <!---------- Train the bot ------->
+
+    <!------------------>
+    });
+</script>
+{% block script %}
+
+{% endblock %}
+
+
+</body></html>

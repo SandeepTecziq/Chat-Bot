@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %} Question Collection {% endblock %}
+
+    {% block style %}
+    <style>
+    textarea{
+            height: 100px;
+    border: 1px solid #949494;
+    outline: #949494;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    width: 100%;
+    }
+    </style>
+    {% endblock %}
+
+
+{% block content %}
+<div class="page-heading">
+    <h2>Question Collection</h2>
+</div>
+<div class="row page-content">
+    <div class="col-sm-8">
+        <div class="block-heading">
+            <h4 class="">Questions In Pack</h4>
+        </div>
+        <div class="block-content border-right" style="padding:0">
+{% if deleted %}
+    <div class="alert alert-success" role="alert" style="text-align: center; font-size: 14px;margin:30px 30px 0 30px;">
+  Selected questions have been deleted. Please do not forget to train the bot.
+</div>
+    {% endif %}
+{% if edited %}
+    <div class="alert alert-success" role="alert" style="text-align: center; font-size: 14px;margin:30px 30px 0 30px;">
+  Selected questions have been edited. Please do not forget to train the bot.
+</div>
+    {% endif %}
+<div class="table-div">
+    <form id="change-status-form" method="post">
+        {% csrf_token %}
+        <select class="form-control" id="change-status-select" name="change-status-select">
+                <option value="1">Delete selected question</option>
+            </select>
+        <input type="text" id="selected-items-input" name="selected-items-input" hidden>
+        <button class="btn button-submit selected-submit">Go</button>
+        <p class="error-list hidden-element if-checked">Please select atleast one question.</p>
+
+    </form>
+    <div class="table-search-box ml-auto">
+
+        <form class="search-user-form">
+            <span class="fa fa-filter"></span>
+            <select id="search-field">
+                <option value=""> Search By Bot </option>
+                {% for bot in parent_company.companies.all %}
+                <option value="{{ bot.name }}">{{ bot.name }}</option>
+                {% endfor %}
+            </select>
+      <input  id="search-user" type="search" placeholder="Search Question" aria-label="Search">
+        <span class="fa fa-search"></span>
+    </form>
+
+                  </div>
+<table class="table" style="padding:20px;" id="question-list-id">
+
+  <thead>
+    <tr>
+      <td scope="col"><input type="checkbox" class="select-all-checkbox"></td>
+      <th scope="col">S.No.</th>
+      <th scope="col">Question</th>
+        <th scope="col">Answer</th>
+        <th scope="col">Bot</th>
+      <th scope="col">Users</th>
+      <th scope="col"></th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for question in questions %}
+    <tr>
+        <td><input type="checkbox" class="single-select" value="{{ question.pk }}" name="select-all-title"></td>
+      <th scope="row">
+
+          {{ forloop.counter }}
+      </th>
+      <td>{{ question.question_text.question.0 }}</td>
+      <td>{{ question.question_name.answer_text }}</td>
+      <td>{{ question.question_tag.company.name }}</td>
+      <td>{{ question.question_name.customer_care }}</td>
+        <td>
+            <button class="btn button-submit-blank edit-question-button" data-pk="{{ question.pk }}">
+                Edit
+            </button>
+        </td>
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+</div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="block-heading">
+            <h4 class="">Edit Question</h4>
+        </div>
+        <div class="block-content edit-question-side">
+            {% include 'bot/question_detail.html' %}
+        </div>
+    </div>
+</div>
+<!--------- Select All Modal ---------->
+<div class="modal fade" id="selectAllModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="selectAllModalLabel">Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          Are you sure you want to delete the selected questions.
+      </div>
+      <div class="modal-footer">
+        <button class="btn button-submit" id="sub-button-selected-all">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready( function () {
+
+<!-------- Edit Question Ajax  ----------->
+
+$(".edit-question-button").click(function(){
+var pk = $(this).attr("data-pk")
+var secret_key = "{{ secret_key }}"
+$.ajax({ // create an AJAX call...
+     data: {'question_id': pk, 'secret_key': secret_key},
+     url: "{% url 'question_detail' %}",
+     dataType: 'json',
+     success: function(data) {
+         if(data['status'] == true){
+         $(".edit-question-side").html(data['html'])
+         $(".edit-question-side").find(".add-question-container").find("#edited-question-pk").val(data['question_id'])
+         }
+         else{
+             alert("Something went wrong.Please refresh and try again.")
+         }
+     },
+     error: function(data){
+     alert("Something went wrong. Please refresh and try again.")
+     }
+});
+})
+
+<!------ Select all form submit ------->
+    $("#sub-button-selected-all").click(function(){
+    $("#change-status-form").submit();
+    });
+
+
+    <!------ Select all modal show ------->
+    $(".selected-submit").click(function(e){
+    select_all_submit(e)
+    });
+
+    <!--- Select all ----->
+    $(".select-all-checkbox").click(function(){
+        select_all($(this))
+    });
+
+<!-------  Add DataTable ----------->
+    var table = $('#question-list-id').DataTable();
+
+    $("#search-field").change(function(){
+        table
+        .column("4")
+        .search(this.value)
+        .draw();
+    })
+    $('#search-user').on('change keyup', function(){
+    var search = $("#search-field").val()
+    table
+    .column("2")
+    .search(this.value)
+    .draw();
+
+  });
+} );
+</script>
+{% endblock %}

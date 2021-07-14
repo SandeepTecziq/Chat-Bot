@@ -1,0 +1,209 @@
+.row{
+        margin: 0;
+        }
+        .border-right{
+        border-right: 1px solid #949494;
+        box-shadow: 14px 0 12px -19px #949494, 0 0 0 0 #949494, 0 0 0 0 #949494, 0 0 0 0 #949494;
+        height: 100%;
+        }
+        .page-heading{
+         padding: 7px 30px 0;
+        }
+        .page-heading h2{
+        color: #949494;
+        }
+        .page-content{
+        margin-top: 0;
+        padding: 10px 20px;
+        }
+        .block-content{
+        padding: 25px 10px 10px 0;
+        margin-top: -10px;
+        min-height: 400px;
+        }
+        .color-orange{
+        color: #ff8a00;
+        }
+        .button-submit, .button-submit:hover{
+        color: #FF8A00;
+        font-size: 14px;
+        background-color: #f1f1f1;
+        font-weight: 600;
+        }
+        .button-submit-blank{
+        border: 1px solid #ff8a00;
+        background-color: #fff;
+        border-radius: 6px;
+        height: 35px;
+        padding: 0 10px;
+        font-size: 14px;
+        }
+        a.button-submit-blank{
+        padding-top: 5px;
+        }
+
+
+
+
+        input, input:focus {
+        font-size: 14px !important;
+        border: 1px solid #949494;
+        border-color:#949494;
+        outline:#949494;
+        padding-left: 10px;
+        }
+        .dropdown-item {
+        font-size: 14px;
+    }
+
+.hidden-element{
+display: none;
+}
+.error-list, ul.errorlist li{
+color: red;
+font-size: 14px;
+font-weight: 600;
+}
+form#change-status-form #change-status-select{
+    max-width: 300px;
+    display: inline;
+    margin-bottom: 10px;
+    font-size: 14px;
+    }
+.modal .modal-body{
+font-size:14px;
+}
+.modal .modal-footer button{
+font-size:14px;
+}
+      .text-orange{
+      color: #ff8a00;
+      }
+      .nav-company-logo span{
+      font-size: 18px;
+      font-weight: 600;
+      margin-left: 10px;
+      }
+      .top-nav-icon{
+      width: 30px;
+      }
+      .top-nav-user-img{
+      display: inline-block;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      }
+      .aside-link-icons{
+      width: 20px;
+      }
+
+      .nav-sidebar .nav-item>.nav-link {
+      padding: 10px 10px 10px 5px;
+      }
+      .nav-sidebar .nav-link p {
+      margin-left: 15px;
+      position: relative;
+      top: 2px;
+      }
+      .nav-item p.active{
+      color: #ff8a00;
+      }
+      table.dataTable{
+        font-size: 14px;
+        color: #949494 !important;
+        padding: 0 !important;
+        margin: 0 -15px;
+        }
+
+        table.dataTable thead tr th{
+        font-weight: 100;
+        color: #000;
+        }
+        .dataTables_info, .dataTables_paginate {
+        font-size: 14px;
+        }
+
+        .search-user-form #search-user, .search-user-form #search-user:focus{
+        max-width: 150px;
+        height: 30px;
+        border-radius: 6px;
+        padding: 10px;
+        outline: #949494;
+        border-color: #949494;
+        border: 1px solid #949494;
+        }
+        .search-user-form span.fa{
+        color: #949494;
+        font-size: 20px;
+        opacity: .5;
+        margin-left: 5px;
+        }
+        .search-user-form #search-field{
+        font-size: 14px;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid #949494;
+        padding: 0 10px;
+        margin-right: 15px;
+        }
+        .paginate_button.current{
+        color: #949494 !important;
+        border-color: #949494 !important;
+        }
+        .dataTables_length{
+        margin-bottom: 10px;
+        }
+        .dataTables_length label{
+        font-size: 14px;
+        }
+        .dataTables_length select, .dataTables_length select:active{
+        height: 25px;
+        border: 1px solid #949494;
+        border-radius: 6px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border: none;
+        margin: 0 10px;
+        }
+        .custom-file-upload {
+            background-color: #f1f1f1;
+            border: none;
+            color: #ff8a00;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: normal !important;
+            font-size: 14px;
+        }
+        .custom-file-upload input {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+
+        }
+        .page-heading h2, .block-heading h4{
+        font-family: lato !important;
+        }
+        table.table.dataTable {
+        border: none;
+        }
+        .table-search-box{
+        width: max-content;
+        position: relative;
+        top: 30px;
+        right: 20px;
+        z-index: 10;
+        }
+        .hidden-visible{
+        visibility: hidden;
+        }
+        .main_header.navbar-expand .navbar-nav .dropdown-menu {
+    font-size: 14px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    opacity: 1;
+    max-height: 200px;
+    overflow-y: scroll;
+}

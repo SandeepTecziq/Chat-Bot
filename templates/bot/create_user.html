@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block title %} Add User {% endblock %}
+{% block style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <style>
+        #RegistrationForm{
+        max-width: 350px;
+        }
+
+        .form-button{
+        text-align: center;
+        }
+        div.bootstrap-select.select-bot{
+        width: 100% !important;
+        }
+
+        div.bootstrap-select.select-bot > .dropdown-toggle{
+        color: #949494;
+        background-color: #fff;
+        border-color: #ced4da;
+        font-size: 14px;
+        }
+        .bootstrap-select.show-tick .dropdown-menu li a span.text {
+            font-weight: normal;
+            color: #949494;
+            font-size: 14px;
+        }
+
+
+
+    </style>
+    {% endblock %}
+{% block content %}
+<div class="page-heading">
+    <h2>Users</h2>
+</div>
+<div class="row page-content">
+    <div class="col-sm-4">
+
+        <div class="block-heading">
+            <h4>Add User</h4>
+        </div>
+        <div class="block-content border-right">
+            <form method="post" id="RegistrationForm">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+          <div class="form-group">
+            {{ form.username }}
+            {{ form.username.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.password }}
+            {{ form.password.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.confirm_password }}
+            {{ form.confirm_password.errors }}
+          </div>
+                <div class="form-group">
+                    <select class="select-bot selectpicker" title="Select Bot" multiple name="add_bot_to_user">
+                        {% for i in company_bots %}
+                        <option value="{{ i.pk }}">{{ i.name }}</option>
+                        {% endfor %}
+                    </select>
+          </div>
+                <div class="form-button">
+        <button name='signup_submit' type="submit" class="btn button-submit ml-auto mr-auto">Submit</button>
+                </div>
+        </form>
+        </div>
+
+    </div>
+    <div class="col-sm-8" style="padding:0">
+
+        <div class="block-heading">
+            <h4 class="">Existing Users</h4>
+        </div>
+        <div class="block-content" style="padding:0">
+            <div class="table-search-box ml-auto">
+
+        <form class="search-user-form">
+            <span class="fa fa-filter"></span>
+            <select class="" id="search-field">
+                <option value="1">By Username</option>
+                <option value="2">By Name</option>
+            </select>
+      <input  id="search-user" type="search" aria-label="Search">
+            <span class="fa fa-search"></span>
+
+    </form>
+
+                  </div>
+            <table class="table" style="padding:20px;" id="question-list-id">
+
+  <thead>
+    <tr>
+      <th scope="col">S.No.</th>
+      <th scope="col">Username</th>
+      <th scope="col">Name</th>
+      <th scope="col">Last Login</th>
+      <th scope="col">Bot assigned</th>
+      <th scope="col"></th>
+
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in employees %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ user.username }}</td>
+      <td>{{ user.first_name }} {{ user.last_name }}</td>
+      <td>{{ user.last_login }}</td>
+      <td class="bot-td">
+          <div class="bot-list">
+          {% for i in user.bots.all %}
+          {% if forloop.counter != 1 %}, {% endif %}{{ i.name }}
+          {% endfor %}
+          </div>
+          <div class="bot-form hidden-element"></div>
+      </td>
+        <td>
+          <button class="add_bot_button btn button-submit-blank" data-pk="{{ user.pk }}">Add Bot</button>
+          <button class="cancel_button btn button-submit-blank hidden-element">Cancel</button>
+            <a href="{% url 'activate_user' user_pk=user.pk %}" class="btn button-submit-blank">
+            {% if user.is_active %}
+            Deactivate
+            {% else %}
+            Activate
+            {% endif %}
+                </a>
+      </td>
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+</table>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+$(document).ready( function () {
+
+    <!------- Show add Bot form -------->
+    $(".add_bot_button").click(function(){
+        var $this = $(this)
+        var page_url = "{% url 'add_bot_to_user' %}"
+        AddBotFormFunction(page_url, $this)
+    });
+
+    <!----- Remove add Bot button ------>
+    $(".cancel_button").click(function(){
+    $(".cancel_button").addClass("hidden-element")
+    $(".add_bot_button").removeClass("hidden-element")
+    $(".bot-form").addClass("hidden-element")
+    $(".bot-list").removeClass("hidden-element")
+    })
+
+    <!--- Bootstrap Picker --->
+    $('.select-bot').selectpicker();
+    <!--- Add DataTable ----->
+
+    var table = $('#question-list-id').DataTable();
+
+    $('#search-user').on('change keyup', function(){
+    var search = $("#search-field").val()
+    table
+    .column(search)
+    .search(this.value)
+    .draw();
+
+  });
+
+});
+</script>
+{% endblock %}

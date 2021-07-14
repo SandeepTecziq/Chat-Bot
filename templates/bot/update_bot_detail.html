@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Update Bot Details {% endblock %}
+{% block style %}
+<link href="{% static 'bot/css/room.css' %}" rel="stylesheet">
+<style>
+body{
+font-size: 14px;
+}
+#DetailForm{
+    margin:10px;
+    padding: 10px;
+    border:1px solid #e2e2e2;
+    }
+    #DetailForm .popup-submit{
+    background-color: {{ company.color }};
+    width:100%;
+    font-size:14px;
+    font-weight:600;
+    border-color:  {{ company.color }};
+    }
+    .intro-div{
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background: {{ company.color }};
+    color: {{ company.head_text_color }};
+    padding-right: 30px;
+    }
+    li.sent{
+	background: {{ company.color }};
+	color: {{ company.head_text_color }};
+	}
+	.contact-profile{
+	background: {{ company.color }};
+	color: {{ company.head_text_color }};
+	padding: 10px;
+	}
+	.sent-span{
+	border-color: {{ company.color }};
+	}
+
+	.messages{
+	    overflow-y: hidden !important;
+	}
+	.bot-img {
+	display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+	float: left;
+	margin-right: 15px;
+	}
+	.bot-image-div a:not(.custom-link), .bot-image-div label, .bot-image-div #image-clear_id{
+	display: none;
+	}
+	#custom-image-clear{
+    height: 15px;
+    position: relative;
+    top: 3px;
+    left: 5px;
+	}
+	#custom-id_image{
+	border: none;
+	padding: 5px;
+	}
+	.image-instruction{
+	font-size: 12px;
+	margin-top: -10px;
+	}
+	.button-submit-blank, .button-submit-blank:hover{
+	color: #000000;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h2 class="float-left">Bot Configuration: {{ company.name }}</h2>
+    <a href="{% url 'bot_list' %}" class="btn button-submit float-right">Back</a>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-sm-4">
+        <div style="margin: 20px 15px; border:1px solid #e5e5e5;padding:0;width:350px;height: 500px;border-radius:6px;">
+        <div class="intro-div" style="border-top-right-radius:6px;border-top-left-radius:6px;">
+{% if company.image %}
+			<div class="bot-img" style='background-image: url("{{ company.image.url }}");margin-right:20px;'></div>
+			{% endif %}
+			<p style="margin-bottom: 0;">Hi ! I am {{ company.bot_name|title }}.</p>
+    {{ company.intro_text_login }}
+  </div>
+        <form method="post" id="DetailForm">
+          <div class="form-group">
+            <select name="language-selected" class="form-control" id="language-select">
+              <option selected>{{ company.language }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control popup-form-input" placeholder="name *">
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control popup-form-input" placeholder="email *">
+          </div>
+
+
+        <span class="btn btn-primary popup-submit">START CHAT</span>
+        </form>
+        </div>
+    </div>
+<div class="col-sm-4 modal-body-add" style="width:100%;">
+<form method="post" id="RegistrationForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+          <div class="form-group">
+            {{ form.bot_name }}
+            {{ form.bot_name.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.color }}
+            {{ form.color.errors }}
+
+          </div>
+            <div class="form-group">
+            {{ form.intro_ques }}
+            {{ form.intro_ques.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.bot_ques }}
+            {{ form.bot_ques.errors }}
+          </div>
+          <div class="form-group">
+            {{ form.bot_title }}
+            {{ form.bot_title.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.head_text_color }}
+            {{ form.head_text_color.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.intro_text_login }}
+            {{ form.intro_text_login.errors }}
+          </div>
+            <div class="form-group">
+            {{ form.service_provider }}
+            {{ form.service_provider.errors }}
+          </div>
+    <div class="form-group bot-image-div">
+        {% if company.image %}
+        <p class="mb-0"><a href="{{ company.image.url }}" class="custom-link">Current Image</a></p>
+        <p class="mb-0">
+        Check this and submit to remove image: <input type="checkbox" name="image-clear" id="custom-image-clear">
+        </p>
+        <p class="mb-0">Update</p>
+        {% endif %}
+        <input type="file" name="image" accept="image/*" id="custom-id_image">
+        <p class="image-instruction">Preferred image width/height ratio is 1:1</p>
+          </div>
+        <button name='signup_submit' type="submit" class="btn button-submit-blank popup-submit mt-0">SUBMIT</button>
+        </form>
+</div>
+<div class="col-sm-4">
+    <div id="frame"style="margin: 20px 15px; border:1px solid #e5e5e5;padding:0;width:350px;height: 500px;border-radius:6px;">
+	<div class="content">
+		<div class="contact-profile" style="border-top-right-radius:6px;border-top-left-radius:6px;">
+			{% if company.image %}
+			<div class="bot-img" style='background-image: url("{{ company.image.url }}");margin-right:20px;'></div>
+			{% endif %}
+			<p style="">{{ company.bot_name|title }}</p>
+		</div>
+		<div class="messages">
+			<div id="message-list">
+			<ul id="chatID">
+				<li class="replies msg-li">{{ company.intro_ques }}
+					<button class="sent-span btn btn-primary" id="start-bot">{{ company.bot_title }}</button>
+				{% for name in company.company_chat_title.all %}
+					{% if name.active %}
+					<button class="sent-span btn btn-primary chat-titles" data-title="{{ name.pk }}">{{ name.title }}</button>
+					{% endif %}
+				{% endfor %}
+                    <button class="sent-span btn btn-primary book-appointment">Book Appointment</button>
+				</li>
+                <li class="sent msg-li">{{ company.bot_title }}</li>
+                <li class="replies msg-li">{{ company.bot_ques }}</li>
+			</ul>
+			</div>
+		</div>
+		<div class="message-input">
+			<div class="wrap">
+			<input style="display:none"  type="text" class="input-box" id="chat-message-input" placeholder="Type question here...." />
+			<button class="submit chat-button-none" id="chat-message-submit">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{% endblock %}

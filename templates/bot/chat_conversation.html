@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Conversation History {% endblock %}
+
+    {% block style %}
+<link href="{% static 'bot/css/chat-history-styles.css' %}" rel="stylesheet" id="">
+<style>
+.msg_cotainer_send, .msg_cotainer {
+    font-size: 14px !important;
+    }
+</style>
+    {% endblock %}
+
+
+{% block content %}
+<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+
+				<div class="col-md-8 col-xl-6 chat">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+
+								<div class="user_info">
+									<span>Chat with  {{ conversation.0.history.customer.name }} on {{ conversation.0.history.date }}</span>
+									<p>{{ conversation.count }} Messages</p>
+
+								</div>
+								{% if conversation.0.history.trained_status == False %}
+								<div class="bot-training" style="margin-left: auto;">
+									<button class="btn btn-primary" id="bot-train">Train</button>
+								</div>
+								{% endif %}
+
+
+							</div>
+
+
+						</div>
+						<div class="card-body msg_card_body">
+						{% for con in conversation %}
+							<div class="ques-ans">
+							<div class="d-flex justify-content-start mb-4">
+								{% if con.history.trained_status == False %}
+								<input type="checkbox" name="ques" value="{{ forloop.counter }}">
+								{% endif %}
+								<div class="msg_cotainer chat-msg">
+									<span class="text">{{ con.question }}</span>
+									<input type="text" value="{{ con.question }}" style="display: none">
+									<span class="msg_time">{{ con.time }}</span>
+								</div>
+								<button class="btn btn-primary done">Done</button>
+							</div>
+							<div class="d-flex justify-content-end mb-4">
+								<button class="btn btn-primary done">Done</button>
+								<div class="msg_cotainer_send chat-msg">
+									<span class="text">{{ con.answer }}</span>
+									<input type="text" value="{{ con.answer }}" style="display: none">
+									<span class="msg_time_send">{{ con.time }}</span>
+								</div>
+
+							</div>
+							</div>
+{% endfor %}
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock %}
+
+{% block script %}
+<script src='https://unpkg.com/jquery.nicescroll@3.7.6/jquery.nicescroll.js'></script>
+<script>
+	$(document).ready(function(){
+	<!-- Nice scroll --->
+$(".card-body").niceScroll({
+  cursorcolor:"#78e08f",
+  cursorwidth:"10px",
+  autohidemode: scroll,
+  enableobserver: true,
+});
+<!----------->
+	$(".msg_cotainer_send, .msg_cotainer").click(function(){
+	$(this).find("span.text").hide();
+	$(this).find("input").show();
+	$(this).siblings(".done").show();
+	});
+	$(".done").click(function(){
+	var txt = $(this).siblings(".chat-msg").find("input").val()
+	$(this).siblings(".chat-msg").find(".text").html(txt)
+	$(this).hide()
+	$(this).siblings(".chat-msg").find("input").hide()
+	$(this).siblings(".chat-msg").find(".text").show()
+
+
+	});
+	<!-----  train Bot ------->
+	$("#bot-train").click(function(){
+		var chat = {}
+		$(".ques-ans").each(function(){
+			if($(this).find("input").prop("checked") == false){
+				var ques = $(this).find(".msg_cotainer").find(".text").text().trim()
+				var ans = $(this).find(".msg_cotainer_send").find(".text").text().trim()
+				chat[ques] = ans
+
+			}
+
+		});
+		$.ajax({
+			url: "{% url 'train_chat_data' %}",
+			dataType: 'json',
+			data: {"chat": JSON.stringify(chat),"secret_key": "{{ company_secret_key }}", "id": "{{ id }}", "username": "{{ conversation.0.history.talker.username }}"},
+			success: function(data){
+			$.ajax({
+			   url: "{% url 'create_file' %}",
+			   dataType: "json",
+			   data: {},
+			   success: function(data){
+			   alert(data['message'])
+			   }
+			 });
+			}
+		});
+
+		});
+	});
+</script>
+{% endblock %}

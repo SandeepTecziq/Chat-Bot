@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %} Aff facebook detail {% endblock %}
+{% block style %}
+
+<style>
+h4.bot-h4-heading {
+   width: 100%;
+   text-align: center;
+   border-bottom: 1px solid #ff8a00;
+   line-height: 0.1em;
+   margin: 10px 0 20px;
+   color: #ff8a00;
+}
+
+h4.bot-h4-heading span {
+    background:#fff;
+    padding:0 10px;
+}
+.bot-container {
+margin: 30px 0;
+}
+.integration-box{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 15px;
+}
+.integration-box .box-title{
+font-size: 20px;
+font-weight: 600;
+}
+.integration-box .box-text{
+margin-bottom: 5px;
+color: #949494;
+}
+.box-link{
+font-size: 14px;
+color: #ff8a00;
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h2>Integration</h2>
+</div>
+<div class="integration-container">
+{% for company in companies %}
+  <div class="bot-container">
+<h4 class="bot-h4-heading"><span>{{ company.name }}</span></h4>
+    <div class="row">
+        <div class="col-sm-4 integration-box">
+            <p class="box-title">Facebook Integration</p>
+            <p class="box-text"><b>Verify Token:</b> {{ company.facebook_bot.verify_key }}</p>
+            <p class="box-text"><b>Access Token:</b> {{ company.facebook_bot.access_key|truncatechars:20 }}</p>
+            <p class="box-text"><b>Page ID:</b> {{ company.facebook_bot.page_id }}</p>
+            <a href="#" data-toggle="modal" data-target="#FBTokenModal" class="float-right box-link"
+               data-verify-key="{{ company.facebook_bot.verify_key }}"
+               data-company-pk="{{ company.pk }}" data-added-title="{{ company.name }}">
+                Add Page ID and Access Token
+            </a>
+        </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+<!------ Create Verify token Modal ------->
+<div class="modal fade" id="FBTokenModal" tabindex="-1" role="dialog" aria-labelledby="FBTokenModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="selectAllModalLabel">Facebook Token: <span class="modal-added-title"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="facebook-token-form" method="post">
+              {% csrf_token %}
+              <input type="text" class="verify-token-input" name="verify-token-input" hidden>
+              <input type="text" class="company-pk-input" name="company-pk-input" hidden>
+              {{ form.as_p }}
+              <input class="btn button-submit" type="submit" value="Submit">
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready( function () {
+
+<!-------  Add DataTable ----------->
+    var table = $('#question-list-id').DataTable();
+
+<!----- On Chat Demo Modal Show ------->
+    $('#FBTokenModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var verify_key = button.data('verify-key')
+      var company_key = button.data('company-pk')
+      var added_title = button.data('added-title')
+      var modal = $(this)
+      modal.find('.verify-token-input').val(verify_key)
+      modal.find('.company-pk-input').val(company_key)
+      modal.find('.modal-added-title').html(added_title)
+
+    })
+
+});
+</script>
+{% endblock %}

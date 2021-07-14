@@ -1,0 +1,535 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Edit Chat Map {% endblock %}
+{% block style %}
+<style>
+.row{
+margin: 0;
+}
+.question-type{
+position: fixed;
+z-index: 10;
+padding: 15px;
+border-radius: 6px;
+bottom: 0;
+}
+ul.question-type-list li{
+cursor: pointer;
+}
+.question-collection form{
+padding-bottom: 15px;
+margin-bottom: 20px;
+border-bottom: 1px solid #ff8a00;
+}
+
+.chat-map-instruction{
+border-bottom: 1px solid #f1f1f1;
+border-left: 10px solid #ff8a00;
+padding: 0 15px 15px 30px;
+margin-bottom: 15px;
+margin-right: -15px;
+}
+.chat-map-instruction .instruction-heading{
+font-size: 22px;
+font-weight: 700;
+margin-bottom: 0;
+opacity: .7;
+}
+.chat-map-instruction .instruction-text{
+font-size: 12px;
+color: #949494;
+margin-bottom: 0;
+line-height: 16px;
+}
+.question-type-container{
+padding-left: 50px;
+}
+.question-type-list{
+margin-bottom: 15px;
+cursor: pointer;
+}
+.question-type-list p.question-type-text{
+font-size: 16px;
+color: #949494;
+margin-bottom: 0;
+}
+
+.question-type-list p.question-type-description{
+font-size: 12px;
+color: #949494;
+margin-bottom: 0;
+}
+.question-type-list.active p.question-type-text, .question-type-list.active p.question-type-description{
+color: #000;
+}
+.title-div{
+width: max-content;
+margin-bottom: 30px;
+}
+.title-div input{
+width: 300px !important;
+border-radius: 6px;
+height: 35px;
+margin-right: 15px;
+}
+.form-number{
+width: 40px;
+background-color: #fff !important;
+border: 1px solid #fff;
+font-size: 16px !important;
+font-weight: 600;
+color: #949494;
+}
+.form-text-single, .url-input{
+height: 35px;
+border-radius: 6px;
+width: 300px;
+margin-right: 15px;
+}
+.form-description, .form-description:focus{
+height: 100px;
+border-radius: 6px;
+margin-right: 15px;
+border: 1px solid #949494;
+outline: #949494;
+margin-bottom: -10px;
+padding-left: 10px;
+margin-top: 10px;
+margin-left: 45px;
+font-size: 14px;
+}
+.option-text, .form-text-carousel, .form-option, .single-text{
+height: 35px;
+border-radius: 6px;
+width: 150px;
+margin-right: 15px;
+}
+.secondary-fields{
+margin-top: 10px;
+margin-left: 45px;
+}
+.tertiary-fields{
+margin-top: 15px;
+margin-left: 45px;
+}
+.tertiary-fields div.item:not(:first-of-type) {
+margin-top: 15px;
+}
+select.parent-select{
+height: 33px;
+width: 50px;
+border-radius: 6px;
+border-color: #ff8a00;
+position: relative;
+top: 1px;
+}
+div.add-it{
+margin-top: 15px;
+}
+span.unsaved-span{
+color: #949494;
+font-size: 14px;
+margin-left: 10px;
+display: none;
+}
+.update-chat-map{
+text-align: center;
+margin-bottom: 20px;
+}
+.test-questions-box{
+padding: 10px;
+position: fixed;
+right: 380px;
+bottom: 30px;
+z-index: 1000;
+}
+.test-questions-box .test-question{
+background-color: #e2e2e2;
+padding: 10px;
+max-width: 220px;
+font-size: 14px;
+border-radius: 20px;
+border-bottom-left-radius: 0;
+}
+.sent-span {
+    padding: 10px 15px;
+    margin-right: 5px;
+    background: #fff !important;
+    color: #000;
+    cursor: pointer;
+    border-radius: 25px;
+    margin-top: 10px;
+    border-color: {{ chat_title.company.color }};
+    width: 100%;
+    font-size: 14px;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="form-collection">
+    {% include 'question-template/form-collection.html' %}
+</div>
+<div class="page-heading">
+    <h2 class="float-left">Edit Chat Map</h2>
+<a href="{% url 'chat_maps' id=company.pk name=company.name %}" class="btn button-submit float-right">Back</a>
+</div>
+<div class="clearfix"></div>
+<div class="row" style="margin-top: 30px;">
+    <div class="col-sm-8">
+        <div class="title-div ml-auto mr-auto">
+            <input type="text" class="question-text" placeholder="Chat title" id="name" value="{{ chat_title.title }}">
+            <button id="save-title" class="btn button-submit">Save</button>
+            <p class="error-list error-chat-name hidden-element">This is an error.</p>
+        </div>
+        <div class="instruction-box mb-3">
+            <button class="btn button-submit-blank hidden-element show-booking-instruction">Show Notice</button>
+            <div class="booking-instruction alert alert-info" role="alert">
+                <div class="row">
+                    <div class="col-sm-9">
+                <p class="mb-2 color-94 font-14">Note: If you want to add book appointment in chat map, follow these steps</p>
+                <ul class="color-94 font-14">
+                    <li>Select "Text Question with Option"</li>
+                    <li>Enter "Do you want to book appointment?"</li>
+                    <li>Put "Yes" in first option and "No" in second option.</li>
+                </ul>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <span class="cursor-pointer close-booking-instruction">X</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="question-collection">
+
+            {% include 'bot/map_details.html' %}
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="question-type">
+            <div class="update-chat-map">
+                <img src="{% static 'bot/images/loading_gif.gif' %}" class="img-fluid hidden-element update-map-loading" style="width:50px;">
+                <p class="mb-2 color-94 update-map-complete font-14 hidden-element">Chat map has been updated</p>
+                <button class="btn update-chat-map-button w-100 text-white" style="background-color:#ff8a00;">Update</button>
+            </div>
+        <div class="chat-map-instruction">
+            <p class="instruction-heading">Select Question</p>
+            <p class="instruction-text">Select The Type Of The Question To Add The Template To The Map And Customize It.</p>
+        </div>
+            <div class="question-type-container">
+                <div class="question-type-list" data-form="text-form" data-carousel-type="single" data-option="False">
+                    <p class="question-type-text">
+                        Text Question
+                    </p>
+                    <p class="question-type-description">
+                        Single text question (Image and URL is optional)
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="text-option-form" data-carousel-type="single" data-option="True">
+                    <p class="question-type-text">
+                        Text Question with Option
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="image-carousel-form" data-carousel-type="carousel" data-option="False">
+                    <p class="question-type-text">
+                        Image Carousel
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="image-carousel-option-form" data-carousel-type="carousel" data-option="True">
+                    <p class="question-type-text">
+                        Image Carousel with Option
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="card-form" data-carousel-type="single" data-option="False">
+                    <p class="question-type-text">
+                        Card
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="card-option-form" data-carousel-type="single" data-option="False">
+                    <p class="question-type-text">
+                        Card with Option
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="card-carousel-form" data-carousel-type="carousel" data-option="False">
+                    <p class="question-type-text">
+                        Card with Carousel
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+                <div class="question-type-list" data-form="card-carousel-option-form" data-carousel-type="carousel" data-option="False">
+                    <p class="question-type-text">
+                        Card with Carousel and Option
+                    </p>
+                    <p class="question-type-description">
+
+                    </p>
+                </div>
+            </div>
+
+    </div>
+    </div>
+    <div class="test-questions-box">
+        {% include 'question-template/show-on-hover.html' %}
+    </div>
+</div>
+
+<!------- Remove Question Modal ---------->
+<div class="modal fade" id="deleteQuestionModal" tabindex="-1" role="dialog" aria-labelledby="deleteQuestionModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteQuestionModalLabel">Remove Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Removing this question will remove all child questions.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn button-submit remove-question-submit" data-dismiss="modal" data-pk="">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'bot/js/ajax-script.js' %}"></script>
+<script>
+$(document).ready(function(){
+
+    <!------- Open and Close Booking Instruction ------>
+    $(".close-booking-instruction").click(function(){
+        $(".booking-instruction").addClass("hidden-element")
+        $(".show-booking-instruction").removeClass("hidden-element")
+    });
+    $(".show-booking-instruction").click(function(){
+        $(".show-booking-instruction").addClass("hidden-element")
+        $(".booking-instruction").removeClass("hidden-element")
+    });
+
+
+    <!--- Add value to chat title ----->
+    $(".form-chat-title").val("{{ chat_title.pk }}")
+
+    <!----- Test carousel interval ----->
+    $(".carousel-test").carousel({
+    interval: 1000
+    })
+
+    <!------ Show Question Sample on Hover ------->
+    $('div.question-type-list').mouseenter(function () {
+        form = $(this).attr("data-form")
+        $(".test-question").addClass("hidden-element")
+        $(".test-question."+form).removeClass("hidden-element")
+     });
+
+     $('div.question-type-list').mouseleave(function () {
+           form = $(this).attr("data-form")
+           $(".test-question").addClass("hidden-element")
+     })
+
+    <!------- Update forms ------->
+    $(".update-chat-map-button").click(function(){
+        var saved = $(".question-collection form:last").attr("data-saved")
+        if(saved == "not-saved"){
+            alert("There is a un-saved question. Please save or remove before updating existing questions")
+            return true
+        }
+        $(".update-map-loading").removeClass("hidden-element")
+        $(".question-collection .create-question-form").each(function(){
+            $(this).find(".form-number").prop("disabled", false)
+                $(this).find(".error-question-text").html("")
+                var $this = $(this)
+                var page_link = "{% url 'edit_save_question' %}"
+                var form_data = new FormData(this)
+                SaveQuestion($this, form_data, page_link, true)
+                $(this).find(".unsaved-span").hide();
+                $(this).attr("data-update","true")
+        })
+        $(".update-map-loading").addClass("hidden-element")
+        $(".update-map-complete").removeClass("hidden-element")
+
+    })
+
+    <!------ Unsaved Form -------->
+    $(document).on("change","input, textarea", function(){
+    $(this).parent().parent().attr("data-update", "false")
+    $(this).parent().parent().find(".unsaved-span").show();
+    })
+
+    <!-------- Remove Question Modal Open ---------->
+
+    $('#deleteQuestionModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var pk = button.data('pk')
+
+      var modal = $(this)
+      modal.find(".remove-question-submit").attr("data-pk", pk)
+
+    })
+
+    <!------- Remove Question -------->
+    $(document).on("click", ".remove-question-submit", function(){
+    var pk = $(this).attr("data-pk")
+    var page_url = "{% url 'remove_save_question' %}"
+    RemoveQuestion(pk, page_url)
+    });
+
+    <!---------- Add Saved Class ------------->
+    $(".question-type-list").addClass("title-saved-ok")
+
+    <!----------- Remove option -------->
+    $(document).on("click", ".remove-question-option", function(){
+        RemoveOption($(this))
+        add_number()
+        return false;
+    })
+
+    <!----- Add Option ------>
+    $(document).on("click", ".add-it .add-option", function(){
+        AddOption($(this))
+        return false;
+    })
+
+    <!---------- On parent select -------->
+    $(document).on("change", ".parent-select", function(){
+        SelectParent($(this))
+    })
+
+    <!---------- Show parent in Saved Questions ----------->
+    AddParentInSavedQuestion()
+
+    <!------- Save Question ------->
+    $(document).on("submit", ".create-question-form", function(){
+
+    $(this).find(".form-number").prop("disabled", false)
+    $(this).find(".error-question-text").html("")
+    var $this = $(this)
+    var page_link = "{% url 'save_question' %}"
+    var form_data = new FormData(this)
+    SaveQuestion($this, form_data, page_link, false)
+    return false;
+    });
+
+    function SaveQuestion($this, form_data, page_link, update_status){
+    $.ajax({
+            data: form_data,
+            processData: false,
+            contentType: false,
+            type: 'post',
+            url: page_link,
+            success: function(data) {
+                if(data['status'] == true){
+                    $this.find(".save-form").remove()
+                    $this.find(".remove-form").attr("data-toggle", "modal")
+                    $this.find(".remove-form").attr("data-pk", data['new_pk'])
+                    $this.find(".remove-form").attr("data-target", "#deleteQuestionModal")
+                    $this.find(".remove-form").after("<span class='unsaved-span'>(unsaved)</span>")
+                    $this.find(".remove-form").addClass("remove-question").removeClass("remove-form")
+                    if(update_status == false){
+                        var append_input = '<input type="text" class="current-map-pk" name="current-map-pk" value="'+data['new_pk']+'" hidden>'
+                        $this.append(append_input)
+                    }
+                    $this.find(".form-child-id").val(data['child_id'])
+                    $this.find(".hidden-input").find(".form-child-id").addClass("parent-"+data['number'])
+                    $this.attr("data-saved","saved")
+                    $this.attr("data-update","true")
+
+                    if(data['single_option'] == true){
+                        $.each(data['options'], function(key, value){
+                            $this.find(".form-number").each(function(){
+                            if($(this).val() == key){
+                                $(this).siblings(".option-child-id").val(value[1])
+                                $(this).siblings(".option-child-id").addClass("parent-"+key)
+                            }
+                            })
+                        })
+                    }
+                    if(data['carousel_option'] == true){
+                        $.each(data['carousel_option_dict'], function(key, value){
+                            $this.find(".form-number").each(function(){
+                            if($(this).val() == key){
+                                $(this).siblings(".form-option-child-id").val(value)
+                                $(this).siblings(".form-option-child-id").addClass("parent-"+key)
+                            }
+                            })
+                        })
+                    }
+                    $(".question-type-list").removeClass("active")
+                    if($(".error-un-saved").hasClass("hidden-element")){
+
+                    }
+                    else{
+                        $(".error-un-saved").addClass("hidden-element")
+                    }
+                }
+                else if(data['status'] == 'form_error'){
+                    $(data['message']).each(function(index, element) {
+                        $this.find(".error-fields").append("<p class='error-list error-question-text'>"+element+"</p>")
+                    });
+                }
+                else if(data['status'] == false){
+                    $this.find(".error-question-text:first").html(data['message'])
+                }
+             },
+            error: function(data){
+               alert("Something went wrong. Please refresh and try again.")
+            }
+
+        });
+
+    }
+    <!-------- Remove Question form Form ------->
+    $(document).on("click", ".remove-form", function(){
+        $(".question-type-list").removeClass("active")
+        $(this).parent().parent("form").remove()
+        add_number()
+    });
+    <!-------- Add Question --------->
+    $("div.question-type-list").click(function(){
+
+    var $this = $(this)
+    var new_serial = $(".question-collection .form-number").length
+    add_question($this, new_serial)
+    });
+
+    <!-------- Set title pk for new questions -------->
+    setTitleToNewQuestions("{{ maps.0.chat_title.pk }}")
+
+    <!--- Edit Chat Title --->
+    $("#save-title").click(function(){
+        $(".save-title-loading").removeClass("hidden-visible")
+        var id = '{{ chat_title.pk }}'
+        var name = $("#name").val()
+        url = "{% url 'edit_chat_name' %}"
+        save_title_name(id, name, url)
+    });
+
+});
+</script>
+{% endblock %}
+
