@@ -349,7 +349,6 @@ def question_list(request):
             question_id = request.POST['question-pk']
             list_quest = form.cleaned_data['question'].split('\r\n')
             curr_ques = Question.objects.get(pk=question_id)
-            print(tag, answer, list_quest)
             if not tag:
                 tag = list_quest[0]
             question = {'question': list_quest}
@@ -1094,7 +1093,6 @@ def create_time_slot(request):
         start = request.POST['start']
         end = request.POST['end']
         day = request.POST.getlist('select-day-drop-down')
-        print(day)
         if start and end and user_pk and day:
             providers = ServiceProvider.objects.filter(pk=user_pk)
             if providers:
@@ -1355,7 +1353,7 @@ def save_question(request):
 
                     return JsonResponse(data)
                 else:
-                    print(single_chat_form.errors)
+                    pass
 
             elif carousel_type == 'carousel':
                 carousel_chat_form = CarouselChatForm(request.POST, request.FILES)
@@ -1425,7 +1423,6 @@ def save_question(request):
                 if option:
                     data['carousel_option'] = True
                     data['carousel_option_dict'] = carousel_option_dict
-                    print(carousel_option_dict)
                 return JsonResponse(data)
 
         else:
@@ -1527,7 +1524,7 @@ def edit_save_question(request):
 
                     return JsonResponse(data)
                 else:
-                    print(single_chat_form.errors)
+                    pass
 
             elif new_ques.carousel_type == 'carousel':
                 carousel_chat_form = CarouselChatForm(request.POST, request.FILES)
@@ -1549,9 +1546,6 @@ def edit_save_question(request):
                             return JsonResponse(data)
 
                 if new_ques.form_type == 'image-carousel-form' or new_ques.form_type == 'image-carousel-option-form':
-                    print(image_count)
-                    print(item_number)
-                    print(images, len(images))
                     if image_count:
                         total_count = len(image_count) + len(images)
                     else:
@@ -1612,7 +1606,6 @@ def edit_save_question(request):
                 return JsonResponse(data)
 
         else:
-            print(chat_new_form.errors)
             data = {
                 'status': False,
                 'message': "chat_new_form form error"

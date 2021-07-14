@@ -184,10 +184,7 @@ class CreateCompany(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data['name']
         if not all(x.isalpha() or x.isspace() for x in name):
-            print('passed')
             return forms.ValidationError("Only letters and space is allowed.")
-        else:
-            print('fail')
 
         return name
 

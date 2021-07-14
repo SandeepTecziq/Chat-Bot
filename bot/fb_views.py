@@ -52,7 +52,6 @@ def post_facebook_message(fbid, recevied_message, token):
 def room_test(request, pk, lang):
     try:
         translate = Translator()
-        print(pk, lang)
         company = get_object_or_404(Company, pk=pk)
         company_name = company.name[:10] if len(company.name) > 10 else company.name
         dir_name = 'company_files/' + str(company.id) + '_' + company_name + '/'

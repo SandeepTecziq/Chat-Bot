@@ -35,19 +35,15 @@ def bot_reply(msg, dir_name):
                     # assign 1 if current word is in the vocabulary position
                     bag[i] = 1
                     if show_details:
-                        print("found in bag: %s" % w)
+                        pass
         return(np.array(bag))
 
     def predict_class(sentence, model):
         # filter out predictions below a threshold
         p = bow(sentence, words,show_details=False)
-        print('sentence: ', sentence)
-        print('p: ', p)
         res = model.predict(np.array([p]))[0]
         ERROR_THRESHOLD = 0.7
-        print(res)
         results = [[i, r] for i, r in enumerate(res) if r >= ERROR_THRESHOLD]
-        print(results)
         # sort by strength of probability
         return_list = []
         if len(results) != 0:

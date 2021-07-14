@@ -16,7 +16,6 @@ def payment_notification(sender, **kwargs):
             subscription.paid = True
             subscription.save()
         else:
-            print('Price: ', subscription.subscription.price)
-            print('Paid: ', ipn.mc_gross)
+            pass
     else:
-        print(ipn.payment_status)
+        pass

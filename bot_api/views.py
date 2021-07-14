@@ -267,8 +267,6 @@ class GetColors(APIView):
                     image = ""
                 text = 'Hi! I am '+company.bot_name
                 # translate = Translator()
-                # print(company.language)
-                # print(text)
                 # intro_text = translate.translate(text, src='en', dest=company.language).text
                 data = {'color': company.color, 'text_color': company.head_text_color,
                         'instruction_text': company.intro_text_login, 'image': image, 'bot_name': company.bot_name,
