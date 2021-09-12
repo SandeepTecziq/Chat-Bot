@@ -393,3 +393,44 @@ function AddBotFormFunction(page_url, $this){
         }
     })
 }
+
+function AddBotReply(question_data, page_url){
+
+	$(".msg-box").find(".btn-submit").addClass("disabled")
+	$(".msg-box").find(".msg-input").prop("disabled", true).val("")
+	$(".msg-container").append("<div class='sent-msg msg-txt'>"+question_data['question']+"</div>")
+    $(".chat-body").animate({
+        scrollTop: $(document).height()
+    }, "fast");
+    setTimeout(function(){$(".ticontainer").removeClass("d-none")}, 100)
+	$.ajax({
+		url: page_url,
+		data: data,
+		dataType: 'json',
+		success: function(data){
+			if(data['status'] == true){
+				setTimeout(function(){
+					$(".ticontainer").addClass("d-none")
+					if (data['get_answer'] == 'fail') {
+						$(".continue-chat").find("p").text(question_data['backup_line'])
+						$(".continue-chat").removeClass("d-none");
+					} else {
+					    $(".msg-container").append("<div class='reply-msg msg-txt'>"+data['reply']+"</div>")
+						$(".msg-box").find(".msg-input").prop("disabled", false).focus();
+	                    $(".msg-box").find(".btn-submit").removeClass("disabled")
+					}
+					$(".chat-body").animate({
+						scrollTop: $(document).height()
+					}, "fast");
+				},2000);
+			}
+			else{
+				alert(data['message'])
+			}
+		},
+		error: function(data){
+			$(".ticontainer").addClass("d-none")
+		}
+	})
+}
+

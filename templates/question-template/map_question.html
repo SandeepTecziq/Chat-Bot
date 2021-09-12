@@ -1,0 +1,158 @@
+<div class="accordion" id="mapQuestionList">
+    {% for question in chat_title.questions.all %}
+  <div class="card">
+    <div class="card-header" id="heading{{ question.pk }}">
+      <h2 class="mb-0">
+        <a class="btn btn-link btn-block text-left collapsed d-flex" type="button" data-toggle="collapse"
+                data-target="#collapse{{ question.pk }}" aria-expanded="true" aria-controls="collapse{{ question.pk }}">
+          <div>
+            <p class="mb-0"><span class="question-number" data-pk="{{ question.pk }}"><b>{{question.number}}</b></span> {{question.question}}</p>
+
+          {% if question.prt_option %}
+          <p class="mb-0 font-12 ml-2"><b>Parent</b>: {{ question.prt_option.option }} - <span>{{ question.prt_option.question.question }}</span></p>
+          {% elif question.prt_question %}
+          <p class="mb-0 font-12 ml-2"><b>Parent</b>: {{ question.prt_question.question }}</p>
+          {% endif %}
+          </div>
+          <div class="ml-auto">
+            <span class="text-orange font-12 cursor-pointer remove-question" data-target="#removeQuestionModal"
+            data-toggle="modal" data-question="{{ question.question }}"
+            data-url="{% url 'remove_save_question' title_pk=question.chat_title.pk question_pk=question.pk %}">Remove</span>
+          </div>
+        </a>
+      </h2>
+    </div>
+
+    <div id="collapse{{ question.pk }}" class="collapse" aria-labelledby="heading{{ question.pk }}"
+         data-parent="#mapQuestionList">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="existing_pk" value="{{ question.pk }}">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label>Text <span class="text-danger">*</span></label>
+                <textarea name="question" cols="40" rows="3" class="form-control" required="" id="id_question">
+                  {{ question.question }}
+                </textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Parent Question</label>
+                <select name="prt_question" class="form-control question-select" id="id_prt_question">
+                  <option value="" selected="">---------</option>
+                  {% for i in chat_title.questions.all %}
+                    {% if question.prt_question and question.prt_question.pk == i.pk %}
+                    <option value="{{ i.pk }}" selected>{{i.number}}: {{ i.question }}</option>
+                    {% elif question.prt_option and question.prt_option.question.pk == i.pk %}
+                    <option value="{{ i.pk }}" selected>{{i.number}}: {{ i.question }}</option>
+                    {% else %}
+                    <option value="{{ i.pk }}">{{i.number}}: {{ i.question }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Parent Option</label>
+                <select name="prt_option" class="form-control parent-options" id="id_prt_option">
+                  <option value="" selected="">---------</option>
+                  {% for i in chat_title.questions.all %}
+                    {% for j in i.options.all %}
+                      {% if j.option %}
+                        {% if question.prt_option %}
+                          {% if question.prt_option.pk == j.pk %}
+                            <option value="{{j.pk}}" data-parent="{{ i.pk }}" selected>{{j}}</option>
+                          {% elif question.prt_option.question.pk == i.pk %}
+                            <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+                          {% else %}
+                            <option value="{{j.pk}}" data-parent="{{ i.pk }}" class="d-none">{{j}}</option>
+                          {% endif %}
+                        {% else %}
+                          <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>URL</label>
+                <input type="url" name="url" {% if question.url %}value="{{ question.url }}"{% endif %} class="form-control" maxlength="200" id="id_url">
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label>Image</label>
+                <input type="file" name="image" accept="image/*" id="id_image">
+                {% if question.image %}
+                <a href="{{ question.image.url }}" target="_blank" class="font-12 text-orange">Current Image</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          {% if question.options.count %}
+
+          <div class="test">
+            <input type="hidden" name="form-TOTAL_FORMS" value="{{ question.options.count }}" id="id_form-TOTAL_FORMS">
+            <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS">
+            <input type="hidden" name="form-MIN_NUM_FORMS" value="1" id="id_form-MIN_NUM_FORMS">
+            <input type="hidden" name="form-MAX_NUM_FORMS" value="1000" id="id_form-MAX_NUM_FORMS">
+            {% for i in question.options.all %}
+            <div class="item row">
+              {% if i.image %}
+              <div class="col-sm-2">
+                <label>Image <span class="text-danger">*</span></label>
+                <input type="file" name="form-{{ forloop.counter0 }}-image" accept="image/*" id="id_form-{{ forloop.counter0 }}-image">
+                <a href="{{ i.image.url }}" target="_blank" class="text-orange font-12">Current Image</a>
+              </div>
+              {% endif %}
+              {% if i.option %}
+              <div class="col-sm-3">
+                <label>Option <span class="text-danger">*</span></label>
+                <input type="text" name="form-{{ forloop.counter0 }}-option" class="form-control" maxlength="30"
+                       value="{{ i.option }}" id="id_form-{{ forloop.counter0 }}-option">
+              </div>
+              {% endif %}
+              <div class="col-sm-3">
+                <label>URL</label>
+                <input type="url" name="form-{{ forloop.counter0 }}-url" class="form-control" maxlength="200"
+                       id="id_form-{{ forloop.counter0 }}-url" {% if i.url %}value="{{ i.url }}"{% endif %}>
+              </div>
+              <div class="col-sm-3">
+                <label>Text</label>
+                <textarea name="form-{{ forloop.counter0 }}-text" cols="40" rows="2" class="form-control"
+                          id="id_form-{{ forloop.counter0 }}-text">
+                  {% if i.text %}{{ i.text }}{% endif %}
+                </textarea>
+              </div>
+              <div class="col-sm-1 align-self-center"><span class="remove-question-option">X</span></div>
+            </div>
+            {% endfor %}
+
+            <div class="add-it">
+                <button class="add-option button-submit-blank btn">Add option</button>
+            </div>
+          </div>
+
+          {% endif %}
+          <div class="mt-2 text-right">
+            <button type="submit" value="Save" class="btn bg-orange text-white">Save</button>
+          </div>
+          <div class="error-fields text-right">
+            <p class="text-danger font-12 error-question-text"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+</div>

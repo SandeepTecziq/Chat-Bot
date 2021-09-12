@@ -39,7 +39,7 @@ class Notify(WebsocketConsumer):
         customer = Customer.objects.get(u_field=user_id)
         talk = 'note_no' if talk_type == 'notification_no' else 'note_yes'
         note = Notification.objects.create(company=company, customer=customer, message=last_quest,
-                                    note_type=talk)
+                                            note_type=talk)
         note_number, created = NotifyNumber.objects.get_or_create(
                                                     company=company,
                                                     note_type=talk,

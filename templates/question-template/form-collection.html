@@ -31,42 +31,6 @@
             Form_Type: {{ chat_new_form.form_type }}
         </div>
 </form>
-<form  method="post" class="card-form hidden-element create-question-form" data-saved="not-saved">
-        {% csrf_token %}
-    <div class="error-fields">
-        <p class="error-list error-question-text"></p>
-    </div>
-    <div class="primary-fields">
-        {{ chat_new_form.number }}
-        {{ chat_new_form.question }}
-        <select class="parent-select" name="parent">
-
-        </select>
-        <input type="submit" name="text-form-submit" class="save-form button-submit-blank btn" value="Save">
-        <input type="button" class="remove-form button-submit-blank btn" value="Remove">
-
-    </div>
-    <div class="secondary-fields">
-        {{ single_chat_form.url }}
-        {{ single_chat_form.single_text }}
-        <!--<label class="custom-file-upload">-->
-        <!--{{ single_chat_form.image }}-->
-            <!--Choose Image-->
-        <!--</label>-->
-        <!--<span class="file-selected"></span>-->
-        <br>
-
-        {{ single_chat_form.description }}
-    </div>
-        <div class="hidden-input hidden-element">
-            is_option: {{ chat_new_form.is_option }}
-            Form_Type: {{ chat_new_form.form_type }}
-            Title: {{ chat_new_form.chat_title }}
-            <span class="child-p">Child ID: {{ chat_new_form.child_id }}</span>
-                <span class="u-id-p">ID: {{ chat_new_form.u_id }}</span>
-            Type: {{ chat_new_form.carousel_type }}
-        </div>
-</form>
 <form  method="post" class="text-option-form hidden-element create-question-form" data-saved="not-saved">
         {% csrf_token %}
         <div class="error-fields">
@@ -88,59 +52,6 @@
                 Choose Image
             </label>
             <span class="file-selected"></span>
-        </div>
-        <div class="tertiary-fields">
-            <div class="item">
-                <input class="form-number" name="option-number-name">
-                <input name="option-text-name" class="option-text" required placeholder="Option">
-                <input class="remove-question-option button-submit-blank btn" value="Remove" type="button">
-                <input name="option-text" class="option-child-id" hidden>
-            </div>
-            <div class="item">
-                <input class="form-number" name="option-number-name">
-                <input name="option-text-name" class="option-text" required placeholder="Option" >
-                <input class="remove-question-option button-submit-blank btn" value="Remove" type="button">
-                <input name="option-text" class="option-child-id" hidden>
-            </div>
-
-            <div class="add-it">
-                <button class="add-option button-submit-blank btn">Add option</button>
-            </div>
-        </div>
-        <div class="hidden-input hidden-element">
-            is_option: {{ chat_new_form.is_option }}
-            Title: {{ chat_new_form.chat_title }}
-            <span class="child-p">Child ID: {{ chat_new_form.child_id }}</span>
-                <span class="u-id-p">ID: {{ chat_new_form.u_id }}</span>
-            Type: {{ chat_new_form.carousel_type }}
-            Form_Type: {{ chat_new_form.form_type }}
-        </div>
-</form>
-<form  method="post" class="card-option-form hidden-element create-question-form" data-saved="not-saved">
-        {% csrf_token %}
-        <div class="error-fields">
-        <p class="error-list error-question-text"></p>
-        </div>
-        <div class="primary-fields">
-            {{ chat_new_form.number }}
-            {{ chat_new_form.question }}
-            <select class="parent-select" name="parent">
-
-            </select>
-            <input type="submit" name="text-form-submit" class="save-form button-submit-blank btn" value="Save">
-            <input type="button" class="remove-form button-submit-blank btn" value="Remove">
-        </div>
-        <div class="secondary-fields">
-            {{ single_chat_form.url }}
-            {{ single_chat_form.single_text }}
-            <!--<label class="custom-file-upload">-->
-            <!--{{ single_chat_form.image }}-->
-                <!--Choose Image-->
-            <!--</label>-->
-            <!--<span class="file-selected"></span>-->
-            <br>
-
-            {{ single_chat_form.description }}
         </div>
         <div class="tertiary-fields">
             <div class="item">
@@ -226,61 +137,6 @@
         Form_Type: {{ chat_new_form.form_type }}
         </div>
 </form>
-<form  method="post" class="card-carousel-form hidden-element create-question-form" data-saved="not-saved" enctype="multipart/form-data">
-        {% csrf_token %}
-    <div class="error-fields">
-        <p class="error-list error-question-text"></p>
-    </div>
-    <div class="primary-fields">
-        {{ chat_new_form.number }}
-        {{ chat_new_form.question }}
-        <select class="parent-select" name="parent">
-
-        </select>
-        <input type="submit" name="text-form-submit" class="save-form button-submit-blank btn" value="Save">
-        <input type="button" class="remove-form button-submit-blank btn" value="Remove">
-    </div>
-    <div class="tertiary-fields">
-        <div class="item">
-            {{ carousel_chat_form.text }}
-
-            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
-            <input name="option-text" class="option-child-id" hidden>
-            <br>
-            {{ carousel_chat_form.description }}
-
-            <div class="not-required-fields hidden-element">
-                {{ carousel_chat_form.option }}
-                {{ carousel_chat_form.image }}
-            </div>
-        </div>
-        <div class="item">
-            {{ carousel_chat_form.text }}
-
-            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
-            <input name="option-text" class="option-child-id" hidden>
-            <br>
-            {{ carousel_chat_form.description }}
-            <div class="not-required-fields hidden-element">
-                {{ carousel_chat_form.option }}
-                {{ carousel_chat_form.image }}
-            </div>
-        </div>
-
-        <div class="add-it">
-            <button class="add-option button-submit-blank btn">Add Frame</button>
-        </div>
-    </div>
-    <div class="hidden-input hidden-element">
-        <input name="total-item-number" class="total-item-number" hidden value="2">
-            is_option: {{ chat_new_form.is_option }}
-            Title: {{ chat_new_form.chat_title }}
-            <span class="child-p">Child ID: {{ chat_new_form.child_id }}</span>
-            <span class="u-id-p">ID: {{ chat_new_form.u_id }}</span>
-            Type: {{ chat_new_form.carousel_type }}
-        Form_Type: {{ chat_new_form.form_type }}
-        </div>
-</form>
 <form  method="post" class="image-carousel-option-form hidden-element create-question-form" data-saved="not-saved" enctype="multipart/form-data">
         {% csrf_token %}
     <div class="error-fields">
@@ -327,64 +183,6 @@
 
             <div class="not-required-fields hidden-element">
                 {{ carousel_chat_form.description }}
-            </div>
-
-        </div>
-
-        <div class="add-it">
-            <button class="add-option button-submit-blank btn">Add Frame</button>
-        </div>
-    </div>
-    <div class="hidden-input hidden-element">
-        <input name="total-item-number" class="total-item-number" hidden value="2">
-            is_option: {{ chat_new_form.is_option }}
-            Title: {{ chat_new_form.chat_title }}
-            <span class="child-p">Child ID: {{ chat_new_form.child_id }}</span>
-            <span class="u-id-p">ID: {{ chat_new_form.u_id }}</span>
-            Type: {{ chat_new_form.carousel_type }}
-        Form_Type: {{ chat_new_form.form_type }}
-        </div>
-</form>
-<form  method="post" class="card-carousel-option-form hidden-element create-question-form" data-saved="not-saved" enctype="multipart/form-data">
-        {% csrf_token %}
-    <div class="error-fields">
-        <p class="error-list error-question-text"></p>
-    </div>
-    <div class="primary-fields">
-        {{ chat_new_form.number }}
-        {{ chat_new_form.question }}
-        <select class="parent-select" name="parent">
-
-        </select>
-        <input type="submit" name="text-form-submit" class="save-form button-submit-blank btn" value="Save">
-        <input type="button" class="remove-form button-submit-blank btn" value="Remove">
-    </div>
-    <div class="tertiary-fields">
-        <div class="item">
-            {{ carousel_chat_form.number_option }}
-            {{ carousel_chat_form.option }}
-            {{ carousel_chat_form.text }}
-            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
-            {{ carousel_chat_form.child_id }}
-            <br>
-
-            {{ carousel_chat_form.description }}
-            <div class="not-required-fields hidden-element">
-                {{ carousel_chat_form.image }}
-            </div>
-
-        </div>
-        <div class="item">
-            {{ carousel_chat_form.number_option }}
-            {{ carousel_chat_form.option }}
-            {{ carousel_chat_form.text }}
-            <input value="Remove" class="remove-question-option btn button-submit-blank" type="button">
-            {{ carousel_chat_form.child_id }}
-            <br>
-
-            {{ carousel_chat_form.description }}
-            <div class="not-required-fields hidden-element">
-                {{ carousel_chat_form.image }}
             </div>
 
         </div>

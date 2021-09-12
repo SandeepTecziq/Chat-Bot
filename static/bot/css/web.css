@@ -1,3 +1,11 @@
+.auto-bot-template .bot-intro-text{
+	font-size: 13px;
+	font-weight: 500;
+}
+.auto-bot-template .bot-instruction-text{
+	font-size: 12px;
+	line-height: 14px;
+}
 .open-chat-button{
 	border-color: #76b61b !important;
 	position: fixed;
@@ -10,15 +18,14 @@
 	font-size: 14px;
 	padding: 10px;
 	cursor: pointer;
-	}
-	.iframe-container{
-	position: fixed;
+}
+.iframe-container{
+	/* position: fixed; */
 	bottom:10px;
 	right:10px;
 	z-index: 1000;
-	display:none;
-	}
-	.iframe-close-button{
+}
+.auto-bot-template .iframe-close-button{
 	position:absolute;
 	top:0;right:0px;
 	color: #fff;
@@ -27,11 +34,136 @@
 	border-radius: 6px;
 	box-shadow: none;
 	padding: 5px 10px;
-	}
-	.chat-container-iframe{
+}
+.chat-container-iframe{
 	border-width:2px;
 	border: none;
 	height:500px;
-	width:350px;
+	width:310px;
 	border-radius: 6px;
-	}
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.auto-bot-template .bot-img {
+	display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+	float: left;
+	margin-right: 15px;
+}
+.auto-bot-template .intro-div{
+    padding: 10px;
+    font-size: 14px;
+    padding-right: 30px;
+}
+.auto-bot-template .chat-body{
+height: calc(100% - 100px);
+overflow-y: scroll;
+    padding-bottom: 45px;
+}
+.auto-bot-template .msg-txt{
+	padding: 7px 10px;
+	border-radius: 10px;
+	color: #7b7b7b;
+	font-size: 13px;
+	margin-bottom: 10px;
+	max-width: 200px;
+	width: max-content;
+    position: relative;
+    bottom: 2px;
+}
+.auto-bot-template .option-container{
+margin-bottom: 10px;
+}
+.auto-bot-template button.btn-option{
+	background-color: #ffffff;
+	border-radius: 20px;
+	font-size: 13px;
+	width: 200px;
+	padding: 5px;
+	border-style: solid;
+	outline: none;
+	cursor: pointer;
+	color: #7b7b7b;
+	margin-bottom: 5px;
+}
+.auto-bot-template .msg-box .msg-input{
+	border: none;
+	border-top: 1px solid #dee2e6;
+	width: calc(100% - 50px);
+	height: 45px;
+	font-size: 13px;
+	padding-left: 10px;
+	outline: none;
+	padding-right: 10px;
+}
+.auto-bot-template .tiblock {
+    align-items: center;
+    display: flex;
+    height: 17px;
+}
+
+.auto-bot-template .ticontainer{
+    position: fixed;
+    bottom: 45px;
+    display: flex;
+}
+
+.auto-bot-template .ticontainer .typing-line{
+    font-size: 13px;
+    margin-right: 3px;
+    position: relative;
+    bottom: 5px;
+}
+
+.auto-bot-template .ticontainer .tidot {
+    background-color: #90949c;
+}
+
+.auto-bot-template .tidot {
+    -webkit-animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
+    border-radius: 2px;
+    display: inline-block;
+    height: 4px;
+    margin-right: 2px;
+    width: 4px;
+}
+
+@-webkit-keyframes mercuryTypingAnimation{
+0%{
+  -webkit-transform:translateY(0px)
+}
+28%{
+  -webkit-transform:translateY(-5px)
+}
+44%{
+  -webkit-transform:translateY(0px)
+}
+}
+
+.auto-bot-template .tidot:nth-child(1){
+-webkit-animation-delay:200ms;
+}
+.auto-bot-template .tidot:nth-child(2){
+-webkit-animation-delay:300ms;
+}
+.auto-bot-template .tidot:nth-child(3){
+-webkit-animation-delay:400ms;
+}
+
+.auto-bot-template .btn-submit{
+	width: 45px;
+    height: 44px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.auto-bot-template .btn-submit.disabled{
+	opacity: .5;
+    cursor: default;
+}
+

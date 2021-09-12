@@ -19,60 +19,39 @@ function updateElementIndex(el, prefix, ndx) {
    if (el.name) el.name = el.name.replace(id_regex, replacement);
 }
 
-function deleteForm(btn, prefix) {
-   var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-   if (formCount > 1) {
-       // Delete the item/form
-
-       $(btn).parent().parent().remove();
-       var forms = $('.item'); // Get all the forms
-       var row_del = $(".item:first").clone(false).get(0);
-       // Update the total number of forms (1 less than before)
-       $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+function deleteForm(btn, prefix, min_num, type) {
+   var formCount = parseInt($(btn).parent().parent().parent().find('#id_' + prefix + '-TOTAL_FORMS').val());
+   if (formCount > min_num) {
+        var forms_parent = $(btn).parent().parent().parent();
+        $(btn).parent().parent().remove();
+       var forms = forms_parent.find('.item')
+       forms_parent.find('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
        var i = 0;
-       // Go through the forms and set their indices, names and IDs
        for (formCount = forms.length; i < formCount; i++) {
            $(forms.get(i)).children().children().each(function () {
-              // if ($(this).attr('type') == 'text')
                 updateElementIndex(this, prefix, i);
            });
        }
-   } // End if
+   }
    else {
-       alert("You have to enter at least one todo item!");
+       alert("You have to enter at least " +min_num+" "+type);
    }
    return false;
 }
 
 function addForm(btn, prefix) {
-   var formCount = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
-   // You can only submit a maximum of 10 todo items
+   var formCount = parseInt($(btn).parent().parent().find('#id_' + prefix + '-TOTAL_FORMS').val());
    if (formCount < 1000) {
-       // Clone a form (without event handlers) from the first form
-       var row = $(".item:first").clone(true).get(0);
-       // Insert it after the last form
-       $(row).removeAttr('id').hide().insertAfter(".item:last").slideDown(300);
-
-       // Remove the bits we don't want in the new row/form
-       // e.g. error messages
-       $(".errorlist", row).remove();
-       $(row).children().removeClass("error");
-
-       // Relabel or rename all the relevant bits
-
+       var row = $(btn).parent().parent().find(".item:first").clone(true).get(0);
+       last_item = $(btn).parent().parent().find(".item:last")
+       $(row).removeAttr('id').hide().insertAfter(last_item).slideDown(300);
        $(row).children().children().each(function () {
            updateElementIndex(this, prefix, formCount);
            $(this).attr("value","")
            $(this).val('')
        });
-
-       // Add an event handler for the delete item/form link
-//               $(row).find(".delete").click(function () {
-//                   return deleteForm(this, prefix);
-//               });
-       // Update the total form count
-       $("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
-   } // End if
+       $(btn).parent().parent().find("#id_" + prefix + "-TOTAL_FORMS").val(formCount + 1);
+   }
    else {
        alert("Sorry, you can only enter a maximum of ten items.");
    }
@@ -347,34 +326,6 @@ function add_question($this, new_serial){
     $this.addClass("active")
 }
 
-function AddOption($this){
-    var cloned = $this.parent().parent().find(".item:first").clone(true)
-    cloned.find("input:not('.remove-question-option')").val("")
-    cloned.find("textarea").val("")
-    cloned.find(".uploaded-image-link").remove()
-    cloned.find(".image-count-input").remove()
-    cloned.find("span.file-selected").html("")
-    var frame_num = parseInt($this.parent().parent().siblings(".hidden-input").find(".total-item-number").val()) + 1
-    $this.parent().parent().siblings(".hidden-input").find(".total-item-number").attr("value",frame_num)
-    $this.parent().parent(".tertiary-fields").find(".item:last").after(cloned)
-    add_number()
-    return false;
-}
-
-function RemoveOption($this){
-    var tot = $this.parent().siblings(".item").length
-    if(tot < 2){
-    alert("Atleast 2 options required")
-    return false
-    }
-    var frame_num = parseInt($this.parent().parent().siblings(".hidden-input").find(".total-item-number").val()) - 1
-    $this.parent().parent().siblings(".hidden-input").find(".total-item-number").attr("value",frame_num)
-    $this.parent().remove();
-
-    add_number()
-    return false
-}
-
 function SelectParent($this){
     var parent = $this.val()
     var u_id = $(".parent-"+parent).val()
@@ -443,4 +394,19 @@ function ClickedServiceProvider($this, calender_line, typing_icon){
      $("#chatID").append("<li class='replies msg-li'>"+calender_line+"<span class='open-datepicker'><i class='fa fa-calendar'></i></span></li>")
 
      },1500)
+}
+
+function StartBotFunc(this_text, bot_line){
+    $(".msg-box").find(".msg-input").prop("disabled", true)
+	$(".msg-box").find(".btn-submit").addClass("disabled")
+	$(".option-container").remove();
+	$(".msg-container").append("<div class='sent-msg msg-txt'>"+this_text+"</div>")
+	setTimeout(function(){$(".ticontainer").removeClass("d-none")}, 100)
+	setTimeout(function(){
+	$(".ticontainer").addClass("d-none")
+	$(".msg-container").append("<div class='reply-msg msg-txt'>"+bot_line+"</div>")
+	$(".msg-box").find(".msg-input").prop("disabled", false).focus();
+	$(".msg-box").find(".btn-submit").removeClass("disabled")
+
+	},2000)
 }

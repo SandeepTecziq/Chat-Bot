@@ -43,17 +43,6 @@ font-size: 14px;
 	.messages{
 	    overflow-y: hidden !important;
 	}
-	.bot-img {
-	display: inline-block;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-	float: left;
-	margin-right: 15px;
-	}
 	.bot-image-div a:not(.custom-link), .bot-image-div label, .bot-image-div #image-clear_id{
 	display: none;
 	}
@@ -85,14 +74,19 @@ font-size: 14px;
 <div class="clearfix"></div>
 <div class="row">
     <div class="col-sm-4">
-        <div style="margin: 20px 15px; border:1px solid #e5e5e5;padding:0;width:350px;height: 500px;border-radius:6px;">
-        <div class="intro-div" style="border-top-right-radius:6px;border-top-left-radius:6px;">
-{% if company.image %}
-			<div class="bot-img" style='background-image: url("{{ company.image.url }}");margin-right:20px;'></div>
-			{% endif %}
-			<p style="margin-bottom: 0;">Hi ! I am {{ company.bot_name|title }}.</p>
-    {{ company.intro_text_login }}
-  </div>
+        <div style="" class="chat-container-iframe">
+        <div class="intro-div d-flex">
+          {% if company.image %}
+            <div>
+                    <div class="bot-img mr-2" style="background-image: url('{{ company.image.url }}')"></div>
+            </div>
+                    {% endif %}
+            <div>
+                    <p id="bot-intro-text" class="mb-0 bot-intro-text">Hi ! I am {{ company.bot_name|title }}.</p>
+                    <p style="display: none;" id="curr-lang" class="mb-0">{{ company.language }}</p>
+            <p id="bot-instruction-text" class="mb-0 bot-instruction-text">{{ company.intro_text_login }}</p>
+            </div>
+        </div>
         <form method="post" id="DetailForm">
           <div class="form-group">
             <select name="language-selected" class="form-control" id="language-select">

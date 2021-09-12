@@ -153,24 +153,59 @@ font-size: 14px;
 border-radius: 20px;
 border-bottom-left-radius: 0;
 }
+.sent-span {
+    padding: 10px 15px;
+    margin-right: 5px;
+    background: #fff !important;
+    color: #000;
+    cursor: pointer;
+    border-radius: 25px;
+    margin-top: 10px;
+    border-color: {{ company.color }};
+    width: 100%;
+    font-size: 14px;
+}
 </style>
 {% endblock %}
 {% block content %}
+
+<div class="form-collection">
+    {% include 'question-template/form-collection.html' %}
+</div>
+<!--{{ question_form }}-->
+<!--{{ option_form }}-->
 <div class="page-heading">
-    <h2 class="float-left">Create Chat Map: {{ company.name }}</h2>
-    <a href="{% url 'chat_maps' pk=company.pk slug=company.slug %}" class="btn button-submit float-right">Back</a>
+    <div class="d-flex">
+    <h2 class="">Questions in Chat Map: {{ chat_title.title }}</h2>
+    <a href="{% url 'chat_maps' pk=company.pk slug=company.slug %}" class="btn button-submit ml-auto">Back</a>
+    </div>
+    <p class="chat-title-created text-danger">Select question to start creating your chatmap.</p>
 </div>
 <div class="clearfix"></div>
 <div class="row" style="margin-top: 30px;">
     <div class="col-sm-8">
-        <div class="title-div ml-auto mr-auto">
-            <form method="post">
-                {% csrf_token %}
-<!--            <input type="text" class="question-text" placeholder="Chat title" id="name">-->
-                {{ title_form.title }}
-                <button id="save-title" class="btn button-submit" name="title-form">Save</button>
-            </form>
-            <p class="error-list error-chat-name hidden-element">This is an error.</p>
+        <div class="instruction-box mb-3">
+            <button class="btn button-submit-blank show-booking-instruction hidden-element">Show Notice</button>
+            <div class="booking-instruction alert alert-info" role="alert">
+                <div class="row">
+                    <div class="col-sm-9">
+                <p class="mb-2 color-94 font-14">Note: If you want to add book appointment in chat map, follow these steps</p>
+                <ul class="color-94 font-14">
+                    <li>Select "Text Question with Option"</li>
+                    <li>Enter "Do you want to book appointment?"</li>
+                    <li>Put "Yes" in first option and "No" in second option.</li>
+                </ul>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <span class="cursor-pointer close-booking-instruction">X</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="question-collection">
+
         </div>
     </div>
     <div class="col-sm-4">
@@ -283,6 +318,16 @@ border-bottom-left-radius: 0;
 <script>
 $(document).ready(function(){
 
+    <!------- Open and Close Booking Instruction ------>
+    $(".close-booking-instruction").click(function(){
+        $(".booking-instruction").addClass("hidden-element")
+        $(".show-booking-instruction").removeClass("hidden-element")
+    });
+    $(".show-booking-instruction").click(function(){
+        $(".show-booking-instruction").addClass("hidden-element")
+        $(".booking-instruction").removeClass("hidden-element")
+    });
+
     <!----- Test carousel interval ----->
     $(".carousel-test").carousel({
     interval: 1000
@@ -300,6 +345,98 @@ $(document).ready(function(){
            $(".test-question").addClass("hidden-element")
      })
 
+    <!----------- Remove option -------->
+
+    $(document).on("click", ".remove-question-option", function(){
+
+        RemoveOption($(this))
+    })
+
+    <!----- Add Option ------>
+    $(document).on("click", ".add-it .add-option", function(){
+        AddOption($(this))
+        return false;
+    })
+
+    <!---------- On parent select -------->
+    $(document).on("change", ".parent-select", function(){
+        SelectParent($(this))
+    })
+
+    <!------- Save Question ------->
+    $(document).on("submit", ".create-question-form", function(){
+
+    $(this).find(".form-number").prop("disabled", false)
+    $(this).find(".error-question-text").html("")
+    var $this = $(this)
+    var question = $(this).find(".form-text-single").val()
+    $.ajax({
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            type: 'post',
+            url: "{% url 'save_question' %}",
+            success: function(data) {
+                if(data['status'] == true){
+                    $this.find(".remove-form").remove()
+                    $this.find(".remove-question-option").remove()
+                    $this.find(".add-option").remove()
+                    $this.find("input, textarea, select").attr("disabled", true)
+                    $this.find(".save-form").remove()
+                    $this.find(".ques-image").remove()
+                    $this.find(".form-child-id").val(data['child_id'])
+                    $this.find(".hidden-input").find(".form-child-id").addClass("parent-"+data['number'])
+                    $this.attr("data-saved","saved")
+
+                    if(data['single_option'] == true){
+                        $.each(data['options'], function(key, value){
+                            $this.find(".form-number").each(function(){
+                            if($(this).val() == key){
+                                $(this).siblings(".option-child-id").val(value[1])
+                                $(this).siblings(".option-child-id").addClass("parent-"+key)
+                            }
+                            })
+                        })
+                    }
+                    if(data['carousel_option'] == true){
+                        $.each(data['carousel_option_dict'], function(key, value){
+                            $this.find(".form-number").each(function(){
+                            if($(this).val() == key){
+                                $(this).siblings(".form-option-child-id").val(value)
+                                $(this).siblings(".form-option-child-id").addClass("parent-"+key)
+                            }
+                            })
+                        })
+                    }
+                    if(!$(".chat-title-created").hasClass('hidden-element')){
+                        $(".chat-title-created").addClass('hidden-element')
+                    }
+                    $(".question-type-list").removeClass("active")
+                    if(!$(".error-un-saved").hasClass("hidden-element")){
+                        $(".error-un-saved").addClass("hidden-element")
+                    }
+                }
+                else if(data['status'] == 'form_error'){
+                    $(data['message']).each(function(index, element) {
+                        $this.find(".error-fields").append("<p class='error-list error-question-text'>"+element+"</p>")
+                    });
+                }
+                else if(data['status'] == false){
+                    $this.find(".error-question-text:first").html(data['message'])
+                }
+             },
+            error: function(data){
+               alert("Something went wrong. Please refresh and try again.")
+            }
+
+        });
+    return false;
+    });
+    <!-------- Remove Question form Form ------->
+    $(document).on("click", ".remove-form", function(){
+        $(".question-type-list").removeClass("active")
+        $(this).parent().parent("form").remove()
+    });
     <!-------- Add Question --------->
     $("div.question-type-list").click(function(){
     var $this = $(this)
@@ -308,7 +445,6 @@ $(document).ready(function(){
     add_question($this, new_serial)
     return false;
     });
-
 });
 </script>
 {% endblock %}

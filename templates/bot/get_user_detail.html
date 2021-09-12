@@ -9,14 +9,12 @@
     <!-- Bootstrap CSS -->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
     <link rel="stylesheet" type="text/css" href="{% static 'project/bootstrap/css/bootstrap.min.css' %}">
-    <link href="{% static 'user_front/css/styles.css' %}">
+    <link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
+
     <title> Start Chat </title>
     <style>
     html, body{
     height: 100%;
-    }
-    body{
-    border: 1px solid {{ company.color }};
     }
     #DetailForm{
     margin:10px;
@@ -31,34 +29,27 @@
     border-color:  {{ company.color }};
     }
     .intro-div{
-    padding: 10px;
-    font-size: 14px;
-    margin-bottom: 20px;
     background: {{ company.color }};
     color: {{ company.head_text_color }};
-    padding-right: 30px;
     }
-    .bot-img {
-	display: inline-block;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-	float: left;
-	margin-right: 15px;
-	}
+    .ques-text-color{
+    color: #7b7b7b;
+    }
+
     </style>
   </head>
-  <body>
-  <div class="intro-div">
+  <body class="auto-bot-template">
+  <div class="intro-div d-flex">
   {% if company.image %}
-			<div class="bot-img" style="background-image: url('{{ company.image.url }}');margin-right:20px;"></div>
+    <div>
+			<div class="bot-img mr-2" style="background-image: url('{{ company.image.url }}')"></div>
+    </div>
 			{% endif %}
-			<p id="bot-intro-text" class="mb-0">Hi ! I am {{ company.bot_name|title }}.</p>
+    <div>
+			<p id="bot-intro-text" class="mb-0 bot-intro-text">Hi ! I am {{ company.bot_name|title }}.</p>
 			<p style="display: none;" id="curr-lang" class="mb-0">{{ company.language }}</p>
-    <p id="bot-instruction-text" class="mb-0">{{ company.intro_text_login }}</p>
+    <p id="bot-instruction-text" class="mb-0 bot-instruction-text">{{ company.intro_text_login }}</p>
+    </div>
   </div>
         <form method="post" id="DetailForm">
             {% csrf_token %}

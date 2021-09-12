@@ -1,0 +1,351 @@
+<form enctype="multipart/form-data" method="post" class="d-none create-question-form border-bottom pb-3 mb-3" id="instruction-question">
+  {% csrf_token %}
+  <input type="hidden" value="instruction" name="question_form_type">
+  {{ question_form.type }}
+  {{ question_form.ans_type }}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Text <span class="text-danger">*</span></label>
+        {{ question_form.question }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Question</label>
+        {{ question_form.prt_question }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Option</label>
+        <select name="prt_option" class="form-control parent-options" id="id_prt_option">
+          <option value="" selected="">---------</option>
+          {% for i in chat_title.questions.all %}
+          {% for j in i.options.all %}
+          {% if j.option %}
+          <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>URL</label>
+        {{ question_form.url }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Image</label>
+        {{ question_form.image }}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mt-2 text-right">
+    <button type="submit" value="Save" class="btn bg-orange text-white">Save</button>
+    <button class="btn btn-secondary remove-this-form">Remove</button>
+  </div>
+  <div class="error-fields text-right">
+    <p class="text-danger font-12 error-question-text"></p>
+  </div>
+</form>
+
+<form enctype="multipart/form-data" class="d-none create-question-form border-bottom pb-3 mb-3" method="post" id="text-question">
+        {% csrf_token %}
+    <input type="hidden" value="text-question" name="question_form_type">
+
+  {{ question_form.type }}
+  {{ question_form.ans_type }}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Text <span class="text-danger">*</span></label>
+        {{ question_form.question }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Question</label>
+        {{ question_form.prt_question }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Option</label>
+        <select name="prt_option" class="form-control parent-options" id="id_prt_option">
+          <option value="" selected="">---------</option>
+          {% for i in chat_title.questions.all %}
+          {% for j in i.options.all %}
+          {% if j.option %}
+          <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>URL</label>
+        {{ question_form.url }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Image</label>
+        {{ question_form.image }}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-2 text-right">
+    <button type="submit" value="Save" class="btn bg-orange text-white">Save</button>
+    <button class="btn btn-secondary remove-this-form">Remove</button>
+  </div>
+  <div class="error-fields text-right">
+    <p class="text-danger font-12 error-question-text"></p>
+  </div>
+</form>
+
+<form enctype="multipart/form-data"  method="post" class="d-none create-question-form border-bottom pb-3 mb-3" id="text-option-question">
+        {% csrf_token %}
+  <input type="hidden" value="text-option" name="question_form_type">
+
+  {{ question_form.type }}
+  {{ question_form.ans_type }}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Text <span class="text-danger">*</span></label>
+        {{ question_form.question }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Question</label>
+        {{ question_form.prt_question }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Option</label>
+        <select name="prt_option" class="form-control parent-options" id="id_prt_option">
+          <option value="" selected="">---------</option>
+          {% for i in chat_title.questions.all %}
+          {% for j in i.options.all %}
+          {% if j.option %}
+          <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>URL</label>
+        {{ question_form.url }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Image</label>
+        {{ question_form.image }}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="test">
+    {{ option_formset.management_form }}
+    {% for form in option_formset %}
+    <div class="item row mb-2">
+      <div class="col-sm-3">
+        <label>Option <span class="text-danger">*</span></label>
+        {{ form.option }}
+      </div>
+      <div class="col-sm-3 pt-4 align-self-center"><span class="remove-question-option">X</span></div>
+    </div>
+    {% endfor %}
+
+    <div class="add-it">
+        <button class="add-option button-submit-blank btn">Add Option</button>
+    </div>
+  </div>
+
+  <div class="mt-2 text-right">
+    <button type="submit" value="Save" class="btn bg-orange text-white">Save</button>
+    <button class="btn btn-secondary remove-this-form">Remove</button>
+  </div>
+  <div class="error-fields text-right">
+    <p class="text-danger font-12 error-question-text"></p>
+  </div>
+</form>
+
+<form enctype="multipart/form-data"  method="post" class="d-none create-question-form border-bottom pb-3 mb-3" id="carousel-question">
+        {% csrf_token %}
+  <input type="hidden" value="image-carousel" name="question_form_type">
+
+  {{ question_form.type }}
+  {{ question_form.ans_type }}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Text <span class="text-danger">*</span></label>
+        {{ question_form.question }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Question</label>
+        {{ question_form.prt_question }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Option</label>
+        <select name="prt_option" class="form-control parent-options" id="id_prt_option">
+          <option value="" selected="">---------</option>
+          {% for i in chat_title.questions.all %}
+          {% for j in i.options.all %}
+          {% if j.option %}
+          <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="test">
+    {{ option_formset.management_form }}
+    {% for form in option_formset %}
+    <div class="item row">
+      <div class="col-sm-3">
+        <label>Image <span class="text-danger">*</span></label>
+        {{ form.image }}
+      </div>
+      <div class="col-sm-3">
+        <label>Text</label>
+        {{ form.text }}
+      </div>
+      <div class="col-sm-3">
+        <label>URL</label>
+        {{ form.url }}
+      </div>
+      <div class="col-sm-3 align-self-center"><span class="remove-question-option">X</span></div>
+    </div>
+    {% endfor %}
+
+    <div class="add-it">
+        <button class="add-option button-submit-blank btn">Add option</button>
+    </div>
+  </div>
+
+  <div class="mt-2 text-right">
+    <button type="submit" value="Save" class="btn bg-orange text-white">Save</button>
+    <button class="btn btn-secondary remove-this-form">Remove</button>
+  </div>
+  <div class="error-fields text-right">
+    <p class="text-danger font-12 error-question-text"></p>
+  </div>
+</form>
+
+<form enctype="multipart/form-data"  method="post" class="d-none create-question-form border-bottom pb-3 mb-3" id="carousel-option-question">
+        {% csrf_token %}
+  <input type="hidden" value="carousel-option" name="question_form_type">
+
+  {{ question_form.type }}
+  {{ question_form.ans_type }}
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Text <span class="text-danger">*</span></label>
+        {{ question_form.question }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Question</label>
+        {{ question_form.prt_question }}
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label>Parent Option</label>
+        <select name="prt_option" class="form-control parent-options" id="id_prt_option">
+          <option value="" selected="">---------</option>
+          {% for i in chat_title.questions.all %}
+          {% for j in i.options.all %}
+          {% if j.option %}
+          <option value="{{j.pk}}" data-parent="{{ i.pk }}">{{j}}</option>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="test">
+    {{ option_formset.management_form }}
+    {% for form in option_formset %}
+    <div class="item row">
+      <div class="col-sm-2">
+        <label>Image <span class="text-danger">*</span></label>
+        {{ form.image }}
+      </div>
+      <div class="col-sm-3">
+        <label>Option <span class="text-danger">*</span></label>
+        {{ form.option }}
+      </div>
+      <div class="col-sm-3">
+        <label>URL</label>
+        {{ form.url }}
+      </div>
+      <div class="col-sm-3">
+        <label>Text</label>
+        {{ form.text }}
+      </div>
+      <div class="col-sm-1 align-self-center"><span class="remove-question-option">X</span></div>
+    </div>
+    {% endfor %}
+
+    <div class="add-it">
+        <button class="add-option button-submit-blank btn">Add option</button>
+    </div>
+  </div>
+<div class="mt-2 text-right">
+  <button type="submit" value="Save" class="btn bg-orange text-white">Save</button>
+  <button class="btn btn-secondary remove-this-form">Remove</button>
+</div>
+  <div class="error-fields text-right">
+      <p class="text-danger font-12 error-question-text"></p>
+    </div>
+</form>
+
+
+
+

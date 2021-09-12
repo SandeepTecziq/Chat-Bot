@@ -103,6 +103,14 @@ class ActiveBotsAdmin(admin.ModelAdmin):
     list_display = ('subscription', 'bot')
 
 
+class SurveyQuestionAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'question', 'type', 'chat_title', 'prt_question', 'prt_option', 'number', 'type', 'ans_type')
+
+
+class SurveyOptionAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'question', 'option', 'image')
+
+
 admin.site.register(ActiveBots, ActiveBotsAdmin)
 admin.site.register(SubscriptionPlan, SubscriptionAdmin)
 admin.site.register(TakenSubscription, TakenSubscriptionAdmin)
@@ -128,3 +136,9 @@ admin.site.register(ChatHistory, ChatHistoryAdmin)
 admin.site.register(Conversation, ConversationAdmin)
 admin.site.register(NotifyNumber, NotifyAdmin)
 admin.site.register(EmpNotifyNumber, EmpNotifyAdmin)
+admin.site.register(SurveyQuestion, SurveyQuestionAdmin)
+admin.site.register(SurveyOptions, SurveyOptionAdmin)
+
+
+
+

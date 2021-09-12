@@ -3,121 +3,180 @@
 <head>
 <meta charset='UTF-8'>
 <meta name="robots" content="noindex">
-<link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
-<link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" />
-<link rel="canonical" href="https://codepen.io/emilcarlsson/pen/ZOQZaV?limit=all&page=74&q=contact+" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
-
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
-<!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	<link rel="stylesheet" type="text/css" href="{% static 'project/bootstrap/css/bootstrap.min.css' %}">
 	<link href="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="Stylesheet"
         type="text/css" />
+	<link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
 
 	<style>
 	html, body{
     height: 100%;
     }
-    body{
-    border: 1px solid {{ company.color }};
-    }
 	{% include 'room.css' %}
-.messages {
-    height: 390px;
+
+.auto-bot-template .sent-msg{
+	background-color: {{ company.color }};
+	color: {{ company.head_text_color }};
+	margin-left: auto;
 }
+.auto-bot-template .reply-msg{
+	background-color: {{ company.ques_color }}
+}
+.auto-bot-template button.btn-option{
+	border-color: {{ company.ques_color }};
+}
+.auto-bot-template button.btn-option:hover{
+	background-color: {{ company.ques_color }};
+}
+.auto-bot-template .btn-submit{
+	background-color: {{ company.color }};
+	color: {{ company.head_text_color }};
+}
+
 </style>
 </head>
-<body style="background:#f9f9fa;">
+<body class="auto-bot-template">
 <input id="datepicker" style="display: none;">
 
 <div id="frame">
 
 	<div class="content">
-		<div class="contact-profile">
+		<div class="intro-div d-flex">
 			{% if company.image %}
-			<div class="bot-img" style="background-image: url('{{ company.image.url }}');margin-right:20px;"></div>
+			<div>
+				<div class="bot-img mr-2" style="background-image: url('{{ company.image.url }}')"></div>
+			</div>
 			{% endif %}
-			<p>{{ translated_dict.bot_name|title }}</p>
-		</div>
-
-
-		<div class="messages">
-
-
-			<ul id="chatID">
-
-				<li class="replies msg-li">{{ translated_dict.intro_ques }}
-					<button class="sent-span btn btn-primary" id="start-bot">{{ translated_dict.bot_title }}</button>
-				{% for pk, title in chat_titles.items %}
-					<button class="sent-span btn btn-primary chat-titles" data-title="{{ pk }}">{{ title }}</button>
-				{% endfor %}
-					{% if if_booking_available %}
-					<button class="sent-span btn btn-primary book-appointment" data-pk="{{ company.pk }}">
-						{{ translated_dict.appointment_title }}
-					</button>
-					{% endif %}
-				</li>
-			</ul>
-				<div class="clearfix"></div>
-
-			<div class="end-instruction-div hidden-element ml-auto mr-auto" id="send-mail-confirm">
-				<p class="mb-0 text-center">{{ static_dict.confirmation_mail }}</p>
-			</div>
-			<div class="end-instruction-div hidden-element ml-auto mr-auto" id="please-wait-p">
-				<p class="mb-0 text-center">{{ static_dict.please_wait }}
-					<img src="{% static 'bot/images/loading_gif.gif' %}" class="img-fluid">
-				</p>
-			</div>
-			<div id="book-appointment-div" class="hidden-element end-instruction-div ml-auto mr-auto text-center">
-				<p class="text-center">{{ static_dict.booking_details }} <br><b><span id="provider-name-span"></span></b>, slot: <b><span id="booking-slot-span"></span></b>, Date:
-					<b><span id="booking-date-span"></span></b>.<br>{{ static_dict.yes_to_book }}
-				</p>
-				<p class="text-center">
-					<button class="booking-button btn button-submit-blank" id="booking-yes">{{ static_dict.choose_yes }}</button>
-				</p>
-				<p class="text-center">
-					<button class="booking-button btn button-submit-blank" id="booking-no">{{ static_dict.choose_no }}</button>
-				</p>
-			</div>
-
-			<div class="end-chat-div hidden-element ml-auto mr-auto end-instruction-div">
-				<p class="text-center">{{ static_dict.saved_requirements }}</p>
-				<p class="text-center">
-					<button class="end-button btn button-submit-blank" id="end-chat-yes">{{ static_dict.choose_yes }}</button>
-				</p>
-				<p class="text-center">
-					<button class="end-button btn button-submit-blank" id="end-chat-no">{{ static_dict.choose_no }}</button>
-				</p>
-			</div>
-				<div id="talk_or_not" class="text-center hidden-element end-instruction-div ml-auto mr-auto">
-                  <p class="text text-center"></p>
-                  <p><button id="talk_yes" class="btn button-submit-blank">{{ static_dict.choose_yes }}</button></p>
-                  <p><button id="talk_no" class="btn button-submit-blank">{{ static_dict.choose_no }}</button></p>
-               </div>
-			<div class="wait-request end-instruction-div hidden-element ml-auto mr-auto" id="wait-request">
-				<p class="mb-0 text-center">{{ static_dict.wait_3_min }}</p>
+			<div>
+				<p class="mb-0 bot-intro-text">{{ translated_dict.bot_name|title }}</p>
+				<p class="mb-0 bot-instruction-text">{{ translated_dict.bot_introduction }}</p>
 			</div>
 		</div>
-		<div class="message-input">
-			<div class="wrap">
-			<input style="display:none"  type="text" class="input-box" id="chat-message-input"
-				   data-button="chat-message-submit" placeholder="Type question here...." />
-			<input  type="text" class="input-box hidden-element" id="chat-new-plot-message-input"
-					data-button="chat-new-plot-message-submit" placeholder="Type Your Response...." />
-			<input style="display:none"  type="text" class="input-box" id="chat-customer-message-input"
-				   data-button="chat-customer-message-submit" placeholder="Type question here...." />
-			<button class="submit chat-button-none cursor-pointer" id="chat-message-submit">
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-            </button>
-			<button class="submit cursor-pointer" id="chat-customer-message-submit">
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-            </button>
-			<button class="submit hidden-element cursor-pointer" id="chat-new-plot-message-submit">
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-            </button>
+			<div class="chat-body px-3 pt-3 bg-white position-relative">
+				<div class="msg-container">
+					<div class="reply-msg msg-txt">{{ translated_dict.intro_ques }}</div>
+					<div class="option-container">
+						<button class="btn-option" id="start-bot">{{ translated_dict.bot_title }}</button>
+						{% for pk, title in chat_titles.items %}
+							<button class="btn-option" data-title="{{ pk }}" >{{ title }}</button>
+						{% endfor %}
+						{% if if_booking_available %}
+						<button class="btn-option" data-pk="{{ company.pk }}">
+							{{ translated_dict.appointment_title }}
+						</button>
+						{% endif %}
+					</div>
+				</div>
+				<!----- Continue chat yes/no when Bot can not answer ------->
+				<div class="continue-chat mt-4 d-none p-3">
+					<div class="reply-msg msg-txt mw-100 w-100">
+						<p class="text-center mb-0"></p>
+					</div>
+					<div class="text-center">
+					<button class="btn-option">Yes</button>
+					<button class="btn-option">No</button>
+					</div>
+				</div>
+
+				<!------------ Typing icon ------------>
+				<div class="ticontainer d-none">
+					<div class="typing-line">{{ translated_dict.bot_name|title }} is typing</div>
+				  <div class="tiblock">
+					<div class="tidot"></div>
+					<div class="tidot"></div>
+					<div class="tidot"></div>
+				  </div>
+				</div>
+
+
+		<!--			<div class="reply-msg msg-txt">This was sent by bot</div>-->
 			</div>
-		</div>
+
+			<div class="msg-box">
+				<input type="text" placeholder="Type your message ..." class="msg-input" disabled>
+				<button class="btn-submit btn-auto-bot disabled"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<button class="btn-submit btn-map disabled d-none"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<button class="btn-submit btn-customer disabled d-none"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			</div>
+
+
+<!--		<div class="messages">-->
+
+
+<!--			<ul id="chatID">-->
+
+<!--				<li class="replies msg-li">{{ translated_dict.intro_ques }}-->
+<!--					<button class="sent-span btn btn-primary" id="start-bot">{{ translated_dict.bot_title }}</button>-->
+<!--				{% for pk, title in chat_titles.items %}-->
+<!--					<button class="sent-span btn btn-primary chat-titles" data-title="{{ pk }}">{{ title }}</button>-->
+<!--				{% endfor %}-->
+<!--					{% if if_booking_available %}-->
+<!--					<button class="sent-span btn btn-primary book-appointment" data-pk="{{ company.pk }}">-->
+<!--						{{ translated_dict.appointment_title }}-->
+<!--					</button>-->
+<!--					{% endif %}-->
+<!--				</li>-->
+<!--			</ul>-->
+<!--				<div class="clearfix"></div>-->
+
+<!--			<div class="end-instruction-div hidden-element ml-auto mr-auto" id="send-mail-confirm">-->
+<!--				<p class="mb-0 text-center">{{ static_dict.confirmation_mail }}</p>-->
+<!--			</div>-->
+<!--			<div class="end-instruction-div hidden-element ml-auto mr-auto" id="please-wait-p">-->
+<!--				<p class="mb-0 text-center">{{ static_dict.please_wait }}-->
+<!--					<img src="{% static 'bot/images/loading_gif.gif' %}" class="img-fluid">-->
+<!--				</p>-->
+<!--			</div>-->
+<!--			<div id="book-appointment-div" class="hidden-element end-instruction-div ml-auto mr-auto text-center">-->
+<!--				<p class="text-center">{{ static_dict.booking_details }} <br><b><span id="provider-name-span"></span></b>, slot: <b><span id="booking-slot-span"></span></b>, Date:-->
+<!--					<b><span id="booking-date-span"></span></b>.<br>{{ static_dict.yes_to_book }}-->
+<!--				</p>-->
+<!--				<p class="text-center">-->
+<!--					<button class="booking-button btn button-submit-blank" id="booking-yes">{{ static_dict.choose_yes }}</button>-->
+<!--				</p>-->
+<!--				<p class="text-center">-->
+<!--					<button class="booking-button btn button-submit-blank" id="booking-no">{{ static_dict.choose_no }}</button>-->
+<!--				</p>-->
+<!--			</div>-->
+
+<!--			<div class="end-chat-div hidden-element ml-auto mr-auto end-instruction-div">-->
+<!--				<p class="text-center">{{ static_dict.saved_requirements }}</p>-->
+<!--				<p class="text-center">-->
+<!--					<button class="end-button btn button-submit-blank" id="end-chat-yes">{{ static_dict.choose_yes }}</button>-->
+<!--				</p>-->
+<!--				<p class="text-center">-->
+<!--					<button class="end-button btn button-submit-blank" id="end-chat-no">{{ static_dict.choose_no }}</button>-->
+<!--				</p>-->
+<!--			</div>-->
+<!--				<div id="talk_or_not" class="text-center hidden-element end-instruction-div ml-auto mr-auto">-->
+<!--                  <p class="text text-center"></p>-->
+<!--                  <p><button id="talk_yes" class="btn button-submit-blank">{{ static_dict.choose_yes }}</button></p>-->
+<!--                  <p><button id="talk_no" class="btn button-submit-blank">{{ static_dict.choose_no }}</button></p>-->
+<!--               </div>-->
+<!--			<div class="wait-request end-instruction-div hidden-element ml-auto mr-auto" id="wait-request">-->
+<!--				<p class="mb-0 text-center">{{ static_dict.wait_3_min }}</p>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--		<div class="message-input">-->
+<!--			<div class="wrap">-->
+<!--			<input style="display:none"  type="text" class="input-box" id="chat-message-input"-->
+<!--				   data-button="chat-message-submit" placeholder="Type question here...." />-->
+<!--			<input  type="text" class="input-box hidden-element" id="chat-new-plot-message-input"-->
+<!--					data-button="chat-new-plot-message-submit" placeholder="Type Your Response...." />-->
+<!--			<input style="display:none"  type="text" class="input-box" id="chat-customer-message-input"-->
+<!--				   data-button="chat-customer-message-submit" placeholder="Type question here...." />-->
+<!--			<button class="submit chat-button-none cursor-pointer" id="chat-message-submit">-->
+<!--                <i class="fa fa-paper-plane" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--			<button class="submit cursor-pointer" id="chat-customer-message-submit">-->
+<!--                <i class="fa fa-paper-plane" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--			<button class="submit hidden-element cursor-pointer" id="chat-new-plot-message-submit">-->
+<!--                <i class="fa fa-paper-plane" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--			</div>-->
+<!--		</div>-->
 	</div>
 </div>
 
@@ -129,435 +188,42 @@
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
 <script src="{% static 'project/bootstrap/js/bootstrap.min.js' %}"></script>
-<script src='https://unpkg.com/jquery.nicescroll@3.7.6/jquery.nicescroll.js'></script>
 <script src="{% static 'bot/js/reconnecting-websocket.js' %}"></script>
 <script src="{% static 'bot/js/ajax-script.js' %}"></script>
 <script src="{% static 'bot/js/scripts.js' %}"></script>
 <script>
 $(document).ready(function(){
 
-<!-- Nice scroll --->
-<!--$(".messages").niceScroll({-->
-  <!--cursorcolor:"{{ company.color }}",-->
-  <!--cursorwidth:"10px",-->
-  <!--autohidemode: scroll,-->
-  <!--enableobserver: true,-->
-<!--});-->
+// Start Bot chat
 
-// Get Bot Reply
+$("#start-bot").click(function(){
+	this_text = $(this).text()
+	bot_line = "{{ translated_dict.bot_ques }}"
+	StartBotFunc(this_text, bot_line)
+});
 
-function AddBotReply(data, page_url){
+// CHat with bot
 
-	$("#chat-message-submit").hide()
-	$("#chat-message-input").prop("disabled", true).val("")
-	$("#chatID").append("<li class='sent msg-li'>"+data['question']+"</li>")
-    $(".messages").animate({
-        scrollTop: $(document).height()
-    }, "fast");
-    $(".messages").getNiceScroll().resize();
-    setTimeout(function(){$("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>")
-    $(".messages").animate({
-        scrollTop: $(document).height()
-    }, "fast");
-	$(".messages").getNiceScroll().resize();
-    }, 500)
-	$.ajax({
-		url: page_url,
-		data: data,
-		dataType: 'json',
-		success: function(data){
-		console.log(data)
-
-			if(data['status'] == true){
-				setTimeout(function(){
-					$(".typing-icon").remove();
-					if (data['get_answer'] == 'fail') {
-						$("#talk_or_not").find("p.text").html(data['reply'])
-						$("#talk_or_not").show();
-					} else {
-						$("#chatID").append("<li class='replies msg-li'>"+data['reply']+"</li>")
-						$("#chat-message-submit").show()
-						$("#chat-message-input").prop("disabled", false)
-						$("#chat-message-input").focus();
-					}
-					$(".messages").animate({
-						scrollTop: $(document).height()
-					}, "fast");
-					$(".messages").getNiceScroll().resize();
-					document.querySelector('#chat-message-input').focus();
-				},1500);
-			}
-			else{
-				alert(data['message'])
-			}
-		},
-		error: function(data){
-			$(".typing-icon").remove();
-		}
-	})
-}
-
-$("#chat-message-submit").click(function(){
- question = $("#chat-message-input").val()
+$(".btn-submit").click(function(){
+ question = $(".msg-input").val()
  dir_name = "{{ dir_name }}"
  history_pk = "{{ new_history.pk }}"
  secret_key = "{{ secret_key }}"
  customer_id = "{{ u_id }}"
  user_lang = "{{ lang }}"
+ backup_line = "{{ company.backup_line }}"
  data = {'question': question, 'dir_name': dir_name, 'history_pk': history_pk, 'secret_key': secret_key,
-  		'user_lang': user_lang, 'customer_id': customer_id}
+  		'user_lang': user_lang, 'customer_id': customer_id, 'backup_line': backup_line}
  page_url = "{% url 'get_bot_reply_updated' %}"
  AddBotReply(data, page_url)
 })
 
 
-<!----- Submit on Enter -------->
-		$(".wrap input").keyup(function(e){
-			if (e.keyCode === 13) {
-				var button = $(this).attr("data-button")
-				$("#"+button).click();
-			}
-		})
-<!-------- Click Booking Yes -------->
-
-$("#booking-yes").click(function(){
-page_url = "{% url 'book_selected_slot' %}"
-var user_uid = "{{ u_id }}"
-BookAppointmentYes(page_url, user_uid)
-})
 
 
-<!-------- Click Booking No -------->
-$("#bookingt-no").click(function(){
-$("#book-appointment-div").hide();
-})
-
-<!---- Slot Book ----->
-$(document).on("click", ".slot-list", function(){
-	var $this = $(this)
-	ClickOnSlot($this)
-});
-
-<!------ Open calender -------->
-
-$(document).on("click", ".open-datepicker", function(){
-   $('#datepicker').datepicker('show');
-});
-$("#datepicker").datepicker({
-
-  dateFormat: 'yy-mm-dd',
-  minDate: '1d',
-  changeMonth: true,
-  changeYear: true,
-  onSelect: function(dateText){
-	  var date = $(this).val()
-	  var page_url = "{% url 'get_slot_list' %}"
-	  var language = '{{ lang }}'
-	  var typing_icon = "<img src='{% static 'bot/images/typing_icon.gif' %}'>"
-	  AfterDateSelect(date, page_url, language, typing_icon)
-  }
-});
-
-function AfterDateSelect(date, page_url, language, typing_icon){
-    $("#chatID").append("<li class='sent msg-li' id='selected-date'>"+date+"</li>")
-    var pk = $(".service-provider-name").attr("id")
-    setTimeout(function(){$("#chatID").append("<li class='typing-icon'>"+typing_icon+"</li>");},500)
-    setTimeout(function(){
-    $.ajax({
-    url: page_url,
-    dataType: "json",
-    data: {"pk": pk, "date": date, 'lang': language},
-    success: function(data){
-		if(data['status'] == true){
-			$(".typing-icon").remove()
-			$("#chatID").append("<li class='replies msg-li'>"+data['get_slot_line']+"</li>")
-			$.each(data['slots'], function(i, obj) {
-				  $(".replies:last").append("<button class='sent-span btn btn-primary slot-list' id="+i+">"+obj+"</button>")
-				});
-				AppendMessageBox()
-			}
-		else{
-			$(".typing-icon").remove();
-     		$("#chatID").append("<li class='replies msg-li'>"+data['message']+"<span class='open-datepicker'><i class='fa fa-calendar'></i></span></li>")
-		}
-    },
-    error: function(data){
-    alert("Something went wrong. Please try again.")
-    }
-
-    })
-    }, 1500)
-}
-
-<!---- Click on service provider ----->
-
-$(document).on("click", ".provider-list", function(){
-	 $this = $(this)
-	 calender_line = "{{ static_dict.open_calender_line }}"
-	 var typing_icon = "<img src='{% static 'bot/images/typing_icon.gif' %}'>"
-	 ClickedServiceProvider($this, calender_line, typing_icon)
-})
-
-<!--------- Show service provider list --------->
-
-$(document).on("click", ".book-appointment", function(){
-	var title = $(this).html()
-	var pk = $(this).attr("data-pk")
-	page_url = '{% url "choose_service_provider" %}'
-	var language = '{{ lang }}'
-	var typing_icon = "<img src='{% static 'bot/images/typing_icon.gif' %}'>"
-	BookAppointment(title, page_url, language, pk, typing_icon)
+//------------------
 });
 
 
-
-
-<!--  end chat yes --->
-$("#end-chat-yes").click(function(){
-$(".input-box").hide();
-$(".submit").hide();
-$("#chat-message-input").show().focus();
-$("#chat-message-button").show();
-});
-
-<!------ Save Chat -------->
-$(".end-chat-div p button").click(function(){
-$(".end-chat-div").addClass("hidden-element");
-saveChat('{{ company_secret_key }}', '{{ u_id }}')
-if($(this).html() == 'yes'){
-window.location.reload();
-}
-});
-
-function saveChat(secret_key, uu_id){
-
-  var sent = {}
-  var replies = {}
-  var chat = {}
-
-  counter = 0
-  $("ul li.replies").each(function(){
-  replies[counter]  = $(this).text()
-  counter++
-  })
-
-  counter1 = 0
-  $("ul li.sent").each(function(){
-  sent[counter1]  = $(this).text()
-  counter1++
-  })
-  $.each(replies, function(key, value){
-  chat[value] = sent[key]
-  })
-  $.ajax({
-  url: '{% url "save_chat_customer" %}',
-  dataType: 'json',
-  data: { 'message': JSON.stringify(chat), 'secret_key': secret_key, 'cust_id':uu_id, 'is_bot': 'yes' },
-  success: function(data){
-
-    },
-  error: function(data){
- 	alert("Something went wrong. Please try again.")
-  }
-
-  });
-
-}
-
-<!----- Text answer given ---->
-$("#chat-new-plot-message-submit").click(function(){
-
-var selected = $("#chat-new-plot-message-input").val()
-var pk = $(this).attr("data-title-pk")
-$("#chatID").append("<li class='sent msg-li'>"+selected+"</li>")
-AppendMessageBox();
-$(".wrap #chat-new-plot-message-input").addClass("hidden-element").val("")
-$(".wrap #chat-new-plot-message-submit").hide();
-setTimeout(function(){
-
-$("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>");
-AppendMessageBox();
-}, 500)
-setTimeout(function(){text_answer()}, 1500);
-        function text_answer(){
-        var child = $(".replies:last").find(".reply-div").attr("data-child")
-        var number = $(".replies:last").find(".reply-div").attr("data-number")
-        view_url = "{% url 'start_chat' %}"
-        var lang = "{{ lang }}"
-        NextQuestionAjax(view_url, pk, lang, "next", child, number, "false", "false" )
-};
-});
-
-<!---- Option Answer given ---->
-$(document).on('click', '.select-option', function(){
-
-var selected = $(this).html()
-$(".sent-span").remove();
-$("#chatID").append("<li class='sent msg-li'>"+selected+"</li>")
-AppendMessageBox();
-var child = $(".replies:last").find(".reply-div").attr("data-child")
-var number = $(".replies:last").find(".reply-div").attr("data-number")
-var option_child = $(this).attr("data-child")
-var option_number = $(this).attr("data-number")
-var lang = "{{ lang }}"
-var pk = $(this).attr("data-title-pk")
-view_url = "{% url 'start_chat' %}"
-setTimeout(function(){
-$("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>");
-AppendMessageBox();
-}, 500)
-setTimeout(function(){
-NextQuestionAjax(view_url, pk, lang, "next", child, number, option_child, option_number )
-}, 1500)
-
-});
-
-
-<!---- Start chat ----->
-$(".chat-titles").click(function(){
-var pk = $(this).attr("data-title")
-$(".wrap #chat-new-plot-message-submit").attr("data-title-pk", pk)
-$(".sent-span").remove();
-var lang = "{{ lang }}"
-$("#chatID").append("<li class='sent msg-li'>"+$(this).html()+"</li>")
-view_url = "{% url 'start_chat' %}"
-
-setTimeout(function(){
-$("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>");
-AppendMessageBox();
-}, 500)
-
-setTimeout(function(){
-NextQuestionAjax(view_url, pk, lang, "start", "child", "number", false, false )
-},1500);
-
-});
-<!---- Start bot chat -------->
-$("#start-bot").click(function(){
-$(".sent-span").remove();
-$("#chatID").append("<li class='sent msg-li'>"+$(this).html()+"</li>")
-setTimeout(function(){$("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>")}, 500)
-setTimeout(function(){
-$(".typing-icon").remove();
-$("#chatID").append("<li class='replies msg-li'>{{ translated_dict.bot_ques }}</li>")
-$("#chat-message-input").show().focus();
-$("#chat-message-submit").show();
-},1500)
-});
-<!------>
-
-});
-
-<!------------------>
-var roomName = "{{ company_secret_key|escapejs }}";
-var parentRoomName = "{{ company.parent_company.secret_key|escapejs }}";
-var userEmail = "{{ u_id|escapejs }}";
-var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-
-<!----------------- notification part ---------------- >
-var notifySocket = new ReconnectingWebSocket(
-    ws_scheme + window.location.host +
-    '/notify/' + parentRoomName + '/');
-
-
-
-document.querySelector('#talk_yes').onclick = function(e) {
-	var elements = document.getElementsByClassName('sent');
-	var last_ques = elements[elements.length - 1].innerHTML;
-	document.getElementById('talk_or_not').style.display = 'none';
-	document.getElementById('wait-request').style.display = "block";
-	$(".messages").animate({
-        scrollTop: $(document).height()
-    }, "fast");
-    $(".messages").getNiceScroll().resize();
-	document.getElementById('chat-message-submit').style.display = "none";
-
-	document.getElementById('chat-message-input').style.display = "none";
-
-    notifySocket.send(JSON.stringify({
-        'talk_type': 'notification_yes',
-        'last_ques': last_ques,
-        'secret_key': '{{ company_secret_key }}',
-        'user_id': '{{ u_id }}',
-    }));
-}
-
-document.querySelector('#talk_no').onclick = function(e) {
-	var elements = document.getElementsByClassName('sent');
-	var last_ques = elements[elements.length - 1].innerHTML;
-    document.getElementById('talk_or_not').style.display = 'none';
-    document.getElementById('chat-message-input').disabled = false;
-	document.getElementById('chat-message-submit').style.display = "block";
-    notifySocket.send(JSON.stringify({
-        'talk_type': 'notification_no',
-        'last_ques': last_ques,
-        'secret_key': '{{ company_secret_key }}',
-        'user_id': '{{ u_id }}',
-
-    }));
-}
-
-<!------- If user clicks yes --------->
-
-document.querySelector('#chat-customer-message-input').onkeyup = function(e) {
-    if (e.keyCode === 13) { // enter, return
-        document.querySelector('#chat-customer-message-submit').click();
-    }
-};
-
-
-var chatCustomerSocket = new ReconnectingWebSocket(
-    ws_scheme + window.location.host +
-    '/ws/chat_to_customer/' + parentRoomName +'/'+ userEmail + '/');
-
-document.querySelector('#chat-customer-message-submit').onclick = function(e) {
-	var messageInputDom = document.querySelector('#chat-customer-message-input');
-    var message = messageInputDom.value;
-    if(message != ''){
-
-		document.getElementById('chat-customer-message-input').disabled = true;
-		document.getElementById('chat-customer-message-submit').style.display = "none";
-
-		chatCustomerSocket.send(JSON.stringify({
-			'message': message,
-			'secret_key': '{{ company_secret_key }}',
-			'user_id': '{{ u_id }}',
-		}));
-		setTimeout(function(){$("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>")
-		$(".messages").animate({
-			scrollTop: $(document).height()
-		}, "fast");
-		$(".messages").getNiceScroll().resize();
-		}, 500)
-		messageInputDom.value = '';
-	}
-};
-chatCustomerSocket.onmessage = function(e) {
-	$(".typing-icon").remove();
-	document.getElementById('wait-request').style.display = "none";
-	document.getElementById('chat-customer-message-input').style.display = "block";
-	document.getElementById('chat-customer-message-submit').style.display = "block";
-	document.getElementById('chat-customer-message-input').disabled = false;
-	document.getElementById('chat-customer-message-submit').style.display = "block";
-	$("#chat-customer-message-input").focus();
-    var data = JSON.parse(e.data);
-    var message = data['message'];
-    var u_id = data['id']
-    var ul = document.getElementById("chatID");
-    var li2 = document.createElement("li");
-    if(u_id == '{{ u_id }}'){
-    li2.setAttribute("class", "sent msg-li");
-    }
-    else{
-    li2.setAttribute("class", "replies msg-li");
-    }
-    li2.appendChild(document.createTextNode(message));
-    ul.appendChild(li2);
-    $(".messages").animate({
-        scrollTop: $(document).height()
-    }, "fast");
-	$(".messages").getNiceScroll().resize();
-
-};
 </script>
 </html>

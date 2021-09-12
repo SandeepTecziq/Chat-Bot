@@ -3,6 +3,7 @@ from jsonfield import JSONField
 from django.contrib.auth.models import AbstractUser
 import uuid
 import googletrans
+from django.utils.text import slugify
 
 
 LANGUAGES = ((i, j) for i,j in googletrans.LANGUAGES.items())
@@ -30,21 +31,29 @@ class Company(models.Model):
     secret_key = models.UUIDField(default=uuid.uuid4, editable=False)
     bot_name = models.CharField(max_length=30, default='Talking Bot')
     image = models.ImageField(null=True, blank=True, upload_to=company_image_upload_path)
-    color = models.CharField(max_length=10, default='#76b61b')
+    color = models.CharField(max_length=10, default='#01578a')
+    ques_color = models.CharField(max_length=10, default='#b0eef3')
     intro_ques = models.CharField(max_length=255, default='What help do you need')
     bot_ques = models.CharField(max_length=255, default='Hi! you can ask anything')
     bot_title = models.CharField(max_length=30, default='Talk to bot')
     head_text_color = models.CharField(max_length=10, default='#ffffff')
     intro_text_login = models.CharField(max_length=300, default='Please fill form to continue.')
+    bot_introduction = models.CharField(max_length=300, default='Always in your service')
     service_provider = models.CharField(max_length=20, default='service provider')
     language = models.CharField(max_length=15, choices=LANGUAGES, default='en')
     active = models.BooleanField(default=False)
     provider_line = models.CharField(max_length=500, default='Please select the service provider')
     slot_line = models.CharField(max_length=500, default='Please select the slot')
+    backup_line = models.CharField(max_length=500, default='I am sorry! I cannot answer this. Would you like to talk to our support?')
     active_date = models.DateTimeField(null=True)
+    slug = models.SlugField()
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super(Company, self).save(*args, **kwargs)
 
 
 class FacebookBotDetails(models.Model):
@@ -166,12 +175,57 @@ class ChatTitle(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_chat_title')
     title = models.CharField(max_length=50)
     active = models.BooleanField(default=False)
+    slug = models.SlugField()
 
     class Meta:
         unique_together = ('company', 'title')
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        return super(ChatTitle, self).save(*args, **kwargs)
+
+
+class SurveyQuestion(models.Model):
+    TYPE = (
+        ('S', 'Single'),
+        ('C', 'Carousel'),
+    )
+    ANS_TYPE = (
+        ('I', 'Information'),
+        ('O', 'Option'),
+        ('T', 'Text'),
+    )
+    type = models.CharField(max_length=1, choices=TYPE)
+    ans_type = models.CharField(max_length=1, choices=ANS_TYPE)
+    chat_title = models.ForeignKey('bot.ChatTitle', on_delete=models.CASCADE, related_name='questions')
+    question = models.TextField()
+    image = models.ImageField(upload_to='images/questions', null=True, blank=True)
+    prt_option = models.ForeignKey('bot.SurveyOptions', on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='child_question')
+    prt_question = models.ForeignKey('bot.SurveyQuestion', on_delete=models.SET_NULL, null=True, blank=True,
+                                     related_name='child_question')
+    url = models.URLField(null=True, blank=True)
+    number = models.IntegerField(default=1)
+
+    def __str__(self):
+        return str(self.number) + ': ' + self.question
+
+
+class SurveyOptions(models.Model):
+    question = models.ForeignKey('bot.SurveyQuestion', on_delete=models.CASCADE, related_name='options')
+    option = models.CharField(max_length=30, null=True, blank=True)
+    image = models.ImageField(upload_to='images/options', null=True, blank=True)
+    text = models.TextField(null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        if self.option:
+            return self.option + ': '+self.question.question[:50]
+        else:
+            return self.question.question[:50]
 
 
 class ChatQuestion(models.Model):

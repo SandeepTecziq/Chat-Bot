@@ -246,7 +246,7 @@
         </div>
     </div>
     <div class="col-sm-3 title-col-box">
-        <a href="{% url 'create_chat_map' id=company.id bot_name=company.name %}"
+        <a href="{% url 'create_chat_map' pk=company.id bot_slug=company.slug %}"
            class="create-new-map-class">
             <div class="map-container-box border-gray">
                 <div class="map-title">Create New Chatmap</div>
@@ -272,9 +272,9 @@
                 </div>
                 {% endif %}
                 <div class="col-sm-4">
-                <a href="{% url 'edit_chat_map' id=title.pk chat_title=title.title %}" class="btn button-submit-blank w-100">Edit</a>
+                <a href="{% url 'chat_map_questions' pk=title.pk slug=title.slug %}" class="btn button-submit-blank w-100">Questions</a>
                 </div>
-                {% if title.question_titles.count != 0 %}
+                {% if title.questions.count != 0 %}
                 <div class="col-sm-4">
 
                 <a href="{% url 'change_chat_map_status' id=title.pk %}" class="btn button-submit-blank w-100">

@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Questions in Chat map {% endblock %}
+{% block style %}
+<style>
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="form-collection">
+    {% include 'question-template/question-collection.html' %}
+</div>
+<div class="page-heading">
+    <div class="d-flex">
+        <div>
+            <h2 class="">Questions in Chat Map: {{ chat_title.title }}</h2>
+        </div>
+        <div class="ml-auto">
+            <a href="{% url 'chat_maps' pk=company.pk slug=company.slug %}" class="btn button-submit">Back</a>
+        </div>
+    </div>
+    {% if chat_title.questions.count == 0 %}
+    <p class="chat-title-created text-danger font-12">Select question to start creating your chatmap.</p>
+    {% endif %}
+</div>
+<div class="row">
+    <div class="col-sm-8">
+    <div class="instruction-box mb-3">
+            <button class="btn button-submit-blank show-booking-instruction d-none">Show Notice</button>
+            <div class="booking-instruction alert alert-info" role="alert">
+                <div class="row">
+                    <div class="col-sm-9">
+                <p class="mb-2 color-94 font-14">Note: If you want to add book appointment in chat map, follow these steps</p>
+                <ul class="color-94 font-14">
+                    <li>Select "Text Question with Option"</li>
+                    <li>Enter "Do you want to book appointment?"</li>
+                    <li>Put "Yes" in first option and "No" in second option.</li>
+                </ul>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <span class="cursor-pointer close-booking-instruction">X</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+</div>
+<div class="questions-list w-75 pl-3 pr-4">
+    <div class="saved_questions">
+        {% include 'question-template/map_question.html' %}
+    </div>
+    <div class="new_question">
+
+    </div>
+</div>
+<div class="question-option-container">
+    <div class="add-question-instruction">
+        <p class="instruction-heading">Select Question</p>
+        <p class="instruction-text">Select The Type Of The Question To Add The Template To The Map And Customize It.</p>
+    </div>
+    <div class="question-type-container">
+            <div class="question-type-list" data-form="instruction-question" data-ans-type="I" data-type="S">
+                <p class="question-type-text">Instruction</p>
+                <p class="question-type-description"></p>
+            </div>
+            <div class="question-type-list" data-form="text-question" data-ans-type="T" data-type="S">
+                <p class="question-type-text">
+                    Text Question
+                </p>
+                <p class="question-type-description">
+                    Single text question (Image and URL is optional)
+                </p>
+            </div>
+            <div class="question-type-list" data-form="text-option-question" data-ans-type="O" data-type="S">
+                <p class="question-type-text">
+                    Text Question with Option
+                </p>
+                <p class="question-type-description">
+
+                </p>
+            </div>
+            <div class="question-type-list" data-form="carousel-question" data-ans-type="T" data-type="C">
+                <p class="question-type-text">
+                    Image Carousel
+                </p>
+                <p class="question-type-description">
+
+                </p>
+            </div>
+            <div class="question-type-list" data-form="carousel-option-question" data-ans-type="O" data-type="C">
+                <p class="question-type-text">
+                    Image Carousel with Option
+                </p>
+                <p class="question-type-description">
+
+                </p>
+            </div>
+        </div>
+</div>
+<div class="modal fade" id="removeQuestionModal" tabindex="-1" role="dialog" aria-labelledby="removeQuestionModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeQuestionModalLabel">Remove Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p class="mb-0">Are you sure you want to delete this question?</p>
+          <p class="delete-question bold"><b></b></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" type="button" class="btn bg-orange text-white">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+    // Select parent question
+    $(document).on("change", ".question-select", function(){
+    selected_question = $(this).find("option:selected").val()
+    option_select = $(this).parent().parent().parent().find(".parent-options")
+    option_select.find("option").each(function(){
+        if($(this).attr("data-parent") != selected_question){
+            $(this).addClass("d-none")
+        }
+        else{
+            $(this).removeClass("d-none")
+        }
+    })
+    })
+    // Remove unsaved form
+    $(document).on("click", ".remove-this-form", function(){
+    $(this).parent().parent().remove();
+    })
+
+    // Open and Close Booking Instruction
+    $(".close-booking-instruction").click(function(){
+        $(".booking-instruction").addClass("d-none")
+        $(".show-booking-instruction").removeClass("d-none")
+    });
+    $(".show-booking-instruction").click(function(){
+        $(".show-booking-instruction").addClass("d-none")
+        $(".booking-instruction").removeClass("d-none")
+    });
+
+    //  Add Question
+    $(".question-type-list").click(function(){
+        ques_form = $(this).attr("data-form")
+        data_type = $(this).attr("data-type")
+        data_ans_type = $(this).attr("data-ans-type")
+        form_clone = $(".form-collection").find("#"+ques_form).clone(true)
+        form_clone.removeClass("d-none")
+        form_clone.find("#id_type").val(data_type)
+        form_clone.find("#id_ans_type").val(data_ans_type)
+        $(".questions-list").find(".new_question").append(form_clone)
+    })
+
+    // Remove option
+    $(document).on("click", ".remove-question-option", function(){
+        deleteForm(this, "form", 2, "options")
+        return false;
+    })
+
+    // Add Option
+    $(document).on("click", ".add-it .add-option", function(){
+        addForm(this, "form")
+        return false;
+    })
+
+    // Submit question form
+    $(document).on("submit", ".create-question-form", function(){
+    var $this = $(this)
+    $.ajax({
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            type: 'post',
+            url: "{% url 'save_chat_questions' pk=chat_title.pk slug=chat_title.slug %}",
+            success: function(data) {
+                if(data['status'] == true){
+                    location.reload();
+                }
+                else if(data['status'] == 'form_error'){
+                    $this.find(".error-fields").html("")
+                    $.each(data['message'], function(index, element) {
+                        $this.find(".error-fields").append("<p class='font-12 text-danger error-question-text'>"+index+ ": "+ element+"</p>")
+                    });
+                }
+                else if(data['status'] == false){
+                    $this.find(".error-question-text:first").html(data['message'])
+                }
+             },
+            error: function(data){
+               alert("Something went wrong. Please refresh and try again.")
+            }
+        });
+    return false;
+    });
+
+    // Remove question modal
+    $('#removeQuestionModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var question = button.data('question')
+      var url = button.data('url')
+      var modal = $(this)
+      modal.find('.delete-question b').text(question)
+      modal.find('.modal-footer a').attr("href", url)
+    })
+});
+
+</script>
+{% endblock %}

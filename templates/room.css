@@ -91,17 +91,6 @@ html, body{
 	.sent-span:hover{
 	color: #000;
 	}
-	.bot-img {
-	display: inline-block;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-	float: left;
-	margin-right: 15px;
-	}
 	.carousel-indicators li{
 	border-radius: 50%;
 	width: 10px;
@@ -117,13 +106,6 @@ html, body{
 	}
 	.sent-span{
 	border-color: {{ company.color }};
-	}
-	button{
-	    min-width: 100px;
-    border-radius: 6px;
-        background-color: {{ company.color }} !important;
-        border-color: {{ company.color }} !important;
-    color: {{ company.head_text_color }};
 	}
 	.open-datepicker{
 	border-bottom: 1px solid #007bff;
@@ -188,4 +170,11 @@ html, body{
 			}
 			.cursor-pointer{
 cursor: pointer;
+}
+.intro-div{
+    background: {{ company.color }};
+    color: {{ company.head_text_color }};
+}
+.ques-text-color{
+    color: #7b7b7b;
 }

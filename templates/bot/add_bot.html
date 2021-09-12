@@ -75,17 +75,22 @@ font-weight: normal !important;
                 {{ form.color.errors }}
             </div>
             <div class="input-container">
+                <p class="label-style">Question Color (Hex code only)</p>
+                {{ form.ques_color }}
+                {{ form.ques_color.errors }}
+            </div>
+            <div class="input-container">
                 <p class="label-style">Image</p>
                 {{ form.image }}
                 {{ form.image.errors }}
             </div>
-            <div class="input-container">
-                <p class="label-style">Language</p>
-                {{ form.language }}
-                {{ form.language.errors }}
-            </div>
         </div>
         <div class="col-sm-4 border-right">
+            <div class="input-container">
+                <p class="label-style">Bot Introduction</p>
+                {{ form.bot_introduction }}
+                {{ form.bot_introduction.errors }}
+            </div>
             <div class="input-container">
                 <p class="label-style">Bot title</p>
                 {{ form.bot_title }}
@@ -127,6 +132,16 @@ font-weight: normal !important;
                 <p class="label-style">Instruction line for user to select slot</p>
                 {{ form.slot_line }}
                 {{ form.slot_line.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Message if bot don't find answer</p>
+                {{ form.backup_line }}
+                {{ form.backup_line.errors }}
+            </div>
+            <div class="input-container">
+                <p class="label-style">Language</p>
+                {{ form.language }}
+                {{ form.language.errors }}
             </div>
         </div>
     </div>

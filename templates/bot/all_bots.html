@@ -147,8 +147,8 @@
                 {% else %}
                 <a href="{% url 'activate_bot' id=bot.pk secret_key=bot.secret_key %}" class="btn button-submit-blank">Deactivate</a>
                 {% endif %}
-                <a href="{% url 'update_bot_detail' id=bot.pk bot_name=bot.name %}" class="btn button-submit-blank">Configuration</a>
-                <a href="{% url 'chat_maps' id=bot.pk name=bot.name %}" class="btn button-submit-blank">Create Chat Map</a>
+                <a href="{% url 'update_bot_detail' pk=bot.pk slug=bot.slug %}" class="btn button-submit-blank">Configuration</a>
+                <a href="{% url 'chat_maps' pk=bot.pk slug=bot.slug %}" class="btn button-submit-blank">Create Chat Map</a>
 
             </div>
         </div>

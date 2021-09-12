@@ -12,9 +12,15 @@
 </form>
 {% endif %}
 {% if secret_key %}
-<span class="open-chat-button" id="show-button" onclick="ShowChat()">Start Chat</span>
-<div class="iframe-container fix-element" id="iframe-container"> <span class="iframe-close-button" onclick="HideChat()">X</span>
-  <iframe src="{% url 'get_user_detail' secret_key=secret_key %}" class="chat-container-iframe"></iframe> </div>
+
+<span class="open-chat-button" id="show-button" onclick="ShowChat()">
+  <img src="{% static 'icons/Botlogo.png' %}" class="top-nav-icon" style="width: 50px;">
+</span>
+<span class="open-chat-button" id="hide-button" onclick="HideChat()" style="display: none">X</span>
+<div class="iframe-container fix-element" id="iframe-container" style="display: none;">
+<!--  <iframe src="{% url 'get_user_detail' secret_key=secret_key %}" class="chat-container-iframe"></iframe> </div>-->
+  <iframe src="http://127.0.0.1:8000/chat/2319de2c-4811-40b7-9705-098cef4e0c72/en/57ca5eb0-a4ff-4930-a422-c1dbdf38e909/"
+          class="chat-container-iframe" id="chat-container-iframe"></iframe> </div>
 {% endif %}
 {% endblock %}
 {% block script %}

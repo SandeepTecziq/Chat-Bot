@@ -26,8 +26,8 @@ from bot_api.common_view_function import start_chat_view, service_provider_view,
 
 
 @login_required(login_url='user_login')
-def update_bot_detail(request, id, bot_name):
-    company = get_object_or_404(Company, pk=id, name=bot_name)
+def update_bot_detail(request, pk, slug):
+    company = get_object_or_404(Company, pk=pk)
 
     if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
         return render(request, 'bot/check_user.html')
@@ -38,7 +38,7 @@ def update_bot_detail(request, id, bot_name):
         form = UpdateBotForm(request.POST, request.FILES, instance=company)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('update_bot_detail', args=(id, bot_name)))
+            return HttpResponseRedirect(reverse('update_bot_detail', args=(pk, slug)))
 
     context = {
         'form': form,
@@ -171,8 +171,9 @@ def room(request, secret_key, lang, u_id):
         if_booking_available = ServiceProvider.objects.filter(company=company).exists()
         company_name = company.name[:10] if len(company.name) > 10 else company.name
         dir_name = 'company_files/' + str(company.id) + '_' + company_name + '/'
-        sentence_list = [company.bot_name, company.intro_ques, company.bot_title, 'Book Appointment', company.bot_ques]
-        variable_list = ['bot_name', 'intro_ques', 'bot_title', 'appointment_title', 'bot_ques']
+        sentence_list = [company.bot_name, company.intro_ques, company.bot_title, 'Book Appointment', company.bot_ques,
+                         company.bot_introduction]
+        variable_list = ['bot_name', 'intro_ques', 'bot_title', 'appointment_title', 'bot_ques', 'bot_introduction']
         if lang == company.language:
             translated_dict = dict(zip(variable_list, sentence_list))
         else:
@@ -700,8 +701,8 @@ def train_chat_data(request):
 
 
 @login_required(login_url='user_login')
-def create_chat_map(request, id, bot_name):
-    company = get_object_or_404(Company, pk=id, name=bot_name)
+def create_chat_map(request, pk, bot_slug):
+    company = get_object_or_404(Company, pk=pk, slug=bot_slug)
 
     if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
         return render(request, 'bot/check_user.html')
@@ -709,53 +710,25 @@ def create_chat_map(request, id, bot_name):
     chat_new_form = ChatNewForm()
     single_chat_form = SingleChatForm()
     carousel_chat_form = CarouselChatForm()
+    title_form = ChatTitleForm()
+    if request.method == 'POST' and 'title-form' in request.POST:
+        title_form = ChatTitleForm(request.POST)
+        if title_form.is_valid():
+            title = title_form.save(commit=False)
+            title.company = company
+            title.save()
+            return HttpResponseRedirect(reverse('chat_map_questions', args=(title.pk, title.slug)))
 
     context = {
         'chat_new_form': chat_new_form,
         'single_chat_form': single_chat_form,
         'carousel_chat_form': carousel_chat_form,
         'create_chat_map': 'active',
-        'id': id,
+        'id': pk,
         'company': company,
+        'title_form': title_form,
     }
     return render(request, 'bot/create_map.html', context)
-
-
-def save_chat_name(request):
-    if not request.user.is_authenticated:
-        data = {
-            'status': 'Invalid'
-        }
-        return JsonResponse(data)
-    id = request.GET.get('id', None)
-    name = request.GET.get('name', None)
-
-    if not id:
-        data = {
-            'status': 'Invalid'
-        }
-
-        return JsonResponse(data)
-    chat_title = ChatTitle.objects.filter(Q(company=Company.objects.get(pk=id)) & Q(title=name)).exists()
-
-    if not name:
-        data = {
-            'status': False,
-            'message': 'Please enter chat title.'
-        }
-
-    elif chat_title:
-        data = {
-            'status': False,
-            'message': 'This chat title already has been registered.'
-        }
-    else:
-        title = ChatTitle.objects.create(company=Company.objects.get(pk=id), title=name)
-        data = {
-            'status': True,
-            'pk': title.pk,
-        }
-    return JsonResponse(data)
 
 
 def edit_chat_name(request):
@@ -941,13 +914,12 @@ def add_bot(request):
 
 
 @login_required(login_url='user_login')
-def chat_maps(request, id, name):
-    company = get_object_or_404(Company, pk=id, name=name)
+def chat_maps(request, pk, slug):
+    company = get_object_or_404(Company, pk=pk)
 
     if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
         return render(request, 'bot/check_user.html')
 
-    company = get_object_or_404(Company, pk=id, name=name)
     ChatTitle.objects.filter(question_titles__isnull=True).update(active=False)
     chat_title = ChatTitle.objects.filter(Q(company=company))
 
@@ -1245,32 +1217,6 @@ def forget_password(request):
         }
 
     return JsonResponse(data)
-
-
-@login_required(login_url='user_login')
-def edit_chat_map(request, id, chat_title):
-    # try:
-    chat_title = get_object_or_404(ChatTitle, pk=id, title=chat_title)
-    maps = ChatQuestionNew.objects.filter(chat_title=chat_title).prefetch_related('single_chat_question', 'carousel_chat_question')
-
-    company = chat_title.company
-    if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
-        return render(request, 'bot/check_user.html')
-
-    chat_new_form = ChatNewForm()
-    single_chat_form = SingleChatForm()
-    carousel_chat_form = CarouselChatForm()
-
-    context = {
-        'maps': maps,
-        'chat_new_form': chat_new_form,
-        'single_chat_form': single_chat_form,
-        'carousel_chat_form': carousel_chat_form,
-        'company': company,
-        'chat_title': chat_title,
-    }
-
-    return render(request, 'bot/edit_chat_map.html', context)
 
 
 def save_question(request):
@@ -1616,46 +1562,6 @@ def edit_save_question(request):
         data = {
             'status': False,
             'message': "Method get"
-        }
-    return JsonResponse(data)
-
-
-@login_required(login_url='user_login')
-def remove_save_question(request):
-    # try:
-
-    question_pk = int(request.GET['question_pk'])
-    ques = ChatQuestionNew.objects.get(pk=question_pk)
-    chat_title = ques.chat_title
-    parent_company_pk = request.user.company.pk
-    if parent_company_pk != chat_title.company.parent_company.pk:
-        data = {
-            'status': 'invalid',
-            'message': 'Invalid request'
-        }
-
-        return JsonResponse(data)
-    number = ques.number
-    if number == 1:
-        ChatQuestionNew.objects.filter(chat_title=chat_title).delete()
-    else:
-        ques.delete()
-        ChatQuestionNew.objects.filter(Q(chat_title=chat_title) & Q(parent__gte=number)).delete()
-
-    if request.is_ajax():
-        maps = ChatQuestionNew.objects.filter(chat_title=chat_title)
-        context = {
-            'maps': maps,
-        }
-        html = render_to_string('bot/map_details.html', context=context, request=request)
-        data = {
-            'status': True,
-            'html': html,
-        }
-    else:
-        data = {
-            'status': 'invalid',
-            'message': 'Invalid request'
         }
     return JsonResponse(data)
 

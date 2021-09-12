@@ -176,7 +176,8 @@ class CreateCompany(forms.ModelForm):
     class Meta:
         model = Company
         fields = ('name', 'language', 'bot_name', 'service_provider', 'image', 'color', 'intro_ques', 'bot_ques', 'bot_title',
-                  'head_text_color', 'intro_text_login', 'provider_line', 'slot_line')
+                  'head_text_color', 'intro_text_login', 'provider_line', 'slot_line',
+                  'ques_color', 'backup_line', 'bot_introduction')
         widgets = {
             'language': forms.Select(attrs={'class': 'selectpicker choose-language', 'data-live-search': 'true'})
         }
