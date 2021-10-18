@@ -136,20 +136,6 @@ html, body{
 			border-radius: 6px;
 			border: 1px solid {{ company.color }};
          }
-         .carousel-control-next, .carousel-control-prev{
-        height: 35px;
-        background: transparent;
-        opacity: 1;
-        border-radius: 6px;
-        width: 10px;
-        top: calc(50% - 17px);
-        }
-        .carousel-control-prev{
-        left: -13px;
-        }
-        .carousel-control-next{
-        right: -13px;
-        }
         .end-instruction-div {
          margin-top:25px;
          background-color: #fff;

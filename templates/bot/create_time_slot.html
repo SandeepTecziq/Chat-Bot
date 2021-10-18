@@ -41,7 +41,7 @@
 <!--</div>-->
 <div class="slot-list">
 {% for slot in curr_provider.provider_slot.all %}
-<p class="available-slot">{{ slot.start }} - {{ slot.end }} : {{ slot.day.day }}</p>
+<p class="available-slot">{{ slot.start }} - {{ slot.end }} : {{ slot.days.day }}</p>
 {% empty %}
 <p class="available-slot">No slot have been created for this Service Provider.</p>
 {% endfor %}

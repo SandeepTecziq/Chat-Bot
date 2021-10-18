@@ -1,215 +1,13 @@
 from googletrans import Translator
-from bot.models import ChatTitle, ChatQuestionNew, ServiceProvider, Company, TimeSlots, BookedSlots, Customer, ChatQuestion
-from django.db.models import Q
+from bot.models import ChatTitle, ServiceProvider, Company, TimeSlots, BookedSlots, Customer
+from django.db.models import Q, Prefetch
 import datetime
 from django.core.mail import send_mail, EmailMessage
 
 
-def get_title_pk(main_type, title_pk, option_number, number):
-    title_qry = ChatTitle.objects.filter(pk=title_pk)
-    if title_qry:
-        title_qry = title_qry[0]
-    else:
-        data = {
-            'status': False,
-            'message': 'Incorrect Title PK'
-        }
-        return data
-    if main_type == 'start':
-        chat_title = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(number=1))
-        if not chat_title:
-            data = {
-                'status': False,
-                'message': 'Chatmap does not exists.'
-            }
-            return data
-        else:
-            chat_title = chat_title[0]
-
-    elif main_type == 'next':
-
-        if option_number == 'false':
-            chat_title = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(parent=number))
-            if chat_title:
-                chat_title = chat_title[0]
-
-            else:
-                data = {
-                    'status': 'end_chat',
-                }
-                return data
-        else:
-            chat_title_option = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(parent=option_number))
-            chat_title_text = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(parent=number))
-            if chat_title_option:
-                chat_title = chat_title_option[0]
-
-            elif chat_title_text:
-                chat_title = chat_title_text[0]
-
-            else:
-                data = {
-                    'status': 'end_chat',
-                }
-                return data
-
-    else:
-        data = {
-            'status': False,
-            'message': 'Invalid main type.'
-        }
-        return data
-
-    data = {
-        'status': True,
-        'title_pk': chat_title.pk
-    }
-    return data
-
-
-def start_chat_view(title_pk, user_lang):
-
-    chat_title = ChatQuestionNew.objects.get(pk=title_pk)
-    company_lang = chat_title.chat_title.company.language
-    if user_lang == company_lang:
-        question = chat_title.text
-    else:
-        translate = Translator()
-        question = translate.translate(chat_title.text, src=company_lang, dest=user_lang).text
-
-    data = {
-        'company_pk': chat_title.chat_title.company.pk,
-        'title_pk': chat_title.chat_title.pk,
-        'question': question,
-        'pk': chat_title.pk,
-        'number': chat_title.number,
-        'status': True,
-        'child_id': chat_title.child_id,
-        'carousel_type': chat_title.carousel_type,
-        'form_type': chat_title.form_type,
-        'detail': {},
-        'is_option': chat_title.is_option,
-    }
-    if chat_title.carousel_type == 'single':
-        detail = {}
-        if chat_title.single_chat_question.image:
-            detail['image'] = chat_title.single_chat_question.image.url
-        else:
-            detail['image'] = False
-        detail['url'] = chat_title.single_chat_question.url
-        if user_lang == company_lang:
-            detail['text'] = chat_title.single_chat_question.single_text
-            detail['options'] = chat_title.single_chat_question.options
-            detail['description'] = chat_title.single_chat_question.description
-        else:
-            translate = Translator()
-            text = translate.translate(chat_title.single_chat_question.single_text, src=company_lang, dest=user_lang).text
-            desc = translate.translate(chat_title.single_chat_question.description, src=company_lang, dest=user_lang).text
-            if chat_title.options:
-                options = chat_title.options
-                for i, j in options.items():
-                    options[i][0] = translate.translate(j[0], src=company_lang, dest=user_lang).text
-
-            else:
-                options = {}
-            detail['options'] = options
-            detail['text'] = text
-            detail['description'] = desc
-
-    elif chat_title.carousel_type == 'carousel':
-        detail = []
-        for frame in chat_title.carousel_chat_question.all():
-            frame_detail = {}
-
-            frame_detail['number'] = frame.number
-            frame_detail['child_id'] = frame.child_id
-            if frame.image:
-                frame_detail['image'] = frame.image.url
-            else:
-                frame_detail['image'] = ''
-
-            if user_lang == company_lang:
-                frame_detail['option'] = frame.option
-                frame_detail['text'] = frame.text
-                frame_detail['description'] = frame.description
-            else:
-                option = translate.translate(frame.option, src=company_lang, dest=user_lang).text
-                text = translate.translate(frame.text, src=company_lang, dest=user_lang).text
-                description = translate.translate(frame.description, src=company_lang, dest=user_lang).text
-                frame_detail['option'] = option
-                frame_detail['text'] = text
-                frame_detail['description'] = description
-
-            detail.append(frame_detail)
-
-    data['detail'] = detail
-
-    return data
-
-
-def next_question_view(number, pk, user_lang):
-    curr_ques = ChatQuestion.objects.get(pk=pk)
-    chat_name = ChatTitle.objects.get(chat_question__pk=pk)
-    ques = ChatQuestion.objects.filter(Q(chat_title=chat_name) & Q(parent=number))
-    ques_1 = ChatQuestion.objects.filter(Q(chat_title=chat_name) & Q(parent=curr_ques.number))
-    company_lang = chat_name.company.language
-    book_appointment = False
-    book_id = 0
-
-    if ques:
-        next_ques = ques
-    else:
-        next_ques = ques_1
-
-    if next_ques:
-        if next_ques[0].question == 'Do you want to book appointment?':
-            book_appointment = True
-            for i, j in next_ques[0].options.items():
-                if j == 'Yes':
-                    book_id = i
-
-        if user_lang == company_lang:
-            question = next_ques[0].question
-            if next_ques[0].options:
-                options = next_ques[0].options
-            else:
-                options = {}
-        else:
-            translate = Translator()
-            question = translate.translate(next_ques[0].question, src=company_lang, dest=user_lang).text
-            if next_ques[0].options:
-                options = {}
-                for i, j in next_ques[0].options.items():
-                    opt = translate.translate(j, src=company_lang, dest=user_lang).text
-                    options[i] = opt
-            else:
-                options = {}
-        data = {
-            'found': True,
-            'question': question,
-            'type': next_ques[0].type,
-            'options': options,
-            'pk': next_ques[0].pk,
-            'number': next_ques[0].number,
-            'book_appointment': book_appointment,
-            'book_id': book_id,
-        }
-        if next_ques[0].images:
-            data['images'] = next_ques[0].images.url
-        else:
-            data['images'] = False
-        return data
-
-    else:
-        data = {
-            'found': False,
-        }
-        return data
-
-
-def service_provider_view(pk, user_lang):
+def service_provider_view(pk, user_lang, date):
     # try:
-    company = Company.objects.filter(pk=pk)
+    company = Company.objects.filter(pk=pk).first()
     if not company:
         data = {
             'status': False,
@@ -217,10 +15,9 @@ def service_provider_view(pk, user_lang):
         }
 
         return data
-
-    else:
-        company = company[0]
-    providers = ServiceProvider.objects.filter(Q(company=company) & Q(provider_slot__isnull=False))
+    booked_slots = BookedSlots.objects.filter(date=date).values_list('slot')
+    providers = ServiceProvider.objects.filter(Q(company=company) & Q(provider_slot__isnull=False)).prefetch_related(
+        Prefetch('provider_slot', queryset=TimeSlots.objects.exclude(pk__in=booked_slots), to_attr='available_slots')).distinct()
 
     if not providers:
         data = {
@@ -231,30 +28,25 @@ def service_provider_view(pk, user_lang):
         return data
 
     company_lang = company.language
-    provider_list = {}
-    calender_line = "Click on calender icon to open calender."
-    if user_lang == company_lang:
-        service_provider = company.service_provider
-        service_provider_line = "Please select"
+    provider_list = []
+    service_provider = company.service_provider
+    service_provider_line = "Please select " + service_provider + " and slot or click the icon to select date again"
+    for i in providers:
 
-        for i in providers:
-            provider_list[i.pk] = i.name
-
-    else:
-
+        ls = []
+        for j in i.available_slots:
+            ls.append({'pk': j.pk, 'from': j.start, 'to': j.end, 'days': j.days['day']})
+        provider_element = {'pk': i.pk, 'name': i.name, 'slots': ls}
+        provider_list.append(provider_element)
+    if user_lang != company_lang:
         translate = Translator()
-        service_provider = translate.translate(company.service_provider, src=company_lang, dest=user_lang).text
-        service_provider_line = translate.translate('Please select', src='en', dest=user_lang).text
-        calender_line = translate.translate(calender_line, src='en', dest=user_lang).text
-        for i in providers:
-            provider_list[i.pk] = translate.translate(i.name, src=company_lang, dest=user_lang).text
+        service_provider_line = translate.translate(service_provider_line, src=company_lang, dest=user_lang).text
 
     data = {
         'status': True,
         'providers': provider_list,
-        'service_provider': service_provider,
         'service_provider_line': service_provider_line,
-        'calender_line': calender_line,
+        'date': date,
     }
 
     # except:

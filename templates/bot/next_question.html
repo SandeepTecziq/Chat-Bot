@@ -1,0 +1,43 @@
+<div class="reply-msg msg-txt">
+    {{ question.question|linebreaks }}
+    {% if question.url %}
+    <a href="{{ question.url }}" target="_blank">{{ question.url }}</a>
+    {% endif %}
+    {% if question.image %}
+    <img src="{{ question.image.url }}" class="img-fluid msg-img">
+    {% endif %}
+</div>
+{% if question.type == 'S' %}
+    {% for i in question.options.all %}
+        <button class="btn-option question-option mx-auto d-block" data-title="{{ question.chat_title.pk }}" data-pk="{{ i.pk }}">{{ i.option }}</button>
+    {% endfor %}
+{% else %}
+    <div id="questionCarousel-{{ question.pk }}" class="carousel slide mb-2" data-ride="carousel">
+      <div class="carousel-inner">
+          {% for i in question.options.all %}
+        <div {% if forloop.counter == 1 %}class="carousel-item active" {% else %}class="carousel-item"{% endif %}>
+            {% if i.text %}
+            {{ i.text|linebreaks }}
+            {% endif %}
+            {% if i.image %}
+            <img src="{{ i.image.url }}" class="img-fluid msg.img mb-2">
+            {% endif %}
+            {% if i.url %}
+            {{ i.url }}
+            {% endif %}
+            {% if i.option %}
+            <button class="btn-option question-option mx-auto d-block" data-pk="{{ i.pk }}" data-title="{{ question.chat_title.pk }}">{{ i.option }}</button>
+            {% endif %}
+        </div>
+          {% endfor %}
+      </div>
+      <a class="carousel-control-prev" href="#questionCarousel-{{ question.pk }}" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#questionCarousel-{{ question.pk }}" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+{% endif %}

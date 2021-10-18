@@ -99,8 +99,18 @@
         line-height: 14px;
         }
 
+        #hide-button:after{
+          display: inline-block;
+          content: "\00d7"; /* This will render the 'X' */
+          font-size: 50px;
+          position: relative;
+          bottom: 8px;
+          left: 1px;
+        }
+
 
     </style>
+<link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
     {% endblock %}
 
 
@@ -138,8 +148,8 @@
 
             </div>
             <div class="map-actions">
-                <button data-href="{% url 'room_test' pk=bot.pk lang=bot.language %}" type="button" class="btn button-submit-blank"
-                   data-toggle="modal" data-target="#testChatBotModal" data-key="{{ bot.secret_key }}">Test Bot</button>
+                <a type="button" href="{% url 'bot_list' %}?test_secret_key={{ bot.secret_key }}"
+                   class="btn button-submit-blank">Test Bot</a>
                 {% if not bot.active %}
                     {% if allowed_bot.sum > 0 %}
                 <a href="{% url 'activate_bot' id=bot.pk secret_key=bot.secret_key %}" class="btn button-submit-blank">Activate</a>
@@ -155,76 +165,23 @@
     </div>
     {% endfor %}
 </div>
-
-<!--------- Test Chat Modal ------------>
-<div class="modal fade" id="testChatBotModal" tabindex="-1" role="dialog" aria-labelledby="testChatBotModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header" style="display: block;">
-        <h5 class="modal-title" id="testChatMapModalLabel"></h5>
-          <p class="ml_status text-danger font-12 mb-2 lh-14 hidden-element">
-              <img src="{% static 'page-icons/warning-icon.png' %}" style="width: 15px;" class="mr-2">
-              No question has been added for this bot (or bot has not been trained after adding question). Please go <b>Create Chat Map</b> > <b>Teach Your Bot</b> to add questions if required.
-          </p>
-          <p class="slot_status text-danger font-12 mb-0 lh-14 hidden-element">
-              <img src="{% static 'page-icons/warning-icon.png' %}" style="width: 15px;" class="mr-2">
-              No service provider has been added for this bot (or slot has not been assigned to server provider). Please go <b>Booking</b> in side navigation and add service provider if required.
-          </p>
-      </div>
-      <div class="modal-body pb-0 text-center">
-            <iframe src="" name="test_bot" title="Chat Bot">df</iframe>
-      </div>
-      <div class="modal-footer">
-
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
+{% if test_secret_key %}
+<div class="bot-functionality-container">
+<button class="open-chat-button" id="show-button" onclick="ShowChat()">
+  <img src="{% static 'icons/Botlogo.png' %}" class="top-nav-icon" style="width: 50px;">
+</button>
+<button class="open-chat-button" id="hide-button" onclick="HideChat()" style="display: none"></button>
+<div class="iframe-container fix-element" id="iframe-container">
+  <iframe src="{% url 'get_user_detail' secret_key=test_secret_key %}?parent_company={{ parent_company.secret_key }}"
+          class="chat-container-iframe"></iframe>
 </div>
-
+</div>
+{% endif %}
 {% endblock %}
 
 {% block script %}
+<script src="{% static 'bot/js/web.js' %}"></script>
 <script>
-$(document).ready( function () {
-<!----- On Chat Demo Modal Show ------->
-    $('#testChatBotModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget)
-      var href = button.data('href')
-      var key = button.data('key')
-      var page_url = "{% url 'check_ml_status' %}"
-      var modal = $(this)
-      modal.find('iframe').attr('src', href)
-      CheckMLStatus(key, page_url, modal)
-
-    })
-
-    function CheckMLStatus(key, page_url, modal){
-    $.ajax({
-    url: page_url,
-    dataType: "json",
-    data: {'secret_key': key},
-    success: function(data){
-    if(data['status'] == true){
-        if(data['ml_status'] == false){
-        modal.find("p.ml_status").removeClass("hidden-element")
-        }
-        if(data['slot_status'] == false){
-        modal.find("p.slot_status").removeClass("hidden-element")
-        }
-
-    }
-    else{
-    alert("Something went wrong. Please refresh and try again.")
-    }
-    },
-    error: function(data){
-    alert("Something went wrong. Please refresh and try again.")
-    },
-    });
-    }
-
-});
 
 </script>
 {% endblock %}

@@ -7,23 +7,46 @@
 	line-height: 14px;
 }
 .open-chat-button{
-	border-color: #76b61b !important;
 	position: fixed;
-	bottom:10px;
-	right:10px;
+	bottom:20px;
+	right:20px;
 	z-index: 1000;
-	background-color: #76b61b !important;
-	border-color: #76b61b !important;
+	background-color: #01578a !important;
 	color: #fff !important;
-	font-size: 14px;
-	padding: 10px;
+	padding: 0;
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border-style: none;
+	animation:pulse 0.5s infinite alternate;
 	cursor: pointer;
 }
+@keyframes pulse {
+  from { box-shadow:0px 0px 10px 1px #6c757d; }
+  to { box-shadow:0px 0px 20px 5px #6c757d; }
+}
+.open-chat-button:focus{
+    outline: none;
+}
+#hide-button:after{
+  display: inline-block;
+  content: "\00d7"; /* This will render the 'X' */
+  font-size: 50px;
+  position: relative;
+  bottom: 6px;
+}
 .iframe-container{
-	/* position: fixed; */
-	bottom:10px;
-	right:10px;
+	position: fixed;
+	bottom:90px;
+	right:20px;
 	z-index: 1000;
+	opacity:0;
+	display: none;
+	transition: opacity 0.3s linear;
+}
+.iframe-container.show{
+    opacity: 1;
+    display: block;
 }
 .auto-bot-template .iframe-close-button{
 	position:absolute;
@@ -70,25 +93,29 @@ overflow-y: scroll;
 	color: #7b7b7b;
 	font-size: 13px;
 	margin-bottom: 10px;
-	max-width: 200px;
+	max-width: 220px;
 	width: max-content;
     position: relative;
     bottom: 2px;
+    min-width: 100px;
 }
 .auto-bot-template .option-container{
 margin-bottom: 10px;
+text-align: center;
 }
-.auto-bot-template button.btn-option{
+.auto-bot-template button.btn-option, .btn-option{
 	background-color: #ffffff;
 	border-radius: 20px;
 	font-size: 13px;
 	width: 200px;
 	padding: 5px;
-	border-style: solid;
 	outline: none;
 	cursor: pointer;
-	color: #7b7b7b;
 	margin-bottom: 5px;
+	border: 2px solid #b0eef3
+}
+.btn-option:hover {
+    background-color: #b0eef3;
 }
 .auto-bot-template .msg-box .msg-input{
 	border: none;
@@ -121,6 +148,17 @@ margin-bottom: 10px;
 
 .auto-bot-template .ticontainer .tidot {
     background-color: #90949c;
+}
+
+.service-provider-item{
+    height: 35px;
+    overflow-y: clip;
+    cursor: pointer;
+    transition: .5s;
+}
+.service-provider-item.height{
+    height: auto;
+    overflow-y: auto;
 }
 
 .auto-bot-template .tidot {
@@ -165,5 +203,15 @@ margin-bottom: 10px;
 .auto-bot-template .btn-submit.disabled{
 	opacity: .5;
     cursor: default;
+}
+
+.reply-msg p{
+    margin-bottom: 0;
+}
+
+.chat-map-last, .chat-map-error{
+    position: fixed;
+    bottom: 45px;
+    font-size: 14px;
 }
 

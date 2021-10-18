@@ -38,7 +38,6 @@
 </head>
 <body class="auto-bot-template">
 <input id="datepicker" style="visibility: hidden;top: 60px;left: 20px;position: fixed;">
-
 <div id="frame">
 
 	<div class="content">
@@ -66,6 +65,7 @@
 							{{ translated_dict.appointment_title }}
 						</button>
 						{% endif %}
+
 					</div>
 				</div>
 				<!----- Continue chat yes/no when Bot can not answer ------->
@@ -74,15 +74,8 @@
 						<p class="text-center mb-0"></p>
 					</div>
 					<div class="text-center">
-					<button class="btn-option" id="talk_yes">Yes</button>
-					<button class="btn-option" id="talk_no">No</button>
-					</div>
-				</div>
-
-				<!--------- Wait for 2 minutes -------->
-				<div class="wait-minute d-none">
-					<div class="reply-msg msg-txt mw-100 w-100">
-						<p class="text-center mb-0">Please wait for 2 minutes. We will message you soon.</p>
+					<button class="btn-option">Yes</button>
+					<button class="btn-option">No</button>
 					</div>
 				</div>
 
@@ -110,7 +103,6 @@
 				  </div>
 				</div>
 
-
 				<!------- Unexpected error -------->
 				<div class="d-none chat-map-error">
 					<p class="mb-0 text-danger font-12"></p>
@@ -126,9 +118,8 @@
 				<input type="text" placeholder="Type your message ..." class="msg-input" disabled>
 				<button class="btn-submit btn-auto-bot disabled"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 				<button class="btn-submit btn-map disabled d-none"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-				<button class="btn-submit btn-customer disabled d-none" id="btn-customer"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<button class="btn-submit btn-customer disabled d-none"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
-
 	</div>
 </div>
 
@@ -146,79 +137,11 @@
 <script>
 $(document).ready(function(){
 
-// Socket variables
-var roomName = "{{ company_secret_key|escapejs }}";
-var parentRoomName = "{{ company.parent_company.secret_key|escapejs }}";
-var userEmail = "{{ u_id|escapejs }}";
-var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+// click approve yes
 
-// notification part
+$(".approve-booking-yes").click(function(){
 
-var notifySocket = new ReconnectingWebSocket(
-    ws_scheme + window.location.host +
-    '/notify/' + parentRoomName + '/');
-
-document.querySelector('#talk_yes').onclick = function(e) {
-	var elements = document.getElementsByClassName('sent-msg');
-	var last_ques = elements[elements.length - 1].innerHTML;
-	$(".continue-chat").addClass("d-none")
-	$(".wait-minute").removeClass("d-none")
-	AppendMessageBox()
-	$(".btn-auto-bot").addClass("d-none")
-	$(".btn-customer").removeClass("d-none")
-    notifySocket.send(JSON.stringify({
-        'talk_type': 'notification_yes',
-        'last_ques': last_ques,
-        'secret_key': '{{ company_secret_key }}',
-        'user_id': '{{ u_id }}',
-    }));
-}
-
-document.querySelector('#talk_no').onclick = function(e) {
-	var elements = document.getElementsByClassName('sent-msg');
-	var last_ques = elements[elements.length - 1].innerHTML;
-    $(".continue-chat").addClass("d-none")
-    $(".msg-input").prop("disabled", false)
-    $(".btn-auto-bot").removeClass("disabled")
-    notifySocket.send(JSON.stringify({
-        'talk_type': 'notification_no',
-        'last_ques': last_ques,
-        'secret_key': '{{ company_secret_key }}',
-        'user_id': '{{ u_id }}',
-    }));
-}
-
-var chatCustomerSocket = new ReconnectingWebSocket(
-    ws_scheme + window.location.host +
-    '/ws/chat_to_customer/' + parentRoomName +'/'+ userEmail + '/');
-
-document.querySelector('#btn-customer').onclick = function(e) {
-    var message = $(".msg-input").val()
-    if(message != ''){
-		chatCustomerSocket.send(JSON.stringify({
-			'message': message,
-			'secret_key': '{{ company_secret_key }}',
-			'user_id': '{{ u_id }}',
-		}));
-		$(".msg-input").val("")
-	}
-};
-chatCustomerSocket.onmessage = function(e) {
-	$(".wait-minute").addClass("d-none")
-	$(".btn-customer").removeClass("disabled")
-	$(".msg-input").prop("disabled", false).focus();
-    var data = JSON.parse(e.data);
-    var message = data['message'];
-    var u_id = data['id']
-    if(u_id == '{{ u_id }}'){
-    $(".msg-container").append("<div class='sent-msg msg-txt'>"+message+"</div>")
-    }
-    else{
-    $(".msg-container").append("<div class='reply-msg msg-txt'>"+message+"</div>")
-    }
-    AppendMessageBox()
-};
-
+})
 
 $(document).on("click", ".slot-option", function(){
 	name = $(this).attr("data-provider")
@@ -270,18 +193,19 @@ $("#start-bot").click(function(){
 });
 
 // Chat with bot
+
 $(".btn-auto-bot").click(function(){
- question = $(".msg-input").val()
- dir_name = "{{ dir_name }}"
- history_pk = "{{ new_history.pk }}"
- secret_key = "{{ secret_key }}"
- customer_id = "{{ u_id }}"
- user_lang = "{{ lang }}"
- backup_line = "{{ company.backup_line }}"
- data = {'question': question, 'dir_name': dir_name, 'history_pk': history_pk, 'secret_key': secret_key,
-  		'user_lang': user_lang, 'customer_id': customer_id, 'backup_line': backup_line}
- page_url = "{% url 'get_bot_reply_updated' %}"
- AddBotReply(data, page_url)
+	 question = $(".msg-input").val()
+	 dir_name = "{{ dir_name }}"
+	 history_pk = "{{ new_history.pk }}"
+	 secret_key = "{{ secret_key }}"
+	 customer_id = "{{ u_id }}"
+	 user_lang = "{{ lang }}"
+	 backup_line = "{{ company.backup_line }}"
+	 data = {'question': question, 'dir_name': dir_name, 'history_pk': history_pk, 'secret_key': secret_key,
+			'user_lang': user_lang, 'customer_id': customer_id, 'backup_line': backup_line, 'if_testing': true}
+	 page_url = "{% url 'get_bot_reply_updated' %}"
+	 AddBotReply(data, page_url)
 })
 
 // Chat map question

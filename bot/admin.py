@@ -59,10 +59,6 @@ class ChatTitleAdmin(admin.ModelAdmin):
     list_display = ('id', 'company', 'title')
 
 
-class ChatQuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'question', 'chat_title', 'type', 'number', 'parent', 'options')
-
-
 class TImeSlotAdmin(admin.ModelAdmin):
     list_display = ('id', 'start', 'end', 'name', 'provider')
 
@@ -77,18 +73,6 @@ class BookingAdmin(admin.ModelAdmin):
 
 class FacebookBotDetailsAdmin(admin.ModelAdmin):
     list_display = ('company','verify_key', 'page_id', 'access_key')
-
-
-class ChatQuestionNewAdmin(admin.ModelAdmin):
-    list_display = ('chat_title', 'text', 'is_first', 'is_option', 'carousel_type', 'number', 'parent', 'u_id', 'child_id')
-
-
-class SingleChatQuestionAdmin(admin.ModelAdmin):
-    list_display = ('chat_title', 'image', 'url', 'options')
-
-
-class CarouselChatQuestionAdmin(admin.ModelAdmin):
-    list_display = ('chat_title', 'image', 'option', 'text', 'description', 'number', 'child_id')
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
@@ -115,14 +99,10 @@ admin.site.register(ActiveBots, ActiveBotsAdmin)
 admin.site.register(SubscriptionPlan, SubscriptionAdmin)
 admin.site.register(TakenSubscription, TakenSubscriptionAdmin)
 admin.site.register(ParentCompany, ParentCompanyAdmin)
-admin.site.register(CarouselChatQuestion, CarouselChatQuestionAdmin)
-admin.site.register(SingleChatQuestion, SingleChatQuestionAdmin)
-admin.site.register(ChatQuestionNew, ChatQuestionNewAdmin)
 admin.site.register(FacebookBotDetails, FacebookBotDetailsAdmin)
 admin.site.register(TimeSlots, TImeSlotAdmin)
 admin.site.register(ServiceProvider, ServiceProviderAdmin)
 admin.site.register(BookedSlots, BookingAdmin)
-admin.site.register(ChatQuestion, ChatQuestionAdmin)
 admin.site.register(ChatTitle, ChatTitleAdmin)
 admin.site.register(QuestionTag, QuestionTagAdmin)
 admin.site.register(Question, QuestionAdmin)

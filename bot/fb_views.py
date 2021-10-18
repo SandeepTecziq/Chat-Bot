@@ -97,28 +97,6 @@ def room_test(request, pk, lang):
         return render(request, 'bot/404_page.html')
 
 
-def get_bot_reply(request):
-    question = request.GET.get('question', None)
-    dir_name = request.GET.get('dir_name', None)
-    try:
-        reply = bot_reply(question, dir_name)
-    except:
-        reply = 'System can not answer this question. Would you like to talk to our customer care service.'
-
-    if reply == 'System can not answer this question. Would you like to talk to our customer care service.':
-        get_answer = 'fail'
-    else:
-        get_answer = 'pass'
-
-    data = {
-        'status': True,
-        'reply': reply,
-        'get_answer': get_answer,
-    }
-
-    return JsonResponse(data)
-
-
 @login_required(login_url='user_login')
 def activate_bot(request, id, secret_key):
     bot = Company.objects.filter(Q(pk=id) & Q(secret_key=secret_key))

@@ -5,54 +5,90 @@
 
 {% block title %} Chat {% endblock %}
 	{% block style %}
-<link href="{% static 'bot/css/chat-styles.css' %}" rel="stylesheet" id="">
+<link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
 <style>
-body{
-    display: block;
+	html, body{
+    height: 100%;
+    }
+{% include 'room.css' %}
+
+.auto-bot-template .sent-msg{
+	background-color: {{ company.color }};
+	color: {{ company.head_text_color }};
+	margin-left: auto;
 }
-#frame{
-margin:auto;
-margin-top: 20px;
+.auto-bot-template .reply-msg{
+	background-color: {{ company.ques_color }}
 }
-#save-chat{
-    float: right;
-    margin: 10px;
-    background: #32465a;
-    border-color: #32465a;
+.auto-bot-template button.btn-option{
+	border-color: {{ company.ques_color }};
+}
+.auto-bot-template button.btn-option:hover{
+	background-color: {{ company.ques_color }};
+}
+.auto-bot-template .btn-submit{
+	background-color: {{ company.color }};
+	color: {{ company.head_text_color }};
+}
+.auto-bot-template{
+	height: 500px;
+	width: 310px;
+	box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+}
+.save-btn-cont{
+	width: 310px;
+	margin-top: 50px;
+}
+.intro-div{
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
 }
 </style>
 	{% endblock %}
 
 
 {% block content %}
+<div class="text-right mx-auto save-btn-cont">
+	<button id="save-chat" class="btn btn-primary">Save Chat</button>
+</div>
+<div class="auto-bot-template mx-auto">
+<div id="frame1" class="h-100">
 
-
-<div id="frame">
-
-	<div class="content">
-		<div class="contact-profile">
-			<p style="margin-left:20px;">{{ customer_name|title }}</p>
-			<button id="save-chat" class="btn btn-primary">Save Chat</button>
-		</div>
-		<div class="messages">
-			<div id="message-list">
-			<ul id="chatID">
-				<li class="replies">{{ ques }}</li>
-			</ul>
+	<div class="content h-100">
+		<div class="intro-div d-flex">
+			{% if company.image %}
+			<div>
+				<div class="bot-img mr-2" style="background-image: url('{{ company.image.url }}')"></div>
 			</div>
-
-		</div>
-
-
-		<div class="message-input">
-			<div class="wrap">
-			<input type="text" id="chat-message-input" placeholder="Write your message..." />
-			<button id="chatCustomer-message-submit" class="submit">
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-            </button>
+			{% endif %}
+			<div>
+				<p class="mb-0 bot-intro-text">{{ customer_name|title }}</p>
 			</div>
 		</div>
+			<div class="chat-body px-3 pt-3 bg-white position-relative">
+				<div class="msg-container">
+					<div class="reply-msg msg-txt">{{ ques }}</div>
+				</div>
+
+				<!------------ Typing icon ------------>
+				<div class="ticontainer d-none">
+					<div class="typing-line">{{ customer_name|title }} is typing</div>
+				  <div class="tiblock">
+					<div class="tidot"></div>
+					<div class="tidot"></div>
+					<div class="tidot"></div>
+				  </div>
+				</div>
+
+			</div>
+
+			<div class="msg-box">
+				<input type="text" placeholder="Type your message ..." class="msg-input">
+				<button class="btn-submit btn-customer" id="btn-customer"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			</div>
+
 	</div>
+</div>
 </div>
 
 {% endblock %}
@@ -73,22 +109,21 @@ var chatCustomerSocket = new ReconnectingWebSocket(
     'ws://' + window.location.host +
     '/ws/chat_to_customer/' + roomName +'/'+ userEmail + '/');
 
-document.querySelector('#chatCustomer-message-submit').onclick = function(e) {
-	var messageInputDom = document.querySelector('#chat-message-input');
-    var message = messageInputDom.value;
+document.querySelector('#btn-customer').onclick = function(e) {
+	var message = $(".msg-input").val()
 	if(message != ''){
     chatCustomerSocket.send(JSON.stringify({
         'message': message,
         'secret_key': '{{ secret_key }}',
         'user_id': '{{ u_id }}',
     }));
-    messageInputDom.value = '';
+    $(".msg-input").val("")
     }
 };
 
-document.querySelector('#chat-message-input').onkeyup = function(e) {
-    if (e.keyCode === 13) { // enter, return
-        document.querySelector('#chatCustomer-message-submit').click();
+document.querySelector('.msg-input').onkeyup = function(e) {
+    if (e.keyCode === 13) {
+        document.querySelector('#btn-customer').click();
     }
 };
 
@@ -96,21 +131,13 @@ chatCustomerSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
     var message = data['message'];
     var u_id = data['id']
-    var ul = document.getElementById("chatID");
-    var li2 = document.createElement("li");
     if(u_id == '{{ u_id }}'){
-    li2.setAttribute("class", "sent");
+    	$(".msg-container").append("<div class='sent-msg msg-txt'>"+message+"</div>")
     }
     else{
-    li2.setAttribute("class", "replies");
+    	$(".msg-container").append("<div class='reply-msg msg-txt'>"+message+"</div>")
     }
-    li2.appendChild(document.createTextNode(message));
-    ul.appendChild(li2);
-    $(".messages").animate({
-        scrollTop: $(document).height()
-    }, "fast");
-
-
+    AppendMessageBox()
 };
 <!----------- Save chat -------------->
 $(document).ready(function(){
@@ -120,20 +147,19 @@ $("#save-chat").click(function(){
   var chat = {}
 
   counter = 0
-  $("ul li.replies").each(function(){
+  $(".reply-msg").each(function(){
   replies[counter]  = $(this).text()
   counter++
   })
 
   counter1 = 0
-  $("ul li.sent").each(function(){
+  $(".sent-msg").each(function(){
   sent[counter1]  = $(this).text()
   counter1++
   })
   $.each(replies, function(key, value){
   chat[value] = sent[key]
   })
-  console.log(chat)
   $.ajax({
   url: '{% url "save_chat_customer" %}',
   dataType: 'json',

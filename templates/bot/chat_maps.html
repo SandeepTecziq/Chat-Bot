@@ -227,7 +227,7 @@
                     <p class="block-text">Teach your bot to answer repetitive queries and be available to 24 * 7 for your client.</p>
                     <p class="block-text">More conversation with your clients make your bot more intelligent.</p>
                     <a class="btn button-submit-blank ques-link"
-                       href="{% url 'notify' id=company.id bot_name=company.name %}">
+                       href="{% url 'notify' id=company.id slug=company.slug %}">
                         Teach Your Bot
                     </a>
                 </div>
@@ -423,92 +423,6 @@ $("#datepicker").datepicker({
 			}
 		})
 
-    <!---- Text response ----->
-    $(".wrap #chat-new-plot-message-submit").click(function(){
-        debugger;
-        var pk = $(this).attr("data-title-pk")
-        var selected = $(".wrap .input-box").val()
-        var child = $(".replies:last").find(".reply-div").attr("data-child")
-        var number = $(".replies:last").find(".reply-div").attr("data-number")
-        view_url = "{% url 'start_chat' %}"
-        var lang = $(".start-chat-button").attr("data-lang")
-        $("#chatID").append("<li class='sent'>"+selected+"</li>")
-        AppendMessageBox();
-        $(".wrap #chat-new-plot-message-input").addClass("hidden-element").val("")
-        $(".wrap #chat-new-plot-message-submit").addClass("hidden-element")
-        setTimeout(function(){
-            $("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>");
-        AppendMessageBox();
-        }, 500)
-        setTimeout(function(){
-        NextQuestionAjax(view_url, pk, lang, "next", child, number, "false", "false" )
-        }, 1500);
-
-    })
-
-    <!---- Option Answer response ---->
-    $(document).on('click', '.select-option', function(){
-
-    var selected = $(this).html()
-    var child = $(".replies:last").find(".reply-div").attr("data-child")
-    var number = $(".replies:last").find(".reply-div").attr("data-number")
-    var option_child = $(this).attr("data-child")
-    var option_number = $(this).attr("data-number")
-    var lang = $(".start-chat-button").attr("data-lang")
-    var pk = $(this).attr("data-title-pk")
-    view_url = "{% url 'start_chat' %}"
-    $(".sent-span").remove();
-
-    $("#chatID").append("<li class='sent'>"+selected+"</li>")
-        AppendMessageBox()
-    setTimeout(function(){
-        $("#chatID").append("<li class='typing-icon'><img src='{% static 'bot/images/typing_icon.gif' %}'></li>");
-        AppendMessageBox();
-    }, 500)
-    setTimeout(function(){
-        NextQuestionAjax(view_url, pk, lang, "next", child, number, option_child, option_number )
-    }, 1500)
-    });
-
-    <!----- Start Chat ------->
-    $(".start-chat-button").click(function(){
-        var pk = $(this).attr("data-pk")
-        var title = $(this).attr("data-title")
-        var lang = $(this).attr("data-lang")
-        $(this).addClass("hidden-element");
-        $(".p-insta").addClass("hidden-element")
-        view_url = "{% url 'start_chat' %}"
-        NextQuestionAjax(view_url, pk, lang, "start", "child", "number", false, false )
-     });
-
-    <!----- On Chat Demo Modal Show ------->
-    $('#testChatMapModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget)
-      var title = button.data('title')
-      var pk = button.data('chat')
-      var lang = button.data('lang')
-      var color = button.data('color')
-
-      var modal = $(this)
-      modal.find('#testChatMapModalLabel').html(title)
-      modal.find("#start-chat-button").attr("data-pk", pk)
-      modal.find("#start-chat-button").attr("data-title", title)
-      modal.find("#start-chat-button").attr("data-lang", lang)
-      $(".wrap #chat-new-plot-message-submit").attr("data-title-pk", pk)
-      modal.find("#input-submit").css({"background-color": color, "border-color": color})
-      modal.find("ul#chatID").empty();
-      $(".p-insta").removeClass("hidden-element")
-      $(".start-chat-button").removeClass("hidden-element");
-      $(".wrap #chat-new-plot-message-input").addClass("hidden-element")
-      $(".wrap #chat-new-plot-message-submit").addClass("hidden-element")
-      $(".p-end-map").addClass("hidden-element")
-      $("#book-appointment-div").hide();
-      $("li.sent").css("background-color", color)
-      $("#book-appointment-div").css("border", "1px solid"+color)
-      $(".sent-span, .sent-span:hover").css("border-color", color)
-      $(".message-input button.submit").css({"background-color": color, "border-color": color})
-    })
-
   <!------- Delete <ch></ch>at ------->
     $('#deleteModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget)
@@ -525,14 +439,6 @@ $("#datepicker").datepicker({
     window.location.href = '/delete_chat_title/'+pk
 
     });
-
-    <!--&lt;!&ndash; Nice scroll -&ndash;&gt;-->
-    <!--$(".messages").niceScroll({-->
-      <!--cursorcolor:"{{ company.color }}",-->
-      <!--cursorwidth:"10px",-->
-      <!--autohidemode: scroll,-->
-      <!--enableobserver: true,-->
-    <!--});-->
 
 });
 </script>

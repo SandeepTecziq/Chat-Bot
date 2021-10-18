@@ -121,6 +121,9 @@ class Notification(models.Model):
     time_added = models.DateTimeField(auto_now_add=True)
     note_type = models.CharField(max_length=30, choices=TYPE)
 
+    class Meta:
+        ordering = ['-pk']
+
 
 class ChatHistory(models.Model):
     TYPE = (
@@ -228,71 +231,6 @@ class SurveyOptions(models.Model):
             return self.question.question[:50]
 
 
-class ChatQuestion(models.Model):
-    TYPE = (
-        ('text', 'text'),
-        ('option', 'option')
-    )
-    type = models.CharField(max_length=10, choices=TYPE)
-    chat_title = models.ForeignKey(ChatTitle, on_delete=models.CASCADE, related_name='chat_question')
-    question = models.CharField(max_length=256)
-    number = models.IntegerField()
-    parent = models.IntegerField(null=True, blank=True)
-    options = JSONField(null=True, blank=True)
-    images = models.ImageField(null=True, blank=True)
-    is_new = models.BooleanField(default=False)
-
-
-class ChatQuestionNew(models.Model):
-    TYPE = (
-        ('single', 'single'),
-        ('carousel', 'carousel')
-    )
-    FORMS = (
-        ('text-form', 'text-form'),
-        ('card-form', 'card-form'),
-        ('text-option-form', 'text-option-form'),
-        ('card-option-form', 'card-option-form'),
-        ('image-carousel-form', 'image-carousel-form'),
-        ('card-carousel-form', 'card-carousel-form'),
-        ('image-carousel-option-form', 'image-carousel-option-form'),
-        ('card-carousel-option-form', 'card-carousel-option-form'),
-    )
-    chat_title = models.ForeignKey(ChatTitle, on_delete=models.CASCADE, related_name='question_titles')
-    is_first = models.BooleanField(default=False)
-    is_option = models.BooleanField(default=False)
-    u_id = models.UUIDField(editable=False, null=True)
-    child_id = models.UUIDField(default=uuid.uuid4, editable=False)
-    carousel_type = models.CharField(max_length=10, choices=TYPE)
-    number = models.CharField(max_length=3)
-    parent = models.CharField(max_length=3)
-    is_new = models.BooleanField(default=True)
-    text = models.CharField(max_length=255)
-    form_type = models.CharField(max_length=50, choices=FORMS)
-
-    def __str__(self):
-        return self.chat_title.title
-
-
-class SingleChatQuestion(models.Model):
-    chat_title = models.OneToOneField(ChatQuestionNew, on_delete=models.CASCADE, related_name='single_chat_question')
-    image = models.ImageField(upload_to=company_question_upload_path, null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
-    options = JSONField(null=True, blank=True)
-    single_text = models.CharField(max_length=255, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-
-class CarouselChatQuestion(models.Model):
-    chat_title = models.ForeignKey(ChatQuestionNew, on_delete=models.CASCADE, related_name='carousel_chat_question')
-    image = models.ImageField(upload_to=company_question_upload_path, null=True, blank=True)
-    child_id = models.UUIDField(editable=False, null=True, blank=True)
-    option = models.CharField(max_length=50, null=True, blank=True)
-    text = models.CharField(max_length=255, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    number = models.CharField(max_length=3, null=True, blank=True)
-
-
 class ServiceProvider(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_provider')
     name = models.CharField(max_length=50)
@@ -307,7 +245,7 @@ class TimeSlots(models.Model):
     start = models.TimeField()
     end = models.TimeField()
     name = models.CharField(max_length=30, null=True, blank=True)
-    day = JSONField(default={"day": "All"})
+    days = models.JSONField(default={"day": "All"})
     provider = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name='provider_slot')
 
     def __str__(self):
@@ -317,6 +255,8 @@ class TimeSlots(models.Model):
 class BookedSlots(models.Model):
     date = models.DateField()
     slot = models.ForeignKey(TimeSlots, on_delete=models.CASCADE, related_name='booked_slot')
+    name = models.CharField(max_length=30)
+    email = models.EmailField()
 
 
 class SubscriptionPlan(models.Model):

@@ -73,8 +73,11 @@
             {{ form.email.errors }}
           </div>
 
-
-        <button name='send_otp_submit' type="submit" class="btn btn-primary popup-submit">START CHAT</button>
+        {% if admin_testing %}
+        <button name='admin-testing' type="submit" class="btn btn-primary popup-submit">START CHAT</button>
+          {% else %}
+        <button name='start-chat' type="submit" class="btn btn-primary popup-submit">START CHAT</button>
+        {% endif %}
         </form>
 
     <!--<script-->

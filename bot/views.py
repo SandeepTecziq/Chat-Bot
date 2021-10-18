@@ -21,8 +21,7 @@ from .view_functions import get_all_detail, check_trained_status
 import random
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.clickjacking import xframe_options_exempt
-from bot_api.common_view_function import start_chat_view, service_provider_view, get_slots, book_selected_slot_view, \
-    get_title_pk
+from bot_api.common_view_function import service_provider_view, get_slots, book_selected_slot_view
 
 
 @login_required(login_url='user_login')
@@ -106,8 +105,13 @@ def templates(request):
 
 
 @xframe_options_exempt
-@csrf_exempt
 def get_user_detail(request, secret_key):
+    parent_uuid = request.GET.get('parent_company')
+    admin_testing = False
+    if parent_uuid:
+        if str(parent_uuid) == str(request.user.company.secret_key):
+            admin_testing = True
+
     languages = googletrans.LANGUAGES
     form = CustomerForm()
     company = Company.objects.filter(secret_key=secret_key)
@@ -120,21 +124,25 @@ def get_user_detail(request, secret_key):
         return render(request, 'question-template/bot_inactive.html', context)
 
     if request.method == 'POST':
-        form = CustomerForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            name = form.cleaned_data['name']
+        if 'admin-testing' in request.POST:
             lang = request.POST['language-selected']
-            # secret_key = form.cleaned_data['secret_key']
-            company = Company.objects.get(secret_key=secret_key)
-            customer, created = Customer.objects.get_or_create(
-                email=email,
-                company=company,
-                defaults={'name': name}
-            )
-            u_id = customer.u_field
+            return HttpResponseRedirect(reverse('bot_testing', args=(secret_key, lang)))
+        else:
+            form = CustomerForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data['email']
+                name = form.cleaned_data['name']
+                lang = request.POST['language-selected']
+                # secret_key = form.cleaned_data['secret_key']
+                company = Company.objects.get(secret_key=secret_key)
+                customer, created = Customer.objects.get_or_create(
+                    email=email,
+                    company=company,
+                    defaults={'name': name}
+                )
+                u_id = customer.u_field
 
-            return HttpResponseRedirect(reverse('room', args=(secret_key, lang, u_id)))
+                return HttpResponseRedirect(reverse('room', args=(secret_key, lang, u_id)))
 
     context = {
         'form': form,
@@ -142,6 +150,7 @@ def get_user_detail(request, secret_key):
         'languages': languages,
         'secret_key': secret_key,
         'not_found': False,
+        'admin_testing': admin_testing,
     }
 
     if company.active:
@@ -213,9 +222,9 @@ def room(request, secret_key, lang, u_id):
             'not_found': False,
             'new_history': new_history,
             'secret_key': secret_key,
+            'bot_testing': False,
         }
         if company.active:
-            # return render(request, 'bot/room.html', context)
             return render(request, 'bot/chat_page.html', context)
         else:
             return render(request, 'question-template/bot_inactive.html')
@@ -234,13 +243,14 @@ def room_customer(request, secret_key, u_id, ques):
     notification = EmpNotification.objects.filter(Q(user=user)).order_by('-pk')
     note_no = EmpNotifyNumber.objects.filter(user=user)
     note_number = note_no[0].number if note_no else 0
-    customer_name = Customer.objects.get(u_field=u_id).name
+    customer_name = Customer.objects.get(u_field=u_id)
     context = {
         'secret_key': secret_key,
         'company_qry': company_qry,
         'u_id': user.username,
         'uu_id': u_id,
-        'customer_name': customer_name,
+        'customer_name': customer_name.name,
+        'company': customer_name.company,
         'ques': ques,
         'notification': notification,
         'note_number': note_number,
@@ -249,8 +259,8 @@ def room_customer(request, secret_key, u_id, ques):
 
 
 @login_required(login_url='user_login')
-def add_Question(request, id, bot_name):
-    company = get_object_or_404(Company, pk=id, name=bot_name)
+def add_question(request, id, slug):
+    company = get_object_or_404(Company, pk=id, slug=slug)
 
     if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
         return render(request, 'bot/check_user.html')
@@ -272,7 +282,7 @@ def add_Question(request, id, bot_name):
                 Answer.objects.create(answer_text=answer, question=question, question_tag=question_tag,
                                       customer_care=request.user)
 
-            return HttpResponseRedirect(reverse('notify', args=(id, bot_name)))
+            return HttpResponseRedirect(reverse('notify', args=(id, slug)))
 
     else:
         formset = create_formset()
@@ -707,9 +717,6 @@ def create_chat_map(request, pk, bot_slug):
     if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
         return render(request, 'bot/check_user.html')
 
-    chat_new_form = ChatNewForm()
-    single_chat_form = SingleChatForm()
-    carousel_chat_form = CarouselChatForm()
     title_form = ChatTitleForm()
     if request.method == 'POST' and 'title-form' in request.POST:
         title_form = ChatTitleForm(request.POST)
@@ -720,152 +727,12 @@ def create_chat_map(request, pk, bot_slug):
             return HttpResponseRedirect(reverse('chat_map_questions', args=(title.pk, title.slug)))
 
     context = {
-        'chat_new_form': chat_new_form,
-        'single_chat_form': single_chat_form,
-        'carousel_chat_form': carousel_chat_form,
         'create_chat_map': 'active',
         'id': pk,
         'company': company,
         'title_form': title_form,
     }
     return render(request, 'bot/create_map.html', context)
-
-
-def edit_chat_name(request):
-    if not request.user.is_authenticated:
-        data = {
-            'status': 'Invalid'
-        }
-        return JsonResponse(data)
-    id = request.GET.get('id', None)
-    name = request.GET.get('name', None)
-
-    if not id:
-        data = {
-            'status': 'Invalid'
-        }
-
-        return JsonResponse(data)
-
-    if not name:
-        data = {
-            'status': False,
-            'message': 'Please enter chat name.'
-        }
-
-        return JsonResponse(data)
-
-    chat_title = ChatTitle.objects.filter(pk=id)
-
-    if not chat_title:
-        data = {
-            'status': 'Invalid',
-        }
-    else:
-        company = chat_title[0].company
-        title = ChatTitle.objects.filter(Q(company=company) & Q(title=name))
-        if title and title[0].pk != chat_title[0].pk:
-            data = {
-                'status': False,
-                'message': 'This chat name already has been registered.'
-            }
-            return JsonResponse(data)
-        else:
-            chat_title.update(title=name)
-            data = {
-                'status': True,
-                'pk': chat_title[0].pk,
-            }
-    return JsonResponse(data)
-
-
-def start_chat(request):
-    main_type = request.GET.get('main_type')
-    user_lang = request.GET.get('lang')
-    title_pk = request.GET.get('title')
-    option_number = request.GET.get('option_number')
-    number = request.GET.get('number')
-    data = get_title_pk(main_type, title_pk, option_number, number)
-
-    if data['status'] == False or data['status'] == 'end_chat':
-        return JsonResponse(data)
-
-    title_pk = data['title_pk']
-    #
-    #
-    #
-    # title_qry = get_object_or_404(ChatTitle, pk=title_pk)
-    #
-    # if main_type == 'start':
-    #     chat_title = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(number=1))
-    #     if not chat_title:
-    #         data = {
-    #             'status': False,
-    #             'message': 'Chatmap does not exists.'
-    #         }
-    #         return data
-    #     else:
-    #         chat_title = chat_title[0]
-    #     title_pk = chat_title.pk
-    #
-    # elif main_type == 'next':
-    #
-    #     if option_number == 'false':
-    #         chat_title = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(parent=number))
-    #         if chat_title:
-    #             chat_title = chat_title[0]
-    #         else:
-    #             data = {
-    #                 'status': 'end_chat',
-    #             }
-    #             return JsonResponse(data)
-    #     else:
-    #         chat_title_option = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(parent=option_number))
-    #         chat_title_text = ChatQuestionNew.objects.filter(Q(chat_title=title_qry) & Q(parent=number))
-    #         if chat_title_option:
-    #             chat_title = chat_title_option[0]
-    #
-    #         elif chat_title_text:
-    #             chat_title = chat_title_text[0]
-    #
-    #         else:
-    #             data = {
-    #                 'status': 'end_chat',
-    #             }
-    #             return JsonResponse(data)
-    #
-    #     title_pk = chat_title.pk
-    #
-    # else:
-    #     data = {
-    #         'status': False,
-    #         'message': 'Invalid request number 2. Please refresh and try again.'
-    #     }
-    #     return JsonResponse(data)
-
-    question_data = start_chat_view(title_pk, user_lang)
-    if request.is_ajax():
-        context = {
-            'question_data': question_data,
-        }
-        if question_data['carousel_type'] == 'single':
-            html = render_to_string('question-template/single.html', context, request=request)
-        elif question_data['carousel_type'] == 'carousel':
-            html = render_to_string('question-template/carousel.html', context, request=request)
-
-        data = {
-            'html': html,
-            'status': True,
-            'is_option': question_data['is_option'],
-            'title-pk': question_data['title_pk']
-        }
-    else:
-        data = {
-            'status': False,
-            'message': 'Invalid request type.'
-        }
-
-    return JsonResponse(data)
 
 
 @login_required(login_url='user_login')
@@ -881,11 +748,13 @@ def bot_list(request):
     bots = Company.objects.filter(parent_company=parent_company)
     subscription_plans = SubscriptionPlan.objects.all()
     allowed_bot = TakenSubscription.objects.filter(Q(parent_company=parent_company) & Q(paid=True)).aggregate(sum=Sum('remaining_bot'))
+    test_secret_key = request.GET.get('test_secret_key')
     context = {
         'bots': bots,
         'subscription_plans': subscription_plans,
         'bot_list': 'active',
         'allowed_bot': allowed_bot,
+        'test_secret_key': test_secret_key,
     }
 
     return render(request, 'bot/all_bots.html', context)
@@ -915,12 +784,11 @@ def add_bot(request):
 
 @login_required(login_url='user_login')
 def chat_maps(request, pk, slug):
-    company = get_object_or_404(Company, pk=pk)
+    company = get_object_or_404(Company, pk=pk, slug=slug)
 
     if request.user.role != 'admin' and request.user.company.pk != company.parent_company.pk:
         return render(request, 'bot/check_user.html')
 
-    ChatTitle.objects.filter(question_titles__isnull=True).update(active=False)
     chat_title = ChatTitle.objects.filter(Q(company=company))
 
     context = {
@@ -935,13 +803,13 @@ def chat_maps(request, pk, slug):
 def delete_chat_title(request, id):
     title = ChatTitle.objects.filter(pk=id)[0]
     company_pk = title.company.pk
-    company_name = title.company.name
+    company_slug = title.company.slug
     secret_key = title.company.parent_company.secret_key
     if request.user.company.secret_key != secret_key:
         return render(request, 'bot/check_user.html')
     title.delete()
 
-    return HttpResponseRedirect(reverse('chat_maps', args=(company_pk, company_name)))
+    return HttpResponseRedirect(reverse('chat_maps', args=(company_pk, company_slug)))
 
 
 @login_required(login_url='user_login')
@@ -1077,7 +945,7 @@ def create_time_slot(request):
                         'message': 'start time should be less than end time.'
                     }
                 else:
-                    TimeSlots.objects.create(start=start, end=end, day={'day': day}, provider=curr_provider)
+                    TimeSlots.objects.create(start=start, end=end, days={'day': day}, provider=curr_provider)
                     curr_provider = ServiceProvider.objects.filter(pk=user_pk).prefetch_related('provider_slot')[0]
                     if request.is_ajax():
                         context = {
@@ -1219,353 +1087,6 @@ def forget_password(request):
     return JsonResponse(data)
 
 
-def save_question(request):
-    if request.method == 'POST':
-        chat_new_form = ChatNewForm(request.POST)
-        if chat_new_form.is_valid():
-            question = chat_new_form.cleaned_data['question']
-            chat_title = chat_new_form.cleaned_data['chat_title']
-            number = chat_new_form.cleaned_data['number']
-            parent = chat_new_form.cleaned_data.get('parent', None)
-            carousel_type = chat_new_form.cleaned_data.get('carousel_type', None)
-            u_id = chat_new_form.cleaned_data.get('u_id', None)
-            is_option = chat_new_form.cleaned_data.get('is_option', None)
-            form_type = chat_new_form.cleaned_data.get('form_type', None)
-            is_first = True if number == "1" else False
-            option = True if is_option == "True" else False
-            title = ChatTitle.objects.filter(pk=chat_title)
-            if title:
-                title = title[0]
-            else:
-                data = {
-                    'status': False,
-                    'message': "Something went wrong. Please refresh and try again."
-                }
-                return JsonResponse(data)
-            new_ques = ChatQuestionNew.objects.create(
-                text=question, number=number, carousel_type=carousel_type, chat_title=title, is_option=option,
-                is_first=is_first, parent=parent, form_type=form_type
-            )
-            if u_id:
-                new_ques.u_id = u_id
-                new_ques.save()
-            child_id = new_ques.child_id
-            if carousel_type == 'single':
-                single_chat_form = SingleChatForm(request.POST, request.FILES)
-                if single_chat_form.is_valid():
-                    image = single_chat_form.cleaned_data.get('image', None)
-                    url = single_chat_form.cleaned_data.get('url', None)
-                    text = single_chat_form.cleaned_data.get('single_text', None)
-                    desc = single_chat_form.cleaned_data.get('description', None)
-                    if form_type == 'card-form' or form_type == 'card-option-form':
-                        if not desc:
-                            data = {
-                                'status': False,
-                                'message': 'Card Body is required'
-                            }
-                            new_ques.delete()
-                            return JsonResponse(data)
-
-                    ques_detail = SingleChatQuestion.objects.create(chat_title=new_ques, url=url, image=image,
-                                                                    single_text=text, description=desc)
-                    data = {
-                        'status': True,
-                        'child_id': child_id,
-                        'number': number,
-                        'single_option': False,
-                        'carousel_option': False,
-                        'new_pk': new_ques.pk,
-                    }
-                    if option:
-                        option_number = request.POST.getlist('option-number-name')
-                        option_values = request.POST.getlist('option-text-name')
-                        for i in option_values:
-                            if not i:
-                                data = {
-                                    'status': False,
-                                    'message': 'All options are required'
-                                }
-                                new_ques.delete()
-                                return JsonResponse(data)
-                        option_values = [[i] for i in option_values]
-                        option_dict = dict(zip(option_number, option_values))
-                        for i in option_dict:
-                            new_id = str(uuid.uuid4())
-                            option_dict[i].append(new_id)
-                        ques_detail.options = option_dict
-                        ques_detail.save()
-                        data['options'] = option_dict
-                        data['single_option'] = True
-
-                    return JsonResponse(data)
-                else:
-                    pass
-
-            elif carousel_type == 'carousel':
-                carousel_chat_form = CarouselChatForm(request.POST, request.FILES)
-                images = request.FILES.getlist('image')
-                texts = request.POST.getlist('text')
-                numbers = request.POST.getlist('number_option')
-                description = request.POST.getlist('description')
-                item_number = int(request.POST.get('total-item-number'))
-                if form_type == 'card-carousel-form' or form_type == 'card-carousel-option-form':
-                    for i in description:
-                        if not i:
-                            data = {
-                                'status': False,
-                                'message': 'Card Body is required'
-                            }
-                            new_ques.delete()
-                            return JsonResponse(data)
-
-                if form_type == 'image-carousel-form' or form_type == 'image-carousel-option-form':
-
-                    if len(images) != item_number:
-
-                        data = {
-                            'status': False,
-                            'message': 'Image field is required'
-                        }
-                        new_ques.delete()
-                        return JsonResponse(data)
-
-                data = {
-                    'status': True,
-                    'child_id': child_id,
-                    'number': number,
-                    'single_option': False,
-                    'carousel_option': False,
-                    'new_pk': new_ques.pk,
-                }
-                if option:
-                    options = request.POST.getlist('option')
-                    for i in options:
-                        if not i:
-                            data = {
-                                'status': False,
-                                'message': 'All options are required'
-                            }
-                            new_ques.delete()
-                            return JsonResponse(data)
-                    carousel_option_dict = {}
-                for i in range(item_number):
-                    chat_n = CarouselChatQuestion.objects.create(chat_title=new_ques, text=texts[i], description=description[i])
-                    try:
-                        chat_n.image = images[i]
-                    except:
-                        pass
-                    try:
-                        chat_n.number = numbers[i]
-                    except:
-                        pass
-
-                    if option:
-                        chat_n.option = options[i]
-                        new_id = str(uuid.uuid4())
-                        chat_n.child_id = new_id
-                        carousel_option_dict[chat_n.number] = new_id
-                    chat_n.save()
-
-                if option:
-                    data['carousel_option'] = True
-                    data['carousel_option_dict'] = carousel_option_dict
-                return JsonResponse(data)
-
-        else:
-            err_list = []
-            err_json = json.loads(chat_new_form.errors.as_json())
-            for i in err_json:
-                strap = i + ': ' + err_json[i][0]['message']
-                err_list.append(strap)
-            data = {
-                'status': 'form_error',
-                'message': err_list
-            }
-
-            return JsonResponse(data)
-    else:
-        data = {
-            'status': False,
-            'message': "Method get"
-        }
-    return JsonResponse(data)
-
-
-@login_required(login_url='user_login')
-def edit_save_question(request):
-    if request.method == 'POST':
-        chat_new_form = ChatNewForm(request.POST)
-        if chat_new_form.is_valid():
-            question = chat_new_form.cleaned_data['question']
-            chat_map_pk = int(request.POST['current-map-pk'])
-            chat_title = chat_new_form.cleaned_data['chat_title']
-            number = chat_new_form.cleaned_data['number']
-            parent = chat_new_form.cleaned_data.get('parent', None)
-            # u_id = chat_new_form.cleaned_data.get('u_id', None)
-            is_first = True if number == "1" else False
-            chat_map = ChatTitle.objects.filter(pk=chat_title)
-            if chat_map:
-                chat_map = chat_map[0]
-            else:
-                data = {
-                    'status': False,
-                    'message': "Something went wrong. Please refresh and try again."
-                }
-                return JsonResponse(data)
-
-            new_ques = ChatQuestionNew.objects.filter(pk=chat_map_pk)
-
-            new_ques.update(text=question, number=number, is_first=is_first, parent=parent)
-            new_ques = new_ques[0]
-
-            # if u_id:
-            #     new_ques.u_id = u_id
-            #     new_ques.save()
-            # child_id = new_ques.child_id
-            if new_ques.carousel_type == 'single':
-                single_chat_form = SingleChatForm(request.POST, request.FILES)
-                if single_chat_form.is_valid():
-                    image = single_chat_form.cleaned_data.get('image', None)
-                    url = single_chat_form.cleaned_data.get('url', None)
-                    text = single_chat_form.cleaned_data.get('single_text', None)
-                    desc = single_chat_form.cleaned_data.get('description', None)
-                    if new_ques.form_type == 'card-form' or new_ques.form_type == 'card-option-form':
-                        if not desc:
-                            data = {
-                                'status': False,
-                                'message': 'Card Body is required'
-                            }
-                            return JsonResponse(data)
-                    ques_detail = SingleChatQuestion.objects.filter(chat_title=new_ques)
-                    ques_detail.update(url=url, image=image, single_text=text, description=desc)
-                    ques_detail = ques_detail[0]
-
-                    data = {
-                        'status': True,
-                        # 'child_id': child_id,
-                        'number': number,
-                        'single_option': False,
-                        'carousel_option': False
-                    }
-                    if new_ques.is_option:
-                        option_number = request.POST.getlist('option-number-name')
-                        option_values = request.POST.getlist('option-text-name')
-                        for i in option_values:
-                            if not i:
-                                data = {
-                                    'status': False,
-                                    'message': 'All options are required'
-                                }
-                                return JsonResponse(data)
-                        option_values = [[i] for i in option_values]
-                        option_dict = dict(zip(option_number, option_values))
-                        for i in option_dict:
-                            # if option_dict[i] not in ques_detail.options:
-                                new_id = str(uuid.uuid4())
-                                option_dict[i].append(new_id)
-                        ques_detail.options = option_dict
-                        ques_detail.save()
-                        data['options'] = option_dict
-                        data['single_option'] = True
-
-                    return JsonResponse(data)
-                else:
-                    pass
-
-            elif new_ques.carousel_type == 'carousel':
-                carousel_chat_form = CarouselChatForm(request.POST, request.FILES)
-                images = request.FILES.getlist('image')
-                image_count = request.POST.getlist('image-count', None)
-                texts = request.POST.getlist('text')
-                numbers = request.POST.getlist('number_option')
-                description = request.POST.getlist('description')
-                option_qry_pk = request.POST.getlist('option-qry-pk')
-                item_number = int(request.POST.get('total-item-number'))
-
-                if new_ques.form_type == 'card-carousel-form' or new_ques.form_type == 'card-carousel-option-form':
-                    for i in description:
-                        if not i:
-                            data = {
-                                'status': False,
-                                'message': 'Card Body is required'
-                            }
-                            return JsonResponse(data)
-
-                if new_ques.form_type == 'image-carousel-form' or new_ques.form_type == 'image-carousel-option-form':
-                    if image_count:
-                        total_count = len(image_count) + len(images)
-                    else:
-                        total_count = len(images)
-                    if total_count != item_number:
-                        data = {
-                            'status': False,
-                            'message': 'Image field is required'
-                        }
-                        return JsonResponse(data)
-
-                data = {
-                    'status': True,
-                    # 'child_id': child_id,
-                    'number': number,
-                    'single_option': False,
-                    'carousel_option': False
-                }
-                if new_ques.is_option:
-                    options = request.POST.getlist('option')
-                    for i in options:
-                        if not i:
-                            data = {
-                                'status': False,
-                                'message': 'All options are required'
-                            }
-                            return JsonResponse(data)
-                    carousel_option_dict = {}
-
-                for i in range(item_number):
-
-                    if option_qry_pk[i]:
-                        chat_n = CarouselChatQuestion.objects.filter(pk=option_qry_pk[i])
-                        chat_n.update(text=texts[i], description=description[i])
-                        chat_n = chat_n[0]
-                    else:
-                        chat_n = CarouselChatQuestion.objects.create(chat_title=new_ques, text=texts[i],
-                                                                 description=description[i])
-                    try:
-                        chat_n.image = images[i]
-                    except:
-                        pass
-                    try:
-                        chat_n.number = numbers[i]
-                    except:
-                        pass
-
-                    if new_ques.is_option:
-                        chat_n.option = options[i]
-                        new_id = str(uuid.uuid4())
-                        chat_n.child_id = new_id
-                        carousel_option_dict[chat_n.number] = new_id
-                    chat_n.save()
-
-                if new_ques.is_option:
-                    data['carousel_option'] = True
-                    data['carousel_option_dict'] = carousel_option_dict
-                return JsonResponse(data)
-
-        else:
-            data = {
-                'status': False,
-                'message': "chat_new_form form error"
-            }
-
-            return JsonResponse(data)
-    else:
-        data = {
-            'status': False,
-            'message': "Method get"
-        }
-    return JsonResponse(data)
-
-
 @login_required(login_url='user_login')
 def change_chat_map_status(request, id):
     question = ChatTitle.objects.get(pk=id)
@@ -1576,14 +1097,20 @@ def change_chat_map_status(request, id):
     question.active = False if question.active else True
     question.save()
 
-    return HttpResponseRedirect(reverse('chat_maps', args=(company.pk, company.name)))
+    return HttpResponseRedirect(reverse('chat_maps', args=(company.pk, company.slug)))
 
 
 def choose_service_provider(request):
     user_lang = request.GET.get('lang')
     pk = request.GET.get('pk')
-    data = service_provider_view(pk, user_lang)
-    return JsonResponse(data)
+    date = request.GET.get('date')
+    data = service_provider_view(pk, user_lang, date)
+    if data['status']:
+        html = render_to_string('bot/provider-slot-list.html', context=data, request=request)
+        response = {'status': True, 'html': html}
+    else:
+        response = data
+    return JsonResponse(response)
 
 
 def get_slot_list(request):

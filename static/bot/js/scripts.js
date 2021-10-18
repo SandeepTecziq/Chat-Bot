@@ -375,24 +375,20 @@ function setTitleToNewQuestions(pk){
 }
 
 function AppendMessageBox(){
-      $(".messages").stop().animate({ scrollTop: $(".messages")[0].scrollHeight}, 1000);
-//    $(".messages").getNiceScroll().resize();
-//$(".messages").getNiceScroll().onResize();
+      $(".chat-body").stop().animate({ scrollTop: $(".chat-body")[0].scrollHeight}, 1000);
 }
 
-function ClickedServiceProvider($this, calender_line, typing_icon){
-     var provider = $this.html()
-     var pk = $this.attr("id")
-     $(".sent-span").remove();
-     $("#chatID").append("<li class='sent service-provider-name msg-li' id="+pk+">"+provider+"</li>")
+function ClickedServiceProvider($this, calender_line){
+     var provider = $this.text()
+     $(".msg-container").append("<div class='sent-msg msg-txt'>"+provider+"</div>")
+     $this.parent().find(".btn-option").remove();
      setTimeout(function(){
-     $("#chatID").append("<li class='typing-icon'>"+typing_icon+"</li>");
+     $(".ticontainer").removeClass("d-none")
      AppendMessageBox();
-     }, 500)
+     }, 100)
      setTimeout(function(){
-     $(".typing-icon").remove();
-     $("#chatID").append("<li class='replies msg-li'>"+calender_line+"<span class='open-datepicker'><i class='fa fa-calendar'></i></span></li>")
-
+     $(".ticontainer").addClass("d-none")
+     $(".msg-container").append("<div class='reply-msg msg-txt'>"+calender_line+"<span class='open-datepicker'><i class='fa fa-calendar'></i></span></div>")
      },1500)
 }
 
@@ -407,6 +403,5 @@ function StartBotFunc(this_text, bot_line){
 	$(".msg-container").append("<div class='reply-msg msg-txt'>"+bot_line+"</div>")
 	$(".msg-box").find(".msg-input").prop("disabled", false).focus();
 	$(".msg-box").find(".btn-submit").removeClass("disabled")
-
 	},2000)
 }

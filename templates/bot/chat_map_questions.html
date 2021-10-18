@@ -46,6 +46,34 @@
     </div>
     </div>
 </div>
+{% if repeat_parent %}
+<div class="alert alert-danger" role="alert">
+    <p class="mb-0">Following questions have been selected as parent for more than 1  question:
+    {% for i in repeat_parent %}
+    <span><b>{{ i.number }}</b></span>(<span>
+    {% for j in i.child_question.all %}
+        {{ j.number }}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    </span>)
+    {% if not forloop.last %},{% endif %}
+        {% endfor %}</p>
+</div>
+{% endif %}
+{% if repeat_option %}
+<div class="alert alert-danger" role="alert">
+<p class="mb-0">Repeated parent options:
+{% for i in repeat_option %}
+<span><b>{{ i.question.number }}-{{ i.option }}</b></span>(<span>
+{% for j in i.child_question.all %}
+    {{ j.number }}{% if not forloop.last %},{% endif %}
+{% endfor %}
+</span>)
+{% if not forloop.last %},{% endif %}
+    {% endfor %}
+</p>
+</div>
+{% endif %}
+
 <div class="questions-list w-75 pl-3 pr-4">
     <div class="saved_questions">
         {% include 'question-template/map_question.html' %}
@@ -54,6 +82,12 @@
 
     </div>
 </div>
+{% if questions.count > 1 %}
+<div class="mt-4 order-question-container d-none position-fixed" style="bottom: 20px;">
+    <button class="sort-question btn bg-orange text-white">Update Question Order</button>
+    <p class="btn-error d-none font-12 text-danger">No new changes in question sequence.</p>
+</div>
+{% endif %}
 <div class="question-option-container">
     <div class="add-question-instruction">
         <p class="instruction-heading">Select Question</p>
@@ -120,8 +154,32 @@
 </div>
 {% endblock %}
 {% block script %}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $(document).ready(function(){
+    $( ".sortable" ).sortable({
+      placeholder: "ui-state-highlight",
+      stop: function(event, ui){
+        $(".order-question-container").removeClass("d-none")
+      }
+    });
+    $( ".sortable" ).disableSelection();
+
+    // sort questions
+    $(".sort-question").click(function(){
+    var l_sort = [];
+    $(".card").each(function(){
+        l_sort.push($(this).attr("id"))
+    })
+    if(l_sort.length > 0){
+        page_url = "{% url 'sort_title_questions' title_pk=chat_title.pk %}"
+        SortQuestions(l_sort, page_url)
+    }
+    else{
+        $(this).siblings("p.btn-error").removeClass("d-none")
+    }
+    })
+
     // Select parent question
     $(document).on("change", ".question-select", function(){
     selected_question = $(this).find("option:selected").val()

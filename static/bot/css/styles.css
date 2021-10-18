@@ -101,7 +101,7 @@ height: 45px;
 border-radius: 25px;
 }
 #save-chat{
-    float: right;
+    font-size: 12px;
     margin: 10px;
     background: #32465a;
     border-color: #32465a;
@@ -155,4 +155,40 @@ border-radius: 25px;
     bottom: 100px;
     right: 10px;
     width: 25%;
+}
+
+.decorated-input{
+    height: 45px;
+    padding-top: 15px;
+}
+.decorated-input:focus{
+    border-color: #00badb;
+}
+.decorated-input::placeholder{
+    color: transparent;
+}
+.decorated-input + label{
+    left: 10px;
+    transform-origin: 0 0;
+    transition: .2s ease-in-out;
+    top: 10px;
+}
+.decorated-input:focus + label, .decorated-input:not(:placeholder-shown) + label{
+    transform: translateY(-1em) scale(.8);
+    top: 15px;
+}
+
+.create-title-form input{
+    border-radius: 0;
+    padding-left: 10px;
+}
+.create-title-form button{
+    height: 45px;
+    border-radius: 0;
+    padding: 10px 25px;
+    position: relative;
+    bottom: 5px;
+}
+.create-title-form input:focus{
+    box-shadow: none;
 }

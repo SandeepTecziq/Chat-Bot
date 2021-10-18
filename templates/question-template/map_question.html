@@ -1,12 +1,12 @@
-<div class="accordion" id="mapQuestionList">
-    {% for question in chat_title.questions.all %}
-  <div class="card">
+<div class="accordion sortable" id="mapQuestionList">
+    {% for question in questions.all %}
+  <div class="card ui-state-default" id="{{ question.pk }}">
     <div class="card-header" id="heading{{ question.pk }}">
       <h2 class="mb-0">
         <a class="btn btn-link btn-block text-left collapsed d-flex" type="button" data-toggle="collapse"
                 data-target="#collapse{{ question.pk }}" aria-expanded="true" aria-controls="collapse{{ question.pk }}">
           <div>
-            <p class="mb-0"><span class="question-number" data-pk="{{ question.pk }}"><b>{{question.number}}</b></span> {{question.question}}</p>
+            <p class="mb-0"><span class="question-number" data-pk="{{ question.pk }}"><b>{{question.number}}.</b></span> {{question.question}}</p>
 
           {% if question.prt_option %}
           <p class="mb-0 font-12 ml-2"><b>Parent</b>: {{ question.prt_option.option }} - <span>{{ question.prt_option.question.question }}</span></p>

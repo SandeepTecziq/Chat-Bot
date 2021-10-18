@@ -119,7 +119,7 @@ right: 20px;
 {% block content %}
 <div class="page-heading">
     <h2 class="float-left">Train Your Bot: {{ company.name }}</h2>
-<a href="{% url 'chat_maps' id=company.pk name=company.name %}" class="btn button-submit float-right">Back</a>
+<a href="{% url 'chat_maps' pk=company.pk slug=company.slug %}" class="btn button-submit float-right">Back</a>
 </div>
 <div class="clearfix"></div>
 <div class="row page-content">
