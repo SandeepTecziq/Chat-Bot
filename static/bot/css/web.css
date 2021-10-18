@@ -209,7 +209,7 @@ text-align: center;
     margin-bottom: 0;
 }
 
-.chat-map-last, .chat-map-error{
+.chat-map-last, .chat-map-error, .booking-confirmed{
     position: fixed;
     bottom: 45px;
     font-size: 14px;

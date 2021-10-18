@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import ChatHistory, Customer, User, Company, Conversation, Question, ChatTitle, SurveyQuestion, \
-    ServiceProvider, SurveyOptions
+    ServiceProvider, SurveyOptions, TimeSlots, BookedSlots
 from googletrans import Translator
 from django.db.models import Q, Max, Count
 from .chatgui import bot_reply
@@ -388,3 +388,33 @@ def get_next_question(request, title_pk, question_pk, is_option):
 
     return JsonResponse(data)
 
+
+def book_selected_slot(request):
+    slot_pk = request.GET.get('slot_pk')
+    time = request.GET.get('time')
+    u_id = request.GET.get('u_id')
+
+    if slot_pk and time and u_id:
+        slot = TimeSlots.objects.filter(pk=slot_pk).first()
+        user = Customer.objects.filter(u_field=u_id).first()
+        if slot and user:
+            email = user.email
+            name = user.name
+            BookedSlots.objects.create(date=time, slot=slot, name=name, email=email)
+            data = {
+                'status': True,
+                'message': 'Selected slot has been booked.'
+            }
+
+        else:
+            data = {
+                'status': False,
+                'message': 'Data not provided. Please try again.'
+            }
+    else:
+        data = {
+            'status': False,
+            'message': 'Data not provided. Please try again.'
+        }
+
+    return JsonResponse(data)

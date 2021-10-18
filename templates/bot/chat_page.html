@@ -100,6 +100,11 @@
 					</div>
 				</div>
 
+				<!-------- Booking Success --------->
+				<div class="d-none booking-confirmed">
+					<p class="mb-0 text-success font-12">success</p>
+				</div>
+
 				<!------------ Typing icon ------------>
 				<div class="ticontainer d-none">
 					<div class="typing-line">{{ translated_dict.bot_name|title }} is typing</div>
@@ -113,7 +118,7 @@
 
 				<!------- Unexpected error -------->
 				<div class="d-none chat-map-error">
-					<p class="mb-0 text-danger font-12"></p>
+					<p class="mb-0 text-danger font-12">error</p>
 				</div>
 
 				<!------- CHat map ended -------->
@@ -145,6 +150,21 @@
 <script src="{% static 'bot/js/scripts.js' %}"></script>
 <script>
 $(document).ready(function(){
+
+// Slot Booking
+
+$(".approve-booking-yes").click(function(){
+	slot_pk = $(this).attr("data-slot-pk")
+	time = $(this).attr("data-time")
+	u_id = "{{ u_id }}"
+	page_url = "{% url 'book_selected_slot' %}"
+	BookSelectedSlot(page_url, slot_pk, time, u_id)
+})
+
+// Booking click no
+$(".approve-booking-no").click(function(){
+	$(".booking-confirmation-box").addClass("d-none")
+})
 
 // Socket variables
 var roomName = "{{ company_secret_key|escapejs }}";

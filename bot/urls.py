@@ -44,7 +44,6 @@ urlpatterns = [
     path('integration/', views.facebook_detail, name='facebook_detail'),
     path('change_chat_map_status/<id>', views.change_chat_map_status, name='change_chat_map_status'),
     path('get_slot_list', views.get_slot_list, name='get_slot_list'),
-    path('book_selected_slot', views.book_selected_slot, name='book_selected_slot'),
     path('intro_change_language', views.intro_change_language, name='intro_change_language'),
     path('78265fc81d199e51016ef810f1d355e5ea7bef7f682b855d94', fb_views.fb_chat_view, name='fb_chat_view'),
     path('add_provider_in_list', views.add_provider_in_list, name='add_provider_in_list'),
@@ -68,4 +67,5 @@ urlpatterns = [
     path('sort_title_questions/<title_pk>/', views2.sort_title_questions, name='sort_title_questions'),
     path('bot_testing/<secret_key>/<lang>/', views2.bot_testing, name='bot_testing'),
     path('get_next_question/<title_pk>/<question_pk>/<is_option>/', views2.get_next_question, name='get_next_question'),
+    path('book_selected_slot', views2.book_selected_slot, name='book_selected_slot'),
 ]
