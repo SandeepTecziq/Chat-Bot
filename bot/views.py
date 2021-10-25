@@ -825,6 +825,20 @@ def create_service_provider(request):
         curr_provider = None
     time_slot_form = TimeSlotForm()
     create_provider_form = CreateProviderForm()
+    category_form = ProviderCategoryForm()
+
+    if request.method == 'POST':
+        if 'category-save' in request.POST:
+            category_form = ProviderCategoryForm(request.POST)
+            if category_form.is_valid():
+                category_form.save()
+                return HttpResponseRedirect(reverse('create_service_provider'))
+
+        if 'add-provider-submit' in request.POST:
+            create_provider_form = CreateProviderForm(request.POST)
+            if create_provider_form.is_valid():
+                create_provider_form.save()
+                return HttpResponseRedirect(reverse('create_service_provider'))
 
     context = {
         'create_provider_form': create_provider_form,
@@ -833,68 +847,9 @@ def create_service_provider(request):
         'time_slot_form': time_slot_form,
         'parent_company': parent_company,
         'create_service_provider': 'active',
+        'category_form': category_form,
     }
     return render(request, 'bot/create_service_provider.html', context)
-
-
-@login_required(login_url='user_login')
-def add_provider_in_list(request):
-    if request.method == 'POST':
-        form = CreateProviderForm(request.POST)
-        if form.is_valid():
-            parent_company = request.user.company
-            provider = form.save(commit=False)
-            company_pk = request.POST.get('select-bot-name', None)
-            if not company_pk:
-                data = {
-                    'status': False,
-                    'message': 'Please select Bot Name'
-                }
-                return JsonResponse(data)
-            provider_company = Company.objects.filter(pk=company_pk)
-            if not provider_company or provider_company[0].parent_company.pk != parent_company.pk:
-                data = {
-                    'status': False,
-                    'message': 'Incorrect Bot Name selected'
-                }
-                return JsonResponse(data)
-            provider_company = provider_company[0]
-            provider.company = provider_company
-            provider.save()
-
-            if request.is_ajax():
-                service_providers = ServiceProvider.objects.filter(company__parent_company=parent_company).prefetch_related('provider_slot')
-                context_provider = {
-                    'service_providers': service_providers,
-                }
-
-                context_slot = {
-                    'curr_provider': provider,
-                }
-                html = render_to_string('bot/provider-list.html', context_provider, request=request)
-                html2 = render_to_string('bot/create_time_slot.html', context_slot, request=request)
-
-                data = {
-                    'html': html,
-                    'html2': html2,
-                    'status': True,
-                }
-            else:
-                data = {
-                    'status': False,
-                    'message': 'bad request. Please refresh and try again.'
-                }
-        else:
-            data = {
-                'status': False,
-                'message': 'Input type is not correct.'
-            }
-    else:
-        data = {
-            'status': False,
-            'message': 'Bad submission method. Please refresh and try again.'
-        }
-    return JsonResponse(data)
 
 
 @login_required(login_url='user_login')

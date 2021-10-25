@@ -1,5 +1,5 @@
 from django import forms
-from .models import SubscriptionPlan, ChatTitle, SurveyQuestion, SurveyOptions
+from .models import SubscriptionPlan, ChatTitle, SurveyQuestion, SurveyOptions, ProviderCategory
 from django.db.models import Q
 
 
@@ -70,3 +70,13 @@ class ChatTitleForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control decorated-input w-75 d-inline',
                                             'placeholder': 'Enter title of chat map'})
         }
+
+
+class ProviderCategoryForm(forms.ModelForm):
+    class Meta:
+        model = ProviderCategory
+        fields = ('name', 'company')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'provider-name', 'placeholder': 'Enter name of category'})
+        }
+

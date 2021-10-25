@@ -46,7 +46,6 @@ urlpatterns = [
     path('get_slot_list', views.get_slot_list, name='get_slot_list'),
     path('intro_change_language', views.intro_change_language, name='intro_change_language'),
     path('78265fc81d199e51016ef810f1d355e5ea7bef7f682b855d94', fb_views.fb_chat_view, name='fb_chat_view'),
-    path('add_provider_in_list', views.add_provider_in_list, name='add_provider_in_list'),
     path('room_test/<pk>/<lang>/', fb_views.room_test, name='room_test'),
     path('create_subscription_plan/', fb_views.create_subscription_plan, name='create_subscription_plan'),
     path('activate_bot/<id>/<secret_key>/', fb_views.activate_bot, name='activate_bot'),
@@ -68,4 +67,5 @@ urlpatterns = [
     path('bot_testing/<secret_key>/<lang>/', views2.bot_testing, name='bot_testing'),
     path('get_next_question/<title_pk>/<question_pk>/<is_option>/', views2.get_next_question, name='get_next_question'),
     path('book_selected_slot', views2.book_selected_slot, name='book_selected_slot'),
+    path('get_provider_category', views2.get_provider_category, name='get_provider_category'),
 ]

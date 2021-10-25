@@ -199,7 +199,7 @@ class CreateAdmin(forms.ModelForm):
 class CreateProviderForm(forms.ModelForm):
     class Meta:
         model = ServiceProvider
-        fields = ('name', )
+        fields = ('name', 'category', 'company')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name of Provider', 'class': 'provider-name'})
         }

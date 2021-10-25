@@ -64,7 +64,7 @@ class TImeSlotAdmin(admin.ModelAdmin):
 
 
 class ServiceProviderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name', 'company')
+    list_display = ('user', 'name', 'company', 'category')
 
 
 class BookingAdmin(admin.ModelAdmin):
@@ -95,6 +95,10 @@ class SurveyOptionAdmin(admin.ModelAdmin):
     list_display = ('pk', 'question', 'option', 'image')
 
 
+class ProvideCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'company')
+
+
 admin.site.register(ActiveBots, ActiveBotsAdmin)
 admin.site.register(SubscriptionPlan, SubscriptionAdmin)
 admin.site.register(TakenSubscription, TakenSubscriptionAdmin)
@@ -118,6 +122,7 @@ admin.site.register(NotifyNumber, NotifyAdmin)
 admin.site.register(EmpNotifyNumber, EmpNotifyAdmin)
 admin.site.register(SurveyQuestion, SurveyQuestionAdmin)
 admin.site.register(SurveyOptions, SurveyOptionAdmin)
+admin.site.register(ProviderCategory, ProvideCategoryAdmin)
 
 
 

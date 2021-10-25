@@ -60,7 +60,6 @@ def service_provider_view(pk, user_lang, date):
 def get_slots(pk, date, user_lang):
     translate = Translator()
     slots = TimeSlots.objects.filter(provider__pk=pk)
-    print(slots)
     slot_dict = {}
     for i in slots:
         book = BookedSlots.objects.filter(Q(date=date) & Q(slot__pk=i.pk)).exists()

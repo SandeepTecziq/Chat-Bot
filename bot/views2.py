@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import ChatHistory, Customer, User, Company, Conversation, Question, ChatTitle, SurveyQuestion, \
-    ServiceProvider, SurveyOptions, TimeSlots, BookedSlots
+    ServiceProvider, SurveyOptions, TimeSlots, BookedSlots, ProviderCategory
 from googletrans import Translator
 from django.db.models import Q, Max, Count
 from .chatgui import bot_reply
@@ -418,3 +418,30 @@ def book_selected_slot(request):
         }
 
     return JsonResponse(data)
+
+
+def get_provider_category(request):
+    pk = request.GET.get('pk')
+    if pk:
+        company = Company.objects.filter(pk=pk).first()
+        if company:
+            categories = ProviderCategory.objects.filter(company=company)
+            category_list = []
+            for i in categories:
+                category_list.append({'pk': i.pk, 'name': i.name})
+            data = {
+                'status': True,
+                'data': category_list
+            }
+        else:
+            data = {
+                'status': False,
+                'message': 'Incorrect BOt detail.'
+            }
+    else:
+        data = {
+            'status': False,
+            'message': 'Bot detail not provided'
+        }
+    return JsonResponse(data)
+

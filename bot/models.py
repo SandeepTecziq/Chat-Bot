@@ -231,11 +231,21 @@ class SurveyOptions(models.Model):
             return self.question.question[:50]
 
 
+class ProviderCategory(models.Model):
+    company = models.ForeignKey('bot.Company', on_delete=models.CASCADE, related_name='provider_categories')
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+
 class ServiceProvider(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_provider')
     name = models.CharField(max_length=50)
     company = models.ForeignKey(Company, related_name='company_provider', null=True, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
+    category = models.ForeignKey('bot.ProviderCategory', on_delete=models.SET_NULL, related_name='providers',
+                                 null=True, blank=True)
 
     def __str__(self):
         return self.name

@@ -99,32 +99,6 @@ function GetProviderDetail(pk, page_url){
     })
 }
 
-function CreateServiceProviderForm(form, page_url){
-$.ajax({
-         data: form.serialize(),
-         type: 'post',
-         url: page_url,
-         success: function(data) {
-             if(data['status'] == true){
-             $(".service-provider-block").html(data['html'])
-             $(".providers-slot").html(data['html2'])
-             $('[data-toggle="tooltip"]').tooltip()
-             $('.select-day-drop-down').selectpicker();
-             }
-             else{
-                 form.find(".error-list").removeClass("hidden-element").html(data['message'])
-             }
-         },
-         error: function(data){
-         alert("Something went wrong. Please refresh and try again.")
-         }
-     });
-     form.find(".provider-name").val("");
-     form.find(".provider-name").focus();
-     return false;
-
-}
-
 function ChangeProviderState(pk, name, page_url){
     $.ajax({
         url: page_url,

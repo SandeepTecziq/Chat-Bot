@@ -5,10 +5,6 @@
 {% block style %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 <style>
-div.buttons {
-    text-align: right;
-    margin-top: 10px;
-}
 .item:not(:last-of-type){
 margin-bottom: 10px;
 }
@@ -62,13 +58,12 @@ margin-left: 10px;
 margin-top: 15px;
 }
 .red-tooltip + .tooltip > .tooltip-inner, .red-tooltip + .tooltip > .tooltip-arrow {background-color: #ff0a00;}
-.select-bot-name{
+.select-bot-name, .select-provider-category{
     height: 35px;
     border-radius: 6px;
     border-color: #949494;
     color: #949494;
     font-size: 14px;
-    padding-left: 10px;
 }
 span.change-provider-state{
 font-size:14px;
@@ -91,7 +86,7 @@ background-color: #fff;
 border-color: #fff;
 font-size: 12px;
 }
-div.bootstrap-select.select-bot-name > .dropdown-toggle{
+div.bootstrap-select.select-bot-name > .dropdown-toggle, div.bootstrap-select.select-provider-category > .dropdown-toggle{
 color: #949494;
 background-color: #fff;
 border-color: #949494;
@@ -116,29 +111,58 @@ font-size: 14px;
             <h4 class="">Add New Provider</h4>
         </div>
         <div class="block-content border-right">
-            <form method="post" id="create-service-provider-form">
-                {% csrf_token %}
 
-            <div class="item row">
-
-                <div class="col-sm-6 pl-0">
-                    {{ create_provider_form.name }}
-                {{ create_provider_form.name.errors }}
-                    <p class="error-list hidden-element"></p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form method="post" id="create-provider-category-form">
+                    {% csrf_token %}
+                        <div class="mb-2">
+                            {{category_form.name}}
+                            <span class="text-danger font-12">{{category_form.name.errors.as_text}}</span>
+                        </div>
+                        <div class="mb-2">
+                            <select name="company" class="select-bot-name w-100">
+                                <option value="">Select Bot</option>
+                                {% for bot in parent_company.companies.all %}
+                                <option value="{{ bot.pk }}">{{ bot.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="text-danger font-12">{{ category_form.company.errors.as_text }}</span>
+                        </div>
+                        <div class="text-right">
+                            <input type="submit" value="Submit" class="btn button-submit" name="category-save">
+                        </div>
+                    </form>
                 </div>
-                <div class="col-sm-6 pr-0">
-                    <select name="select-bot-name" class="select-bot-name w-100">
-                        {% for bot in parent_company.companies.all %}
-                        <option value="{{ bot.pk }}">{{ bot.name }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="col-sm-6">
+                    <form method="post" id="">
+                    {% csrf_token %}
+                        <div class="mb-2">
+                            {{ create_provider_form.name }}
+                            <span class="text-danger font-12">{{ create_provider_form.name.errors }}</span>
+                        </div>
+                        <div class="mb-2">
+                            <select name="company" class="select-bot-name provider-bot-name w-100">
+                                <option value="">Select Bot</option>
+                                {% for bot in parent_company.companies.all %}
+                                <option value="{{ bot.pk }}">{{ bot.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-danger font-12">{{ create_provider_form.company.errors.as_text }}</span>
+                            <select name="category" class="select-provider-category w-100 d-none">
+                                <option value="">Select Category</option>
+                            </select>
+
+                        </div>
+                        <div class="text-right">
+                            <input type="submit" value="Submit" class="btn button-submit" name="add-provider-submit">
+                        </div>
+                    </form>
                 </div>
 
             </div>
-                <div class="buttons">
-                    <input type="submit" value="Submit" class="btn button-submit" name="add-provider-submit">
-                </div>
-                </form>
         </div>
     </div>
     <div class="col-sm-3">
@@ -164,6 +188,37 @@ font-size: 14px;
 <script>
 $(document).ready(function(){
 
+function GetProviderCategory(page_url, pk){
+    $.ajax({
+        url: page_url,
+        data: {'pk': pk},
+        dataType: "json",
+        success: function(data){
+            if(data['data'].length > 0){
+                $(".select-provider-category").removeClass("d-none").attr("required", true)
+                $(".select-provider-category").find("option:not(:first)").remove()
+                $.each(data['data'] , function(index, val) {
+                    $(".select-provider-category").append("<option value='"+val['pk']+"'>"+val['name']+"</option>")
+                });
+                $('.select-provider-category').selectpicker();
+            }
+            else{
+                $(".select-provider-category").addClass("d-none").attr("required", false)
+            }
+        },
+        error: function(data){
+            alert("Something went wrong. Please refresh and try again.")
+        },
+    })
+}
+
+// show provider category
+$(".provider-bot-name").change(function(){
+    pk = $(this).find("option:selected").val()
+    page_url = "{% url 'get_provider_category' %}"
+    GetProviderCategory(page_url, pk)
+})
+
 <!------ Bootstrap Dropdown ------>
 
 $('.select-day-drop-down').selectpicker();
@@ -176,15 +231,6 @@ $(document).on("click", ".change-provider-state span", function(){
     var name = $(this).attr("data-name")
     ChangeProviderState(pk, name, page_url)
 });
-
-<!----- Add Service provider ------->
-$(document).on("submit", '#create-service-provider-form', function() {
-
-     form = $('#create-service-provider-form')
-     page_url = "{% url 'add_provider_in_list' %}"
-     CreateServiceProviderForm(form, page_url)
-    return false;
- });
 
 <!-------- Add Time Slot -------->
 $(document).on("submit", '#create-slot-form', function() {
