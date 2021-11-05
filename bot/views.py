@@ -22,6 +22,17 @@ import random
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.clickjacking import xframe_options_exempt
 from bot_api.common_view_function import service_provider_view, get_slots, book_selected_slot_view
+import os, sys
+
+
+class HiddenPrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
 
 
 @login_required(login_url='user_login')
@@ -333,7 +344,8 @@ def create_file(request):
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(a, f, ensure_ascii=False, indent=4)
 
-    train_chat(dir_name)
+    with HiddenPrints():
+        train_chat(dir_name)
     messages.success(request, 'Bot has been trained')
     data = {
         'message': 'Bot has been trained successfully.',
@@ -490,6 +502,12 @@ def change_read_status_note(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        secret_key = request.user.company.secret_key
+        if request.user.role == 'admin':
+            return HttpResponseRedirect(reverse('bot_list'))
+        else:
+            return HttpResponseRedirect(reverse('employee_page', args=(secret_key,)))
     form = UserLoginForm()
     forget_password_form = ForgetPasswordForm()
     parent_company_form = ParentCompanyForm()

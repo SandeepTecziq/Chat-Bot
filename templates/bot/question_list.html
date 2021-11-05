@@ -63,7 +63,7 @@
     </form>
 
                   </div>
-<table class="table" style="padding:20px;" id="question-list-id">
+        <table class="table" style="padding:20px;" id="question-list-id">
 
   <thead>
     <tr>
@@ -179,7 +179,9 @@ $.ajax({ // create an AJAX call...
     });
 
 <!-------  Add DataTable ----------->
-    var table = $('#question-list-id').DataTable();
+    var table = $('#question-list-id').DataTable({
+            "bAutoWidth": false
+    });
 
     $("#search-field").change(function(){
         table
