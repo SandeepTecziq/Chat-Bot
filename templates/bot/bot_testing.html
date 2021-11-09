@@ -56,7 +56,7 @@
 				<div class="msg-container">
 					<div class="reply-msg msg-txt">{{ translated_dict.intro_ques }}</div>
 					<div class="option-container">
-						<button class="btn-option" id="start-bot">{{ translated_dict.bot_title }}</button>
+<!--						<button class="btn-option" id="start-bot">{{ translated_dict.bot_title }}</button>-->
 						{% for pk, title in chat_titles.items %}
 							<button class="btn-option btn-chat-map" data-title="{{ pk }}" >{{ title }}</button>
 						{% endfor %}
@@ -115,8 +115,8 @@
 			</div>
 
 			<div class="msg-box">
-				<input type="text" placeholder="Type your message ..." class="msg-input" disabled>
-				<button class="btn-submit btn-auto-bot disabled"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<input type="text" placeholder="Type your message ..." class="msg-input">
+				<button class="btn-submit btn-auto-bot"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 				<button class="btn-submit btn-map disabled d-none"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 				<button class="btn-submit btn-customer disabled d-none"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
@@ -139,12 +139,6 @@
 <script src="{% static 'bot/js/scripts.js' %}"></script>
 <script>
 $(document).ready(function(){
-
-// click approve yes
-
-$(".approve-booking-yes").click(function(){
-
-})
 
 $(document).on("click", ".slot-option", function(){
 	name = $(this).attr("data-provider")
@@ -182,6 +176,8 @@ $("#datepicker").datepicker({
 
 // Book appointment
 $(document).on("click", ".btn-appointment-book", function(){
+	$(".msg-input").prop("disabled", true)
+	$(".btn-auto-bot").addClass("disabled")
 	 $this = $(this)
 	 calender_line = "{{ static_dict.open_calender_line }}"
 	 ClickedServiceProvider($this, calender_line)
@@ -198,6 +194,7 @@ $("#start-bot").click(function(){
 // Chat with bot
 
 $(".btn-auto-bot").click(function(){
+	$(".msg-container").find(".btn-option").remove()
 	 question = $(".msg-input").val()
 	 dir_name = "{{ dir_name }}"
 	 history_pk = "{{ new_history.pk }}"
