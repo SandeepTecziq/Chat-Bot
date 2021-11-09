@@ -62,6 +62,7 @@ urlpatterns = [
     path('get_bot_reply_updated/', views2.get_bot_reply_updated, name='get_bot_reply_updated'),
     path('chat_map_questions/<pk>/<slug>/', views2.chat_map_questions, name='chat_map_questions'),
     path('save_chat_questions/<pk>/<slug>/', views2.save_chat_questions, name='save_chat_questions'),
+    path('edit_chat_questions/<pk>/', views2.edit_chat_questions, name='edit_chat_questions'),
     path('remove_save_question/<title_pk>/<question_pk>/', views2.remove_save_question, name='remove_save_question'),
     path('sort_title_questions/<title_pk>/', views2.sort_title_questions, name='sort_title_questions'),
     path('bot_testing/<secret_key>/<lang>/', views2.bot_testing, name='bot_testing'),

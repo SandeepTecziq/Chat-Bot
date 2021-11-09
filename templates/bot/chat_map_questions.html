@@ -157,13 +157,13 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $(document).ready(function(){
-    $( ".sortable" ).sortable({
-      placeholder: "ui-state-highlight",
-      stop: function(event, ui){
-        $(".order-question-container").removeClass("d-none")
-      }
-    });
-    $( ".sortable" ).disableSelection();
+<!--    $( ".sortable" ).sortable({-->
+<!--      placeholder: "ui-state-highlight",-->
+<!--      stop: function(event, ui){-->
+<!--        $(".order-question-container").removeClass("d-none")-->
+<!--      }-->
+<!--    });-->
+<!--    $( ".sortable" ).disableSelection();-->
 
     // sort questions
     $(".sort-question").click(function(){
@@ -232,7 +232,7 @@ $(document).ready(function(){
         return false;
     })
 
-    // Submit question form
+    // Submit question form edit_chat_questions
     $(document).on("submit", ".create-question-form", function(){
     var $this = $(this)
     $.ajax({
@@ -241,6 +241,37 @@ $(document).ready(function(){
             contentType: false,
             type: 'post',
             url: "{% url 'save_chat_questions' pk=chat_title.pk slug=chat_title.slug %}",
+            success: function(data) {
+                if(data['status'] == true){
+                    location.reload();
+                }
+                else if(data['status'] == 'form_error'){
+                    $this.find(".error-fields").html("")
+                    $.each(data['message'], function(index, element) {
+                        $this.find(".error-fields").append("<p class='font-12 text-danger error-question-text'>"+index+ ": "+ element+"</p>")
+                    });
+                }
+                else if(data['status'] == false){
+                    $this.find(".error-question-text:first").html(data['message'])
+                }
+             },
+            error: function(data){
+               alert("Something went wrong. Please refresh and try again.")
+            }
+        });
+    return false;
+    });
+
+    // Submit question form
+    $(document).on("submit", ".saved_question_form", function(){
+    var $this = $(this)
+    var question_pk = $(this).find(".existing_question").val()
+    $.ajax({
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            type: 'post',
+            url: "/edit_chat_questions/"+ question_pk +"/",
             success: function(data) {
                 if(data['status'] == true){
                     location.reload();

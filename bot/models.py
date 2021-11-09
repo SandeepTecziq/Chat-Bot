@@ -211,6 +211,7 @@ class SurveyQuestion(models.Model):
     prt_question = models.ForeignKey('bot.SurveyQuestion', on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='child_question')
     url = models.URLField(null=True, blank=True)
+    question_form_type = models.CharField(max_length=40, null=True, blank=True)
     number = models.IntegerField(default=1)
 
     def __str__(self):

@@ -26,9 +26,12 @@
     <div id="collapse{{ question.pk }}" class="collapse" aria-labelledby="heading{{ question.pk }}"
          data-parent="#mapQuestionList">
       <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" class="saved_question_form">
           {% csrf_token %}
-          <input type="hidden" name="existing_pk" value="{{ question.pk }}">
+          <input type="text" name="type" hidden value="{{ question.type }}" required id="id_type">
+          <input type="text" name="ans_type" hidden value="{{ question.ans_type }}" required id="id_ans_type">
+          <input type="hidden" name="existing_pk" value="{{ question.pk }}" class="existing_question">
+          <input type="hidden" value="{{ question.question_form_type }}" name="question_form_type">
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">

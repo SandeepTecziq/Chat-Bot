@@ -6,10 +6,12 @@ from django.db.models import Q
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = SurveyQuestion
-        fields = ('type', 'ans_type', 'question', 'prt_question', 'prt_option', 'image', 'url')
+        fields = ('type', 'ans_type', 'question', 'prt_question', 'prt_option', 'image', 'url',
+                  'question_form_type')
         widgets = {
             'type': forms.TextInput(attrs={'hidden': True}),
             'ans_type': forms.TextInput(attrs={'hidden': True}),
+            'question_form_type': forms.TextInput(attrs={'hidden': True}),
             'question': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'prt_question': forms.Select(attrs={'class': 'form-control question-select'}),
             'url': forms.URLInput(attrs={'class': 'form-control'}),

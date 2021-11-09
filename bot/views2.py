@@ -189,6 +189,82 @@ def save_chat_questions(request, pk, slug):
     return JsonResponse(data)
 
 
+def edit_chat_questions(request, pk):
+    question = SurveyQuestion.objects.filter(pk=pk).first()
+
+    if question:
+        if request.method == 'POST':
+            question_form = QuestionForm(request.POST, request.FILES, title_pk=question.chat_title.pk,
+                                         instance=question)
+            if question_form.is_valid():
+                question_form_type = request.POST.get('question_form_type')
+                if_options = SurveyOptions.objects.filter(question=question)
+                if question.ans_type in ['I', 'T']:
+                    question_form.save()
+                    data = {
+                        'status': True,
+                    }
+                else:
+                    formset_class = formset_factory(OptionForm, max_num=1000, min_num=1, formset=RequiredFormSet)
+                    option_formset = formset_class(request.POST, request.FILES,
+                                                   form_kwargs={'question_form_type': question_form_type})
+                    if option_formset.is_valid():
+                        question_qry = question_form.save()
+                        if_options.delete()
+                        for form in option_formset:
+                            option_save = form.save(commit=False)
+                            option_save.question = question_qry
+                            option_save.save()
+
+                        data = {
+                            'status': True,
+                        }
+                    else:
+                        err_list = {}
+                        for form in option_formset:
+                            err_json = json.loads(form.errors.as_json())
+                            for i in err_json:
+                                strap = err_json[i][0]['message']
+                                err_list[i.capitalize()] = strap
+                        data = {
+                            'status': 'form_error',
+                            'message': err_list
+                        }
+
+            else:
+                err_list = {}
+                err_json = json.loads(question_form.errors.as_json())
+                for i in err_json:
+                    strap = err_json[i][0]['message']
+                    err_list[i.capitalize()] = strap
+                data = {
+                    'status': 'form_error',
+                    'message': err_list
+                }
+
+        else:
+            data = {
+                'status': False,
+                'message': 'Invalid request type'
+            }
+    else:
+        data = {
+            'status': False,
+            'message': 'Incorrect question id.'
+        }
+
+    if data['status'] and data['status'] != 'form_error':
+        chat_title = ChatTitle.objects.filter(pk=question.chat_title.pk).prefetch_related('questions',
+                                                                                        'questions__options').first()
+        context = {
+            'chat_title': chat_title,
+        }
+        html = render_to_string('question-template/map_question.html', context=context, request=request)
+        data['html'] = html
+
+    return JsonResponse(data)
+
+
 @login_required(login_url='user_login')
 def remove_save_question(request, title_pk, question_pk):
     chat_title = ChatTitle.objects.filter(pk=title_pk).first()
