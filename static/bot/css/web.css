@@ -20,8 +20,8 @@
 	padding: 10px 20px;
 }
 .open-chat-button.close-btn{
-    height: 60px;
-    width: 60px;
+    height: 45px;
+    width: 45px;
     border-radius: 50%;
     padding: 0;
 }
@@ -35,9 +35,7 @@
 #hide-button:after{
   display: inline-block;
   content: "\00d7"; /* This will render the 'X' */
-  font-size: 50px;
-  position: relative;
-  bottom: 11px;
+  font-size: 30px;
 }
 .iframe-container{
 	position: fixed;
