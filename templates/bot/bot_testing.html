@@ -38,9 +38,9 @@
 </head>
 <body class="auto-bot-template">
 <input id="datepicker" style="visibility: hidden;top: 60px;left: 20px;position: fixed;">
-<div id="frame">
+<div id="frame" class="h-100">
 
-	<div class="content">
+	<div class="content h-100">
 		<div class="intro-div d-flex">
 			{% if company.image %}
 			<div>
@@ -139,6 +139,21 @@
 <script src="{% static 'bot/js/scripts.js' %}"></script>
 <script>
 $(document).ready(function(){
+
+$('.msg-input').keypress(function (e) {
+  if (e.which == 13) {
+    if(!$(".btn-auto-bot").hasClass("disabled")){
+    	$(".btn-auto-bot").click()
+    }
+    if(!$(".btn-map").hasClass("disabled")){
+    	$(".btn-map").click()
+    }
+    if(!$(".btn-customer").hasClass("disabled")){
+    	$(".btn-customer").click()
+    }
+    return false;    //<---- Add this line
+  }
+});
 
 $(document).on("click", ".slot-option", function(){
 	name = $(this).attr("data-provider")
