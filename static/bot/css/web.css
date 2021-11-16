@@ -11,15 +11,19 @@
 	bottom:20px;
 	right:20px;
 	z-index: 1000;
-	background-color: #01578a !important;
+	background: linear-gradient(to left top, #704dc5, #2870cc);
 	color: #fff !important;
-	padding: 0;
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
 	border-style: none;
 	animation:pulse 0.5s infinite alternate;
 	cursor: pointer;
+	border-radius: 50rem;
+	padding: 10px 20px;
+}
+.open-chat-button.close-btn{
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    padding: 0;
 }
 @keyframes pulse {
   from { box-shadow:0px 0px 10px 1px #6c757d; }
@@ -33,7 +37,7 @@
   content: "\00d7"; /* This will render the 'X' */
   font-size: 50px;
   position: relative;
-  bottom: 6px;
+  bottom: 11px;
 }
 .iframe-container{
 	position: fixed;
@@ -83,8 +87,8 @@
     padding-right: 30px;
 }
 .auto-bot-template .chat-body{
-height: calc(100% - 100px);
-overflow-y: scroll;
+    height: calc(100% - 160px);
+    overflow-y: scroll;
     padding-bottom: 45px;
 }
 .auto-bot-template .msg-txt{
@@ -213,5 +217,10 @@ text-align: center;
     position: fixed;
     bottom: 45px;
     font-size: 14px;
+}
+
+.start-chat-img{
+    width: 25px;
+       margin-right: 5px;
 }
 

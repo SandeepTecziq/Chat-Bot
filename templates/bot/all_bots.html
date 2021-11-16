@@ -165,12 +165,16 @@
     </div>
     {% endfor %}
 </div>
+
+
 {% if test_secret_key %}
 <div class="bot-functionality-container">
 <button class="open-chat-button" id="show-button" onclick="ShowChat()">
-  <img src="{% static 'icons/Botlogo.png' %}" class="top-nav-icon" style="width: 50px;">
+  <img src="{% static 'icons/logo-hq.png' %}" class="start-chat-img">
+
+    Contact Us
 </button>
-<button class="open-chat-button" id="hide-button" onclick="HideChat()" style="display: none"></button>
+<button class="open-chat-button close-btn" id="hide-button" onclick="HideChat()" style="display: none"></button>
 <div class="iframe-container fix-element" id="iframe-container">
   <iframe src="{% url 'get_user_detail' secret_key=test_secret_key %}?parent_company={{ parent_company.secret_key }}"
           class="chat-container-iframe"></iframe>
