@@ -161,6 +161,21 @@
 <script>
 $(document).ready(function(){
 
+$('.msg-input').keypress(function (e) {
+  if (e.which == 13) {
+    if(!$(".btn-auto-bot").hasClass("disabled")){
+    	$(".btn-auto-bot").click()
+    }
+    if(!$(".btn-map").hasClass("disabled")){
+    	$(".btn-map").click()
+    }
+    if(!$(".btn-customer").hasClass("disabled")){
+    	$(".btn-customer").click()
+    }
+    return false;    //<---- Add this line
+  }
+});
+
 // Slot Booking
 
 $(".approve-booking-yes").click(function(){
