@@ -325,17 +325,26 @@ function GetNextQuestion(title_pk, question_pk, is_option){
 }
 
 function BookSelectedSlot(page_url, slot_pk, time, u_id){
+    $(".approve-booking-yes").addClass("d-none")
+    $(".approve-booking-no").addClass("d-none")
+    $(".book-wait").removeClass("d-none")
 	$.ajax({
 		url: page_url,
 		data: {'slot_pk': slot_pk, 'time': time, 'u_id': u_id},
 		dataType: 'json',
 		success: function(data){
+		    $(".approve-booking-yes").addClass("d-none")
+            $(".approve-booking-no").addClass("d-none")
+            $(".book-wait").removeClass("d-none")
 			$(".chat-map-error").addClass("d-none").text("")
 			$(".booking-confirmation-box").addClass("d-none")
 			$(".booking-confirmed").removeClass("d-none")
 			$(".booking-confirmed").find("p").text(data['message']).removeClass("d-none")
 		},
 		error: function(data){
+		    $(".approve-booking-yes").addClass("d-none")
+            $(".approve-booking-no").addClass("d-none")
+            $(".book-wait").removeClass("d-none")
 			$(".chat-map-error").removeClass("d-none").text("Something went wrong. Please try again.")
 		}
 	})

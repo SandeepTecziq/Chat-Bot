@@ -86,7 +86,7 @@
 				</div>
 
 				<!---------- Booking confirmation Box ------------->
-				<div class="booking-confirmation-box mt-4 d-none p-3">
+				<div class="booking-confirmation-box d-none mt-4 p-3">
 					<div class="reply-msg msg-txt mw-100 w-100">
 						<p class="text-center mb-0">You have selected following slot for booking.
 							Name: <b class="approved-provider-name"></b>, Date: <b class="approved-booked-date"></b>,
@@ -96,6 +96,14 @@
 					<div class="text-center">
 						<button class="btn-option approve-booking-yes" data-time="" data-slot-pk="">Yes</button>
 						<button class="btn-option approve-booking-no">No</button>
+						<div class="ticontainer book-wait d-none text-danger mt-2" style="position: initial; justify-content: center">
+							<div class="typing-line">Please wait for 2 minutes</div>
+						  <div class="tiblock">
+							<div class="tidot bg-danger"></div>
+							<div class="tidot bg-danger"></div>
+							<div class="tidot bg-danger"></div>
+						  </div>
+						</div>
 					</div>
 				</div>
 

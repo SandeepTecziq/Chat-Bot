@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_exempt
+from .view_functions import send_booking_confirmation_mail
 
 
 def get_bot_reply_updated(request):
@@ -476,7 +477,11 @@ def book_selected_slot(request):
         if slot and user:
             email = user.email
             name = user.name
-            BookedSlots.objects.create(date=time, slot=slot, name=name, email=email)
+            company = user.company
+            owner = User.objects.filter(Q(company=company.parent_company) & Q(role='admin')).first()
+            slot = BookedSlots.objects.create(date=time, slot=slot, name=name, email=email)
+            if owner:
+                send_booking_confirmation_mail(email, name, owner.username, owner.email, slot.pk)
             data = {
                 'status': True,
                 'message': 'Selected slot has been booked.'
