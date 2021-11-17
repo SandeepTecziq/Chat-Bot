@@ -224,7 +224,7 @@ body,html{
 	}
 .msg_cotainer_send, .msg_cotainer{
  min-width: 100px;
- cursor:pointer;
+ font-size: 14px !important;
 }
 .ques-ans .done{
 padding: 0 5px !important;

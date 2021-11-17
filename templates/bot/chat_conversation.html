@@ -5,9 +5,11 @@
     {% block style %}
 <link href="{% static 'bot/css/chat-history-styles.css' %}" rel="stylesheet" id="">
 <style>
-.msg_cotainer_send, .msg_cotainer {
-    font-size: 14px !important;
-    }
+{% if not conversation.0.history.trained_status %}
+	.msg_cotainer_send, .msg_cotainer {
+		cursor:pointer;
+	}
+{% endif %}
 </style>
     {% endblock %}
 
@@ -84,21 +86,23 @@ $(".card-body").niceScroll({
   autohidemode: scroll,
   enableobserver: true,
 });
-<!----------->
+	<!----- CHange message when bot is not trained  ------>
+	{% if not conversation.0.history.trained_status %}
 	$(".msg_cotainer_send, .msg_cotainer").click(function(){
-	$(this).find("span.text").hide();
-	$(this).find("input").show();
-	$(this).siblings(".done").show();
-	});
-	$(".done").click(function(){
-	var txt = $(this).siblings(".chat-msg").find("input").val()
-	$(this).siblings(".chat-msg").find(".text").html(txt)
-	$(this).hide()
-	$(this).siblings(".chat-msg").find("input").hide()
-	$(this).siblings(".chat-msg").find(".text").show()
 
-
+		$(this).find("span.text").hide();
+		$(this).find("input").show();
+		$(this).siblings(".done").show();
+		});
+		$(".done").click(function(){
+		var txt = $(this).siblings(".chat-msg").find("input").val()
+		$(this).siblings(".chat-msg").find(".text").html(txt)
+		$(this).hide()
+		$(this).siblings(".chat-msg").find("input").hide()
+		$(this).siblings(".chat-msg").find(".text").show()
 	});
+
+	{% endif %}
 	<!-----  train Bot ------->
 	$("#bot-train").click(function(){
 		var chat = {}
