@@ -9,6 +9,14 @@ body{
 	font-size: 12px;
 	line-height: 14px;
 }
+.font-12{
+    font-size: 12px !important;
+}
+
+.font-14{
+    font-size: 14px !important;
+}
+
 .open-chat-button{
 	position: fixed;
 	bottom:20px;
