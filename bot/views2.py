@@ -479,13 +479,20 @@ def book_selected_slot(request):
             name = user.name
             company = user.company
             owner = User.objects.filter(Q(company=company.parent_company) & Q(role='admin')).first()
-            slot = BookedSlots.objects.create(date=time, slot=slot, name=name, email=email)
-            if owner:
-                send_booking_confirmation_mail(email, name, owner.username, owner.email, slot.pk)
-            data = {
-                'status': True,
-                'message': 'Selected slot has been booked.'
-            }
+            if_slot = BookedSlots.objects.filter(Q(date=time) & Q(slot=slot)).exists()
+            if not if_slot:
+                slot = BookedSlots.objects.create(date=time, slot=slot, name=name, email=email)
+                if owner:
+                    send_booking_confirmation_mail(email, name, owner.username, owner.email, slot.pk)
+                data = {
+                    'status': True,
+                    'message': 'Selected slot has been booked.'
+                }
+            else:
+                data = {
+                    'status': False,
+                    'message': 'This slot already has been booked. Please select another.'
+                }
 
         else:
             data = {

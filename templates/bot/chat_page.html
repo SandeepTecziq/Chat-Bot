@@ -275,6 +275,9 @@ $(document).on("click", ".slot-option", function(){
 	$(".booking-confirmation-box").find(".approved-slot").text(slot)
 	$(".booking-confirmation-box").find(".approve-booking-yes").attr("data-time", date)
 	$(".booking-confirmation-box").find(".approve-booking-yes").attr("data-slot-pk", pk)
+	$(".approve-booking-yes").removeClass("d-none")
+	$(".approve-booking-no").removeClass("d-none")
+	$(".book-wait").addClass("d-none")
 	$(".booking-confirmation-box").removeClass("d-none")
 	AppendMessageBox();
 })

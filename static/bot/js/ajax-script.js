@@ -333,15 +333,20 @@ function BookSelectedSlot(page_url, slot_pk, time, u_id){
 		data: {'slot_pk': slot_pk, 'time': time, 'u_id': u_id},
 		dataType: 'json',
 		success: function(data){
-		    $(".approve-booking-yes").addClass("d-none")
-            $(".approve-booking-no").addClass("d-none")
-            $(".book-wait").removeClass("d-none")
-			$(".chat-map-error").addClass("d-none").text("")
-			$(".booking-confirmation-box").addClass("d-none")
-			$(".booking-confirmed").removeClass("d-none")
-			$(".booking-confirmed").find("p").text(data['message']).removeClass("d-none")
-			$(".msg-input").prop("disabled", false)
-			$(".btn-auto-bot").removeClass("disabled")
+		    if(data['status'] == true){
+                $(".chat-map-error").addClass("d-none")
+                $(".booking-confirmation-box").addClass("d-none")
+                $(".booking-confirmed").removeClass("d-none")
+                $(".booking-confirmed").find("p").text(data['message']).removeClass("d-none")
+                $(".msg-input").prop("disabled", false)
+                $(".btn-auto-bot").removeClass("disabled")
+			}
+			else{
+				$(".booking-confirmation-box").addClass("d-none")
+                $(".booking-confirmed").addClass("d-none")
+			    $('.chat-map-error').removeClass('d-none')
+			    $('.chat-map-error').find('p').text(data['message'])
+			}
 		},
 		error: function(data){
 		    $(".approve-booking-yes").addClass("d-none")
