@@ -235,3 +235,7 @@ text-align: center;
        margin-right: 5px;
 }
 
+.provider-category-name{
+    cursor: pointer;
+    margin-left: initial !important;
+}

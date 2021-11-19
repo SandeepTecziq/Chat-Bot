@@ -161,6 +161,13 @@
 <script>
 $(document).ready(function(){
 
+// show service provider on category click
+$(document).on("click", ".provider-category-name", function(){
+	cls = $(this).attr("id")
+	$(".service-provider-item:not(."+cls+")").addClass("d-none")
+	$("."+cls).toggleClass("d-none")
+})
+
 $('.msg-input').keypress(function (e) {
   if (e.which == 13) {
     if(!$(".btn-auto-bot").hasClass("disabled")){
@@ -379,8 +386,8 @@ $(".btn-map").click(function(){
 // add hieght in service list provider
 
 $(document).on("click", ".service-provider-item", function(){
-	$(".service-provider-item").removeClass("height")
-	$(this).addClass("height")
+	$(this).siblings(".service-provider-item").removeClass("height")
+	$(this).toggleClass("height")
 })
 
 

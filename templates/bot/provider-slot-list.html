@@ -1,10 +1,31 @@
 <div class="reply-msg msg-txt">{{ service_provider_line }} <span class="open-datepicker"><i class="fa fa-calendar"></i></span></div>
-{% for i in providers %}
-{% if i.slots|length > 0 %}
-<div class="reply-msg msg-txt service-provider-item"><p class="text-center mb-2">{{ i.name }}</p>
-    {% for k in i.slots %}
-    <button class="btn-option slot-option" data-pk="{{ k.pk }}" data-provider="{{ i.name }}" data-time="{{ date }}">{{ k.from }} - {{ k.to }}</button>
+{% if category_available %}
+
+    {% for i in providers %}
+    {% if i.slots|length > 0 %}
+    {% ifchanged i.category %}
+    <div class="provider-category-name sent-msg msg-txt" id="category-{{ i.category_pk }}">
+        {{ i.category }}
+    </div>
+        {% endifchanged %}
+    <div class="reply-msg msg-txt service-provider-item category-{{ i.category_pk }} d-none"><p class="text-center mb-2">{{ i.name }}</p>
+        {% for k in i.slots %}
+        <button class="btn-option slot-option" data-pk="{{ k.pk }}" data-provider="{{ i.name }}" data-time="{{ date }}">{{ k.from }} - {{ k.to }}</button>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endfor %}
-</div>
+
+{% else %}
+
+    {% for i in providers %}
+    {% if i.slots|length > 0 %}
+    <div class="reply-msg msg-txt service-provider-item"><p class="text-center mb-2">{{ i.name }}</p>
+        {% for k in i.slots %}
+        <button class="btn-option slot-option" data-pk="{{ k.pk }}" data-provider="{{ i.name }}" data-time="{{ date }}">{{ k.from }} - {{ k.to }}</button>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+
 {% endif %}
-{% endfor %}

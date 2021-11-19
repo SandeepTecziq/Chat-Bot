@@ -1,5 +1,5 @@
 from googletrans import Translator
-from bot.models import ChatTitle, ServiceProvider, Company, TimeSlots, BookedSlots, Customer
+from bot.models import ChatTitle, ServiceProvider, Company, TimeSlots, BookedSlots, Customer, ProviderCategory
 from django.db.models import Q, Prefetch
 import datetime
 from django.core.mail import send_mail, EmailMessage
@@ -17,7 +17,8 @@ def service_provider_view(pk, user_lang, date):
         return data
     booked_slots = BookedSlots.objects.filter(date=date).values_list('slot')
     providers = ServiceProvider.objects.filter(Q(company=company) & Q(provider_slot__isnull=False)).prefetch_related(
-        Prefetch('provider_slot', queryset=TimeSlots.objects.exclude(pk__in=booked_slots), to_attr='available_slots')).distinct()
+        Prefetch('provider_slot', queryset=TimeSlots.objects.exclude(pk__in=booked_slots),
+                 to_attr='available_slots')).distinct().order_by('category')
 
     if not providers:
         data = {
@@ -31,13 +32,23 @@ def service_provider_view(pk, user_lang, date):
     provider_list = []
     service_provider = company.service_provider
     service_provider_line = "Please select " + service_provider + " and slot or click the icon to select date again"
-    for i in providers:
+    provider_category = ProviderCategory.objects.filter(company=company).exists()
+    if provider_category:
+        category_available = True
+    else:
+        category_available = False
 
+    for i in providers:
         ls = []
         for j in i.available_slots:
             ls.append({'pk': j.pk, 'from': j.start, 'to': j.end, 'days': j.days['day']})
-        provider_element = {'pk': i.pk, 'name': i.name, 'slots': ls}
+        if i.category:
+            provider_element = {'pk': i.pk, 'name': i.name, 'slots': ls, 'category': i.category.name,
+                                'category_pk': i.category.pk}
+        else:
+            provider_element = {'pk': i.pk, 'name': i.name, 'slots': ls, 'category': False, 'category_pk': False}
         provider_list.append(provider_element)
+
     if user_lang != company_lang:
         translate = Translator()
         service_provider_line = translate.translate(service_provider_line, src=company_lang, dest=user_lang).text
@@ -47,6 +58,7 @@ def service_provider_view(pk, user_lang, date):
         'providers': provider_list,
         'service_provider_line': service_provider_line,
         'date': date,
+        'category_available': category_available,
     }
 
     # except:
