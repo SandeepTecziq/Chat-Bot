@@ -318,6 +318,7 @@ $("#start-bot").click(function(){
 
 // Chat with bot
 $(".btn-auto-bot").click(function(){
+$(".booking-confirmed").addClass("d-none")
 $(".msg-container").find(".btn-option").remove()
  question = $(".msg-input").val()
  dir_name = "{{ dir_name }}"

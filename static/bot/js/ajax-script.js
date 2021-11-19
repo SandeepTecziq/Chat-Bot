@@ -340,6 +340,8 @@ function BookSelectedSlot(page_url, slot_pk, time, u_id){
 			$(".booking-confirmation-box").addClass("d-none")
 			$(".booking-confirmed").removeClass("d-none")
 			$(".booking-confirmed").find("p").text(data['message']).removeClass("d-none")
+			$(".msg-input").prop("disabled", false)
+			$(".btn-auto-bot").removeClass("disabled")
 		},
 		error: function(data){
 		    $(".approve-booking-yes").addClass("d-none")
