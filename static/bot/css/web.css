@@ -39,10 +39,12 @@ body{
   display: inline-block;
   content: "\00d7"; /* This will render the 'X' */
   font-size: 30px;
+  position: relative;
+  bottom: 2px;
 }
 .iframe-container{
 	position: fixed;
-	bottom:90px;
+	bottom:65px;
 	right:20px;
 	z-index: 10000;
 	opacity:0;
