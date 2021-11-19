@@ -3,6 +3,7 @@
 {% block title %} All Bots {% endblock %}
 
     {% block style %}
+    <link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
     <style>
 
         .chat-map-columns .title-col-box{
@@ -99,9 +100,12 @@
         line-height: 14px;
         }
 
+        #hide-button:after {
+            bottom: 0px;
+        }
+
 
     </style>
-<link href="{% static 'bot/css/web.css' %}" rel="stylesheet">
     {% endblock %}
 
 
