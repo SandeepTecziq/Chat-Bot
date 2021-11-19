@@ -19,11 +19,15 @@ outline: #949494;
 }
 .provider-detail{
 cursor: pointer;
-width: max-content;
+position: relative;
 }
 .provider-detail img{
 max-width: 20px;
-margin-right: 10px;
+position: absolute;
+top: 3px;
+}
+.provider-detail p{
+padding-left: 25px;
 }
 .slot-provider-name{
 font-size: 22px;
@@ -107,13 +111,13 @@ font-size: 14px;
 </div>
 <div class="row page-content">
     <div class="col-sm-4">
-        <div class="block-heading">
-            <h4 class="">Add New Provider</h4>
-        </div>
         <div class="block-content border-right">
 
             <div class="row">
                 <div class="col-sm-6">
+                    <div class="block-heading mb-3">
+                        <h5 class="">Add New Category</h5>
+                    </div>
                     <form method="post" id="create-provider-category-form">
                     {% csrf_token %}
                         <div class="mb-2">
@@ -135,6 +139,9 @@ font-size: 14px;
                     </form>
                 </div>
                 <div class="col-sm-6">
+                    <div class="block-heading mb-3">
+                        <h5 class="">Add New Provider</h5>
+                    </div>
                     <form method="post" id="">
                     {% csrf_token %}
                         <div class="mb-2">

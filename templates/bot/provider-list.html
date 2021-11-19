@@ -1,10 +1,10 @@
 {% load static %}
 
 {% for provider in service_providers %}
-<p class="provider-detail" data-pk="{{ provider.pk }}">
+<div class="provider-detail" data-pk="{{ provider.pk }}">
     <img src="{% static 'page-icons/smile.png' %}">
-    {{ provider.name }}
-</p>
+    <p>{{ provider.name }} ({{ provider.company.name }}{% if provider.category %}/{{ provider.category.name }}{% endif %})</p>
+</div>
 {% empty %}
 <p style="font-size: 14px;">
     No Service providers has been added..

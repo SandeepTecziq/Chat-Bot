@@ -1,6 +1,7 @@
 {% load static %}
 {% if curr_provider %}
 <p class="slot-provider-name">{{ curr_provider.name|title }} | {{ curr_provider.company.name }} |
+    {% if curr_provider.category %}{{ curr_provider.category.name }} |{% endif %}
     {% if curr_provider.is_active %} Active {% else %} Inactive {% endif %}
     <span class="change-provider-state">(<span data-pk="{{ curr_provider.pk }}" data-name="{{ curr_provider.name }}" class="">change</span>)</span>
     <img src="{% static 'bot/images/loading_gif.gif' %}" class="loading-image hidden-element" style="width: 60px;">
