@@ -208,7 +208,7 @@ var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 
 var notifySocket = new ReconnectingWebSocket(
     ws_scheme + window.location.host +
-    '/notify/' + parentRoomName + '/');
+    '/ws/notify/' + parentRoomName + '/');
 
 document.querySelector('#talk_yes').onclick = function(e) {
 	var elements = document.getElementsByClassName('sent-msg');

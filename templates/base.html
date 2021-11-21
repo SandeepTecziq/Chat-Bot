@@ -95,7 +95,7 @@ var roomName = "{{ parent_company.secret_key|escapejs }}";
 var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 var notifySocket = new ReconnectingWebSocket(
     ws_scheme + window.location.host +
-    '/notify/'  + roomName + '/');
+    '/ws/notify/'  + roomName + '/');
 
 $(document).ready(function(){
 
@@ -196,7 +196,7 @@ var emp_id = $(this).attr("id");
 
 var alertEmployeeSocket = new ReconnectingWebSocket(
     ws_scheme + window.location.host +
-    '/alert_employee/'  + key +'/'+ emp_id + '/');
+    '/ws/alert_employee/'  + key +'/'+ emp_id + '/');
 alertEmployeeSocket.onopen = function(e){
 alertEmployeeSocket.send(JSON.stringify({
         'last_ques': last_ques_yes,
