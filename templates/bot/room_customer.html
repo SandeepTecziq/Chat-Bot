@@ -103,10 +103,10 @@ var userEmail = "{{ uu_id|escapejs }}";
 
 
 <!------- If user clicks yes --------->
-
+var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 
 var chatCustomerSocket = new ReconnectingWebSocket(
-    'ws://' + window.location.host +
+    ws_scheme + window.location.host +
     '/ws/chat_to_customer/' + roomName +'/'+ userEmail + '/');
 
 document.querySelector('#btn-customer').onclick = function(e) {
