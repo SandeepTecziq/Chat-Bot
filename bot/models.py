@@ -71,6 +71,8 @@ class User(AbstractUser):
     company = models.ForeignKey(ParentCompany, on_delete=models.CASCADE, related_name='company_name', null=True)
     role = models.CharField(max_length=10, choices=ROLE, default='admin')
     bots = models.ManyToManyField(Company, related_name='users', blank=True)
+    available = models.BooleanField(default=False)
+    logged_in = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username

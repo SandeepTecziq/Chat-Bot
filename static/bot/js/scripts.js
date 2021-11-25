@@ -376,6 +376,7 @@ function setTitleToNewQuestions(pk){
 
 function AppendMessageBox(){
       $(".chat-body").stop().animate({ scrollTop: $(".chat-body")[0].scrollHeight}, 1000);
+      $(".chat-nrml-box").stop().animate({ scrollTop: $(".chat-nrml-box")[0].scrollHeight}, 1000);
 }
 
 function ClickedServiceProvider($this, calender_line){

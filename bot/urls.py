@@ -69,4 +69,5 @@ urlpatterns = [
     path('get_next_question/<title_pk>/<question_pk>/<is_option>/', views2.get_next_question, name='get_next_question'),
     path('book_selected_slot', views2.book_selected_slot, name='book_selected_slot'),
     path('get_provider_category', views2.get_provider_category, name='get_provider_category'),
+    path('get_available_employees/<company_pk>', views2.get_available_employees, name='get_available_employees'),
 ]

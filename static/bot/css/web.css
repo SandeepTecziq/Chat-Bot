@@ -98,7 +98,7 @@ body{
     padding-right: 30px;
 }
 .auto-bot-template .chat-body{
-    height: calc(100% - 100px);
+    height: calc(100% - 150px);
     overflow-y: scroll;
     padding-bottom: 45px;
 }
@@ -152,6 +152,12 @@ text-align: center;
     position: fixed;
     bottom: 45px;
     display: flex;
+}
+
+.center-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .auto-bot-template .ticontainer .typing-line{
@@ -238,4 +244,31 @@ text-align: center;
 .provider-category-name{
     cursor: pointer;
     margin-left: initial !important;
+}
+.chat-type-enabler{
+	font-size: 12px;
+	background-color: #ddd;
+	cursor: pointer;
+	width: 50%;
+	text-align: center;
+	padding: .5rem;
+}
+
+.chat-type-enabler:first-of-type{
+	border-right: 2px solid #fff;
+}
+
+.human-chat-loading{
+    height: 100%;
+}
+
+.chat-nrml-box{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    height: calc(100% - 151px);
+    overflow-y: scroll;
+}
+.no-online-msg{
+    padding-left: 1rem;
+    padding-right: 1rem;
 }

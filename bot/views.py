@@ -223,6 +223,7 @@ def room(request, secret_key, lang, u_id):
         context = {
             'company_secret_key': secret_key,
             'company': company,
+            'parent_secret_key': company.parent_company.secret_key,
             'dir_name': dir_name,
             'u_id': u_id,
             'lang': lang,
@@ -520,6 +521,9 @@ def user_login(request):
             user = form.login(request)
             if user:
                 login(request, user)
+                user.logged_in = True
+                user.available = True
+                user.save()
                 next_page = request.GET.get('next')
                 if user.is_staff and user.is_superuser:
                     return HttpResponseRedirect(reverse('company_list'))
@@ -555,7 +559,11 @@ def user_login(request):
                     number = subscription.bot_allowed
                     TakenSubscription.objects.create(subscription=subscription, parent_company=parent, paid=True,
                                                      expire_date=expire_date, remaining_bot=number)
+
             login(request, user)
+            user.logged_in = True
+            user.available = True
+            user.save()
             return HttpResponseRedirect(reverse('bot_list'))
         else:
             signup_success = False
@@ -572,6 +580,10 @@ def user_login(request):
 
 
 def user_logout(request):
+    user = request.user
+    user.available = False
+    user.logged_in = False
+    user.save()
     logout(request)
     return redirect('user_login')
 

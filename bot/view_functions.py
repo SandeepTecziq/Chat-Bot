@@ -49,3 +49,22 @@ def send_booking_confirmation_mail(user_email, user_name, owner_name, owner_emai
     else:
         pass
 
+
+def get_online_employees(company_pk):
+    company = Company.objects.filter(pk=company_pk).first()
+    if company:
+        users = company.users.all()
+        users = users.filter(Q(logged_in=True) & Q(available=True))
+        data = {
+            'status': True,
+            'user_count': users.count(),
+            'users': users,
+        }
+    else:
+        data = {
+            'status': False,
+            'message': 'Company not found.'
+        }
+
+    return data
+

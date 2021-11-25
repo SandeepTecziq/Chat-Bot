@@ -124,6 +124,7 @@ function ChangeProviderState(pk, name, page_url){
 
 function AppendMessageBox(){
         $(".chat-body").stop().animate({ scrollTop: $(".chat-body")[0].scrollHeight}, "fast");
+        $(".chat-nrml-box").stop().animate({ scrollTop: $(".chat-nrml-box")[0].scrollHeight}, "fast");
 }
 
 function BookAppointmentYes(page_url, user_uid){
@@ -353,6 +354,46 @@ function BookSelectedSlot(page_url, slot_pk, time, u_id){
             $(".approve-booking-no").addClass("d-none")
             $(".book-wait").removeClass("d-none")
 			$(".chat-map-error").removeClass("d-none").text("Something went wrong. Please try again.")
+		}
+	})
+}
+
+function NotifyEmp(key, user_id, emp_id, ws_scheme){
+	var alertEmployeeSocket = new ReconnectingWebSocket(
+    ws_scheme + window.location.host +
+    '/ws/alert_employee/'  + key +'/'+ emp_id + '/');
+	alertEmployeeSocket.onopen = function(e){
+		alertEmployeeSocket.send(JSON.stringify({
+			'last_ques': "new chat",
+			'user_id': user_id,
+			'emp_id': emp_id,
+    	}));
+    };
+}
+
+function ConnectToEmployee(page_url, ws_scheme, parent_secret_key, u_id){
+	$.ajax({
+		url: page_url,
+		data: {},
+		dataType: "json",
+		success: function(data){
+			if(data['status'] == true){
+				$(".human-chat-loading").addClass("d-none")
+				$(".no-online-msg").addClass("d-none")
+				$(".chat-nrml").removeClass("d-none")
+				NotifyEmp(parent_secret_key, u_id, data['emp_pk'], ws_scheme)
+			}
+			else if(data['status'] == false){
+			    $(".chat-nrml").addClass("d-none")
+				$(".human-chat-loading").addClass("d-none")
+				$(".no-online-msg").removeClass("d-none")
+			}
+			else{
+			 alert(data['message'])
+			}
+		},
+		error: function(data){
+			alert("Something went wrong. Please try again.")
 		}
 	})
 }

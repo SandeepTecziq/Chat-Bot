@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_exempt
-from .view_functions import send_booking_confirmation_mail
+from .view_functions import send_booking_confirmation_mail, get_online_employees
 
 
 def get_bot_reply_updated(request):
@@ -531,5 +531,32 @@ def get_provider_category(request):
             'status': False,
             'message': 'Bot detail not provided'
         }
+    return JsonResponse(data)
+
+
+def get_available_employees(request, company_pk):
+    company = Company.objects.filter(pk=company_pk).first()
+    if company:
+        users = company.users.all()
+        user = users.filter(Q(logged_in=True) & Q(available=True)).first()
+
+        if user:
+            user.available = False
+            user.save()
+            data = {
+                'status': True,
+                'emp_pk': user.pk
+            }
+        else:
+            data = {
+                'status': False,
+            }
+
+    else:
+        data = {
+            'status': 'not found',
+            'message': 'Company not found.'
+        }
+
     return JsonResponse(data)
 
