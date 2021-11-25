@@ -139,6 +139,15 @@
 					<div class="reply-msg msg-txt">Hi, unfortunately nobody is online at the moment.</div>
 					<div class="reply-msg msg-txt">What can we help you with when we bach online?</div>
 				</div>
+				<div class="chat-nrml d-none">
+					<div class="chat-nrml-box">
+
+					</div>
+					<div class="msg-box">
+						<input type="text" placeholder="Type your message ..." class="msg-input">
+						<button class="btn-submit btn-customer-nrml disabled"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -161,36 +170,31 @@
 <script>
 $(document).ready(function(){
 
-function ConnectToEmployee(page_url){
-	$.ajax({
-		url: page_url,
-		data: {},
-		dataType: "json",
-		success: function(data){
-			if(data['status'] == true){
-
-			}
-			else if(data['status'] == false){
-
-			}
-			else{
-			 alert(data['message'])
-			}
-		},
-		error: function(data){
-			alert("Something went wrong. Please try again.")
-		}
-	})
-}
+var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 
 // change chat format
 $(".chat-type-enabler").click(function(){
+	cls = $(this).attr("data-body")
+	if(cls == "human-chat-body"){
+		$(".chat-receiver").val("chat-nrml-box")
+		$(".btn-customer-nrml").removeClass("disabled")
+		$(".btn-auto-bot").addClass("disabled")
+		page_url = "{% url 'get_available_employees' company_pk=company.pk %}"
+		ConnectToEmployee(page_url, ws_scheme, "{{ parent_secret_key }}", "{{ u_id }}")
+	}
+	else if(cls == "bot-chat-body"){
+		$(".chat-receiver").val("msg-container")
+		$(".btn-customer-nrml").addClass("disabled")
+		$(".btn-auto-bot").removeClass("disabled")
+	}
+	else{
+		return false
+	}
 	$(this).addClass("active")
 	$(this).siblings(".chat-type-enabler").removeClass("active")
-	cls = $(this).attr("data-body")
+
 	$(".chat-category").addClass("d-none")
 	$("."+cls).removeClass("d-none")
-	ConnectToEmployee(page_url)
 })
 
 // show service provider on category click
