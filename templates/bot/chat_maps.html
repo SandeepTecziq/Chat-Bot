@@ -76,54 +76,6 @@
         .map-actions .col-sm-4 button{
         padding: 0 2px;
         }
-        #testChatMapModal .modal-dialog{
-        max-width: 350px;
-        }
-        #testChatMapModal .modal-body{
-        background-color: #f9f9fa;
-        }
-        #testChatMapModal .modal-body .messages{
-        height: 300px;
-        overflow-y: scroll;
-        outline: none;
-        margin-bottom: 20px;
-        }
-
-        #testChatMapModal .modal-body .messages #chatID{
-        list-style-type: none;
-        padding-left: 0;
-        }
-        #testChatMapModal .modal-body .messages #chatID li{
-        padding: 10px 15px;
-        border-radius: 25px;
-        max-width: 200px;
-        min-width: 60px;
-
-        }
-        #testChatMapModal .modal-body .messages #chatID li:last-of-type{
-        margin-bottom: 10px;
-        }
-
-        #testChatMapModal .modal-body .messages #chatID li.sent{
-        background-color: {{ company_qry.color }};
-        color: #fff;
-        border-bottom-right-radius: 0;
-        clear: both;
-        float: right;
-        margin-top: 10px;
-        margin-right: 10px;
-        }
-        #testChatMapModal .modal-body .messages #chatID li.replies{
-        background-color: #e5e5e5;
-        color: #000;
-        border-bottom-left-radius: 0;
-        clear: both;
-        float: left;
-
-        }
-        #testChatMapModal .modal-body .messages #chatID li.replies:not(:first-of-type){
-        margin-top: 10px;
-        }
         .message-input .wrap input {
         font-family: lato;
         float: left;
@@ -260,17 +212,6 @@
             <div class="map-title">{{ title.title }}</div>
             <div class="map-description"></div>
             <div class="map-actions row">
-                {% if title.question_titles.count != 0 %}
-                <div class="col-sm-4">
-
-                <button type="button" class="btn button-submit-blank test-bot w-100" data-toggle="modal"
-                        data-chat="{{ title.pk }}" data-title="{{ title.title }}" data-lang="{{ title.company.language }}"
-                        data-color="{{ title.company.color }}" data-target="#testChatMapModal">
-                    Test Map
-                </button>
-
-                </div>
-                {% endif %}
                 <div class="col-sm-4">
                 <a href="{% url 'chat_map_questions' pk=title.pk slug=title.slug %}" class="btn button-submit-blank w-100">Questions</a>
                 </div>
@@ -314,46 +255,6 @@
   </div>
 </div>
 
-<!------ Test Chat Map Modal  ------->
-<div class="modal fade" id="testChatMapModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="testChatMapModalLabel"></h5>
-      </div>
-      <div class="modal-body pb-0">
-          <input id="datepicker" style="display: none;">
-          <div class="messages">
-              <p class="text-center mb-0 mt-5 p-insta">Click on <b>Start</b> to start the chat.</p>
-			<div id="message-list">
-			<ul id="chatID">
-
-			</ul>
-            <div id="book-appointment-div" style="display: none;">
-				Appointment will be booked after getting user confirmation.
-			</div>
-			</div>
-
-		</div>
-		<div class="message-input">
-			<div class="wrap">
-			<input  type="text" class="input-box hidden-element" id="chat-new-plot-message-input"
-						  data-button="chat-new-plot-message-submit" placeholder="Type your response here...." />
-			<button class="submit" id="chat-new-plot-message-submit" data-title-pk="">
-                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
-             </button>
-			</div>
-		</div>
-      </div>
-      <div class="modal-footer">
-          <p class="text-center mb-0 p-end-map end-chat-div hidden-element">Chat map ended.</p>
-        <button class="btn button-submit-blank start-chat-button" id="start-chat-button" data-pk="" >Start</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 {% endblock %}
 
@@ -364,81 +265,6 @@
 <script>
 $(document).ready( function () {
 
-<!---- Stop slid carousel ----->
-
-$(".carousel").carousel({
-interval: false
-})
-
-<!---- Slot Book ----->
-
-$(document).on("click", ".slot-list", function(){
-var $this = $(this)
-ClickOnSlot($this)
-});
-
-<!------ Open calender -------->
-$(document).on("click", ".open-datepicker", function(){
-$('#datepicker').datepicker('show');
-});
-$("#datepicker").datepicker({
-
-    dateFormat: 'yy-mm-dd',
-    minDate: '1d',
-    changeMonth: true,
-    changeYear: true,
-    onSelect: function(dateText){
-    	var date = $(this).val()
-    	var page_url = "{% url 'get_slot_list' %}"
-    	var language = '{{ chat_title.0.company.language }}'
-    	var typing_icon = "<img src='{% static 'bot/images/typing_icon.gif' %}'>"
-          AfterDateSelect(date, page_url, language, typing_icon)
-        }
-});
-
-    <!---- Click on service provider ----->
-    $(document).on("click", ".provider-list", function(){
-        $this = $(this)
-         calender_line = "Click on calender icon to open calender."
-         var typing_icon = "<img src='{% static 'bot/images/typing_icon.gif' %}'>"
-         ClickedServiceProvider($this, calender_line, typing_icon)
-    })
-
-    <!---- Open Provider list ----->
-
-    $(document).on("click", ".book-appointment", function(){
-        var title = $(this).html()
-        var pk = $(this).attr("data-pk")
-        page_url = '{% url "choose_service_provider" %}'
-        var language = '{{ chat_title.0.company.language }}'
-        var typing_icon = "<img src='{% static 'bot/images/typing_icon.gif' %}'>"
-        BookAppointment(title, page_url, language, pk, typing_icon)
-    });
-
-    <!----- Submit on Enter -------->
-		$(".wrap input").keyup(function(e){
-			if (e.keyCode === 13) {
-				var button = $(this).attr("data-button")
-				$("#"+button).click();
-			}
-		})
-
-  <!------- Delete <ch></ch>at ------->
-    $('#deleteModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget)
-      var title = button.data('title')
-      var pk = button.data('pk')
-
-      var modal = $(this)
-      modal.find('#chat-title-modal').html("<b>"+title+"</b>")
-      modal.find("#sub-button").attr("data-pk", pk)
-    })
-
-    $("#sub-button").click(function(){
-    var pk = $(this).attr("data-pk");
-    window.location.href = '/delete_chat_title/'+pk
-
-    });
 
 });
 </script>

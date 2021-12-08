@@ -222,7 +222,7 @@ class SurveyQuestion(models.Model):
 
 class SurveyOptions(models.Model):
     question = models.ForeignKey('bot.SurveyQuestion', on_delete=models.CASCADE, related_name='options')
-    option = models.CharField(max_length=30, null=True, blank=True)
+    option = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to='images/options', null=True, blank=True)
     text = models.TextField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)

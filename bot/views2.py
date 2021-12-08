@@ -401,7 +401,10 @@ def get_next_question(request, title_pk, question_pk, is_option):
                     question = SurveyQuestion.objects.filter(prt_option=prt_option).first()
                     if not question:
                         number = prt_option.question.number + 1
-                        question = SurveyQuestion.objects.filter(Q(chat_title=title) & Q(number=number)).first()
+                        fltr = Q(chat_title=title) & Q(number__gte=number) & Q(prt_option__isnull=True) \
+                               & Q(prt_question__isnull=True)
+
+                        question = SurveyQuestion.objects.filter(fltr).first()
                         if not question:
                             data = {
                                 'status': 'last',
@@ -432,7 +435,10 @@ def get_next_question(request, title_pk, question_pk, is_option):
                     question = SurveyQuestion.objects.filter(prt_question=prt_question).first()
                     if not question:
                         number = prt_question.number + 1
-                        question = SurveyQuestion.objects.filter(Q(chat_title=title) & Q(number=number)).first()
+                        fltr = Q(chat_title=title) & Q(number__gte=number) & Q(prt_option__isnull=True) \
+                               & Q(prt_question__isnull=True)
+
+                        question = SurveyQuestion.objects.filter(fltr).first()
                         if not question:
                             data = {
                                 'status': 'last',
