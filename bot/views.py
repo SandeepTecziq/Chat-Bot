@@ -329,33 +329,26 @@ def create_file(request):
             'message': 'Need atleast 2 questions to train the bot.'
         }
         return JsonResponse(data)
-    ParentCompany.objects.create(name='7')
     company_name = company.name[:10] if len(company.name) > 10 else company.name
     dir_name = 'company_files/' + str(company.id) + '_' + company_name + '/'
     filename = dir_name + 'fil.json'
     Path(dir_name).mkdir(parents=True, exist_ok=True)
     a = {'intents': []}
     qry = QuestionTag.objects.filter(company=company).prefetch_related('question_tag_name', 'answer_tag_name')
-    ParentCompany.objects.create(name='6')
     for i in qry:
         dct = {'tag': i.tag, 'question': i.question_tag_name.question_text['question'],
                'answer': [i.answer_tag_name.answer_text]
                }
         a['intents'].append(dct)
-    ParentCompany.objects.create(name='5')
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(a, f, ensure_ascii=False, indent=4)
-    ParentCompany.objects.create(name='3')
     with HiddenPrints():
         train_chat(dir_name)
-    ParentCompany.objects.create(name='4')
     data = {
         'message': 'Bot has been trained successfully.',
         'status': True,
     }
-    ParentCompany.objects.create(name='1')
     Question.objects.filter(question_tag__company=company).update(if_trained=True)
-    ParentCompany.objects.create(name='2')
     return JsonResponse(data)
 
 
