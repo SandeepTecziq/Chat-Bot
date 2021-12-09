@@ -219,6 +219,8 @@ $(".training-bot#train-the-bot").click(function(){
    dataType: "json",
    data: {'pk': "{{ id }}"},
    success: function(data){
+    console.log(data['status'])
+    console.log(data['message'])
     $(".loading-image").addClass("hidden-visible")
     $(".train-bot-instruction").removeClass("hidden-visible")
     if(data['status'] == true){
