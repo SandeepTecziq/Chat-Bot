@@ -304,6 +304,9 @@ var chatCustomerSocket = new ReconnectingWebSocket(
     '/ws/chat_to_customer/' + parentRoomName +'/'+ userEmail + '/');
 
 document.querySelector('.btn-customer').onclick = function(e) {
+	if($(this).hasClass("disabled")){
+		return false
+	}
     var message = $(this).siblings(".msg-input").val()
     if(message != ''){
 		chatCustomerSocket.send(JSON.stringify({
@@ -316,6 +319,9 @@ document.querySelector('.btn-customer').onclick = function(e) {
 };
 
 document.querySelector('.btn-customer-nrml').onclick = function(e) {
+	if($(this).hasClass("disabled")){
+		return false
+	}
     var message = $(this).siblings(".msg-input").val()
     if(message != ''){
 		chatCustomerSocket.send(JSON.stringify({
@@ -401,6 +407,9 @@ $("#start-bot").click(function(){
 
 // Chat with bot
 $(".btn-auto-bot").click(function(){
+if($(this).hasClass("disabled")){
+		return false
+	}
 $(".booking-confirmed").addClass("d-none")
 $(".msg-container").find(".btn-option").remove()
  question = $(".msg-input").val()
@@ -418,6 +427,8 @@ $(".msg-container").find(".btn-option").remove()
 
 // Chat map question
 	$(".btn-chat-map").click(function(){
+		$(".btn-auto-bot").addClass("disabled")
+		$(".msg-box").find(".msg-input").prop("disabled", true).val("")
 		title_pk = $(this).attr("data-title")
 		$(".btn-auto-bot").addClass("d-none")
 		$(".btn-map").removeClass("d-none")
@@ -443,6 +454,9 @@ $(document).on("click", ".question-option", function(){
 
 // Text answer
 $(".btn-map").click(function(){
+	if($(this).hasClass("disabled")){
+		return false
+	}
 	title_pk = $(this).attr("data-title")
 	question_pk = $(this).attr("data-pk")
 	is_option = "incorrect"

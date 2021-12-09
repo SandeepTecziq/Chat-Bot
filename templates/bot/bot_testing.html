@@ -207,13 +207,13 @@ $(document).on("click", ".provider-category-name", function(){
 $('.msg-input').keypress(function (e) {
   if (e.which == 13) {
     if(!$(".btn-auto-bot").hasClass("disabled")){
-    	$(".btn-auto-bot").click()
+		$(".btn-auto-bot").click()
     }
     if(!$(".btn-map").hasClass("disabled")){
-    	$(".btn-map").click()
+		$(".btn-map").click()
     }
     if(!$(".btn-customer").hasClass("disabled")){
-    	$(".btn-customer").click()
+		$(".btn-customer").click()
     }
     return false;    //<---- Add this line
   }
@@ -273,6 +273,9 @@ $("#start-bot").click(function(){
 // Chat with bot
 
 $(".btn-auto-bot").click(function(){
+	if($(this).hasClass("disabled")){
+		return false
+	}
 	$(".msg-container").find(".btn-option").remove()
 	 question = $(".msg-input").val()
 	 dir_name = "{{ dir_name }}"
@@ -289,6 +292,8 @@ $(".btn-auto-bot").click(function(){
 
 // Chat map question
 	$(".btn-chat-map").click(function(){
+		$(".btn-auto-bot").addClass("disabled")
+		$(".msg-box").find(".msg-input").prop("disabled", true).val("")
 		title_pk = $(this).attr("data-title")
 		$(".btn-auto-bot").addClass("d-none")
 		$(".btn-map").removeClass("d-none")
@@ -314,7 +319,9 @@ $(document).on("click", ".question-option", function(){
 
 // Text answer
 $(".btn-map").click(function(){
-	debugger;
+	if($(this).hasClass("disabled")){
+		return false
+	}
 	title_pk = $(this).attr("data-title")
 	question_pk = $(this).attr("data-pk")
 	is_option = "incorrect"

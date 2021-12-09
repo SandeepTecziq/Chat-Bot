@@ -347,7 +347,6 @@ def create_file(request):
 
     with HiddenPrints():
         train_chat(dir_name)
-    messages.success(request, 'Bot has been trained')
     data = {
         'message': 'Bot has been trained successfully.',
         'status': True,
