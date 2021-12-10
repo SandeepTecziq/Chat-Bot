@@ -400,17 +400,20 @@ def get_next_question(request, title_pk, question_pk, is_option):
                 if prt_option:
                     question = SurveyQuestion.objects.filter(prt_option=prt_option).first()
                     if not question:
-                        number = prt_option.question.number + 1
-                        fltr = Q(chat_title=title) & Q(number__gte=number) & Q(prt_option__isnull=True) \
-                               & Q(prt_question__isnull=True)
+                        question = SurveyQuestion.objects.filter(prt_question=prt_option.question).first()
 
-                        question = SurveyQuestion.objects.filter(fltr).first()
                         if not question:
-                            data = {
-                                'status': 'last',
-                                'message': 'Thank you for using this service!'
-                            }
-                            return JsonResponse(data)
+                            number = prt_option.question.number + 1
+                            fltr = Q(chat_title=title) & Q(number__gte=number) & Q(prt_option__isnull=True) \
+                                   & Q(prt_question__isnull=True)
+
+                            question = SurveyQuestion.objects.filter(fltr).first()
+                            if not question:
+                                data = {
+                                    'status': 'last',
+                                    'message': 'Thank you for using this service!'
+                                }
+                                return JsonResponse(data)
                     context = {
                         'question': question
                     }
