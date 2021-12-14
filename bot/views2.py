@@ -569,3 +569,13 @@ def get_available_employees(request, company_pk):
 
     return JsonResponse(data)
 
+
+def leave_human_chat(request):
+    emp_id = request.GET.get('emp_id')
+    if emp_id:
+        User.objects.filter(pk=emp_id).update(available=True)
+
+    data = {
+        'status': True
+    }
+    return JsonResponse(data)

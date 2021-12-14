@@ -272,3 +272,25 @@ text-align: center;
     padding-left: 1rem;
     padding-right: 1rem;
 }
+
+.leave-confirmation{
+	padding: 10px;
+	position: fixed;
+	top: calc(100% + 75px);
+	font-size: 12px;
+	transition: .5s;
+	opacity: 0;
+	z-index: 10;
+}
+.leave-confirmation.active{
+	opacity: 1;
+	top: calc(100% - 90px);
+}
+.leave-confirmation button{
+	background-color: #fff;
+	border: none;
+	cursor: pointer;
+}
+.leave-confirmation button:focus{
+	outline: none;
+}

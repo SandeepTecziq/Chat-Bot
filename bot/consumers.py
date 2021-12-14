@@ -150,20 +150,22 @@ class AlertEmployee(WebsocketConsumer):
         last_ques = text_data_json['last_ques'],
         user_id = text_data_json['user_id'],
         emp_id = text_data_json['emp_id'],
+        if last_ques == 'End Chat':
+            note_id = 1
+        else:
+            user = User.objects.get(pk=emp_id[0])
+            customer = Customer.objects.get(u_field=user_id[0])
 
-        user = User.objects.get(pk=emp_id[0])
-        customer = Customer.objects.get(u_field=user_id[0])
+            note = EmpNotification.objects.create(user=user, customer=customer, message=last_ques[0])
+            note_number, created = EmpNotifyNumber.objects.get_or_create(
+                user=user,
+                defaults={'number': 1}
+            )
+            note_id = note.pk
 
-        note = EmpNotification.objects.create(user=user, customer=customer, message=last_ques[0])
-        note_number, created = EmpNotifyNumber.objects.get_or_create(
-            user=user,
-            defaults={'number': 1}
-        )
-        note_id = note.pk
-
-        if not created:
-            note_number.number += 1
-            note_number.save()
+            if not created:
+                note_number.number += 1
+                note_number.save()
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,

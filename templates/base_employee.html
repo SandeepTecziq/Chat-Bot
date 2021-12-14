@@ -17,7 +17,7 @@
 	<!--<script src='https://kit.fontawesome.com/a076d05399.js'></script>-->
 	<script src='{% static "bot/js/kit_fontawesome.js" %}'></script>
     <style>
-    .navbar-expand .navbar-nav .dropdown-menu {
+    .dropdown-menu {
         font-size: 14px;
         padding: 10px 5px;
         border-radius: 10px;
@@ -29,12 +29,12 @@
         font-size: 14px !important;
         border: 1px solid #c2c2c2;
         }
-        .dropdown-item {
+    .dropdown-item {
         font-size: 14px;
     }
     .hidden-element{
-display: none;
-}
+        display: none;
+    }
     </style>
     {% block style %}
 
@@ -149,10 +149,14 @@ var data = JSON.parse(e.data)
 var last_ques = data['last_ques']
 var user_id = data['user_id']
 var note_id = data['note_id']
-
-get_notification("notification_yes")
-var ques = '<a user-pk="'+user_id+ '" class="dropdown-item note-read note-read-read" href="#" data-pk="' + note_id + '">' + last_ques + '</a>'
-$('#div_yes').prepend(ques);
+if(last_ques == 'End Chat'){
+    alert("This chat has been ended.")
+}
+else{
+    get_notification("notification_yes")
+    var ques = '<a user-pk="'+user_id+ '" class="dropdown-item note-read note-read-read" href="#" data-pk="' + note_id + '">' + last_ques + '</a>'
+    $('#div_yes').prepend(ques);
+}
 };
 
 <!---------- On note click ------------>

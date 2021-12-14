@@ -38,9 +38,13 @@
 	background-color: {{ company.ques_color }};
 	font-weight: 600;
 }
+.leave-confirmation{
+	background-color: {{ company.ques_color }};
+}
 </style>
 </head>
 <body class="auto-bot-template">
+<input type="hidden" class="active-employee" value="">
 <input id="datepicker" style="visibility: hidden;top: 60px;left: 20px;position: fixed;">
 <input type="hidden" class="chat-receiver" value="msg-container">
 <div id="frame h-100">
@@ -58,8 +62,8 @@
 			</div>
 		</div>
 		<div class="d-flex p-2">
-			<div class="chat-type-enabler active" data-body="bot-chat-body">Bot</div>
-			<div class="chat-type-enabler" data-body="human-chat-body">Human</div>
+			<div class="chat-type-enabler active bot-chat-body-btn">Bot</div>
+			<div class="chat-type-enabler human-chat-body-btn">Human</div>
 		</div>
 		<div class="bot-chat-body chat-category">
 			<div class="chat-body px-3 pt-3 bg-white position-relative">
@@ -167,7 +171,14 @@
 						<button class="btn-submit btn-customer-nrml disabled"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 					</div>
 				</div>
+				<div class="leave-confirmation">
+					<p class="mb-0">Are you sure you want to leave this chat.
+						<button class="class-yes">Yes</button>
+						<button class="class-no">No</button>
+					</p>
+				</div>
 			</div>
+
 		</div>
 
 	</div>
@@ -192,29 +203,59 @@ $(document).ready(function(){
 
 var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 
-// change chat format
-$(".chat-type-enabler").click(function(){
-	cls = $(this).attr("data-body")
-	if(cls == "human-chat-body"){
+// hide leave-confirmation
+$(".leave-confirmation .class-no").click(function(){
+	$(".leave-confirmation").removeClass("active")
+})
+
+// switch to bot change
+$(".bot-chat-body-btn").click(function(){
+	emp_val = $(".active-employee").val()
+	if(emp_val != ""){
+		$(".leave-confirmation").addClass("active")
+	}
+	else{
+		$(".leave-confirmation").addClass("active")
+		$(".chat-receiver").val("msg-container")
+		$(".btn-customer-nrml").addClass("disabled")
+		$(".btn-auto-bot").removeClass("disabled")
+		$(".human-chat-body-btn").removeClass("active")
+		$(".bot-chat-body-btn").addClass("active")
+		$(".chat-category").addClass("d-none")
+		$(".bot-chat-body").removeClass("d-none")
+	}
+})
+
+// switch to human chat
+$(".human-chat-body-btn").click(function(){
+	emp_val = $(".active-employee").val()
+	if(emp_val == ""){
+		$(".leave-confirmation").removeClass("active")
 		$(".chat-receiver").val("chat-nrml-box")
 		$(".btn-customer-nrml").removeClass("disabled")
 		$(".btn-auto-bot").addClass("disabled")
 		page_url = "{% url 'get_available_employees' company_pk=company.pk %}"
 		ConnectToEmployee(page_url, ws_scheme, "{{ parent_secret_key }}", "{{ u_id }}")
+		$(this).addClass("active")
+		$(this).siblings(".chat-type-enabler").removeClass("active")
+		$(".chat-category").addClass("d-none")
+		$(".human-chat-body").removeClass("d-none")
 	}
-	else if(cls == "bot-chat-body"){
-		$(".chat-receiver").val("msg-container")
-		$(".btn-customer-nrml").addClass("disabled")
-		$(".btn-auto-bot").removeClass("disabled")
-	}
-	else{
-		return false
-	}
-	$(this).addClass("active")
-	$(this).siblings(".chat-type-enabler").removeClass("active")
+})
 
+// click confirmation yes
+$(".leave-confirmation .class-yes").click(function(){
+	$(".leave-confirmation").addClass("active")
+	$(".chat-receiver").val("msg-container")
+	$(".btn-customer-nrml").addClass("disabled")
+	$(".btn-auto-bot").removeClass("disabled")
+	$(".human-chat-body-btn").removeClass("active")
+	$(".bot-chat-body-btn").addClass("active")
 	$(".chat-category").addClass("d-none")
-	$("."+cls).removeClass("d-none")
+	$(".bot-chat-body").removeClass("d-none")
+	emp_id = $(".active-employee").val()
+	page_url = "{% url 'leave_human_chat' %}"
+	LeaveHumanChat(emp_id, page_url, "{{ parent_secret_key }}", ws_scheme, "{{u_id}}")
 })
 
 
@@ -317,6 +358,10 @@ document.querySelector('.btn-customer').onclick = function(e) {
 		$(".msg-input").val("")
 	}
 };
+
+chatCustomerSocket.onclose = function(e){
+	NotifyEmp("{{parent_secret_key}}", "{{u_id}}", "emp_id", ws_scheme, "End Chat")
+}
 
 document.querySelector('.btn-customer-nrml').onclick = function(e) {
 	if($(this).hasClass("disabled")){

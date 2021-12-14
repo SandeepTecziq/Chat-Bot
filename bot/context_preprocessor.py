@@ -26,6 +26,7 @@ def admin_variables(request):
             'all_saved': all_saved,
             'parent_company': parent_company,
             'employees': employees,
+            'parent_secret_key': parent_company.secret_key,
         }
 
     else:

@@ -358,13 +358,13 @@ function BookSelectedSlot(page_url, slot_pk, time, u_id){
 	})
 }
 
-function NotifyEmp(key, user_id, emp_id, ws_scheme){
+function NotifyEmp(key, user_id, emp_id, ws_scheme, msg){
 	var alertEmployeeSocket = new ReconnectingWebSocket(
     ws_scheme + window.location.host +
     '/ws/alert_employee/'  + key +'/'+ emp_id + '/');
 	alertEmployeeSocket.onopen = function(e){
 		alertEmployeeSocket.send(JSON.stringify({
-			'last_ques': "new chat",
+			'last_ques': msg,
 			'user_id': user_id,
 			'emp_id': emp_id,
     	}));
@@ -381,7 +381,9 @@ function ConnectToEmployee(page_url, ws_scheme, parent_secret_key, u_id){
 				$(".human-chat-loading").addClass("d-none")
 				$(".no-online-msg").addClass("d-none")
 				$(".chat-nrml").removeClass("d-none")
-				NotifyEmp(parent_secret_key, u_id, data['emp_pk'], ws_scheme)
+				msg = "New Chat"
+				NotifyEmp(parent_secret_key, u_id, data['emp_pk'], ws_scheme, msg)
+				$(".active-employee").val(data['emp_pk'])
 			}
 			else if(data['status'] == false){
 			    $(".chat-nrml").addClass("d-none")
@@ -395,5 +397,19 @@ function ConnectToEmployee(page_url, ws_scheme, parent_secret_key, u_id){
 		error: function(data){
 			alert("Something went wrong. Please try again.")
 		}
+	})
+}
+
+function LeaveHumanChat(emp_id, page_url, parent_secret_key, ws_scheme, u_id){
+	$.ajax({
+		url: page_url,
+		data: {'emp_id': emp_id},
+		dataType: 'json',
+		success: function(data){
+			$(".active-employee").val("")
+			msg = "End Chat"
+			NotifyEmp(parent_secret_key, u_id, emp_id, ws_scheme, msg)
+		},
+		error: function(data){}
 	})
 }

@@ -70,4 +70,5 @@ urlpatterns = [
     path('book_selected_slot', views2.book_selected_slot, name='book_selected_slot'),
     path('get_provider_category', views2.get_provider_category, name='get_provider_category'),
     path('get_available_employees/<company_pk>', views2.get_available_employees, name='get_available_employees'),
+    path('leave_human_chat', views2.leave_human_chat, name='leave_human_chat'),
 ]
