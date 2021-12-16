@@ -51,15 +51,13 @@
     <div class="table-search-box ml-auto">
 
         <form class="search-user-form">
-            <span class="fa fa-filter"></span>
             <select id="search-field">
-                <option value=""> Search By Bot </option>
+                <option value=""> Filter By Bot </option>
                 {% for bot in parent_company.companies.all %}
                 <option value="{{ bot.name }}">{{ bot.name }}</option>
                 {% endfor %}
             </select>
       <input  id="search-user" type="search" placeholder="Search Question" aria-label="Search">
-        <span class="fa fa-search"></span>
     </form>
 
                   </div>
