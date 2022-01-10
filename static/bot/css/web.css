@@ -29,6 +29,8 @@ body{
 	cursor: pointer;
 	border-radius: 50rem;
 	padding: 10px 20px;
+	align-items: center;
+	justify-content: center;
 }
 .open-chat-button.close-btn{
     height: 45px;
@@ -47,8 +49,6 @@ body{
   display: inline-block;
   content: "\00d7"; /* This will render the 'X' */
   font-size: 30px;
-  position: relative;
-  bottom: 2px;
 }
 .iframe-container{
 	position: fixed;
