@@ -593,10 +593,14 @@ def check_previous_chat(request):
     user_lang = request.COOKIES.get('user_lang')
     customer_id = request.COOKIES.get('customer_id')
     secret_key = request.COOKIES.get('secret_key')
+    print(old_chat, '1')
+    print(user_lang, '2')
+    print(customer_id, '3')
+    print(secret_key, '4')
     if old_chat and secret_key and customer_id and user_lang:
         chat_history = ChatHistory.objects.filter(pk=old_chat).first()
         if chat_history:
-            room_url = HttpResponseRedirect(reverse('room', secret_key, user_lang, customer_id)).url
+            room_url = HttpResponseRedirect(reverse('room', args=(secret_key, user_lang, customer_id))).url
             data = {
                 'status': True,
                 'room_url': request.build_absolute_uri(room_url) + '?previous_chat='+old_chat
