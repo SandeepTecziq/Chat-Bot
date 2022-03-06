@@ -14,7 +14,7 @@ function HideChat() {
   z.style.display = "none";
   y.style.display = "flex";
 }
-function getChatBOtReady(){
+function getChatBotReady(){
     $.ajax({
         url: 'https://toptecq.com/check_previous_chat',
         dataType: 'json',
