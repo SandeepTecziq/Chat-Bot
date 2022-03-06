@@ -14,9 +14,9 @@ function HideChat() {
   z.style.display = "none";
   y.style.display = "flex";
 }
-function getChatBOtReady(){
+function getChatBotReady(){
     $.ajax({
-        url: 'https://toptecq.com/check_previous_chat',
+        url: 'http://127.0.0.1:8000/check_previous_chat',
         dataType: 'json',
         data: {},
         success: function(data){
@@ -26,6 +26,6 @@ function getChatBOtReady(){
                 $(".iframe-container").addClass("show")
                 $("#hide-button").css("display", "flex")
             }
-        }
+        },
     })
 }
