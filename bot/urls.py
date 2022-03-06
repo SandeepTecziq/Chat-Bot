@@ -71,4 +71,5 @@ urlpatterns = [
     path('get_provider_category', views2.get_provider_category, name='get_provider_category'),
     path('get_available_employees/<company_pk>', views2.get_available_employees, name='get_available_employees'),
     path('leave_human_chat', views2.leave_human_chat, name='leave_human_chat'),
+    path('check_previous_chat', views2.check_previous_chat, name='check_previous_chat'),
 ]

@@ -185,8 +185,12 @@ def room(request, secret_key, lang, u_id):
             return render(request, 'question-template/bot_inactive.html', context)
         ChatHistory.objects.filter(Q(company=company) & Q(customer=customer)).update(saved_status=True)
         talker = User.objects.filter(Q(company=company.parent_company) & Q(role='admin')).first()
-        new_history = ChatHistory.objects.create(company=company, customer=customer,
-                                                 chat_type='bot_chat', talker=talker)
+        previous_chat = request.GET.get('previous_chat')
+        if previous_chat:
+            new_history = ChatHistory.objects.filter(pk=previous_chat).prefetch_related('chat_history').first()
+        else:
+            new_history = ChatHistory.objects.create(company=company, customer=customer,
+                                                     chat_type='bot_chat', talker=talker)
 
         if_booking_available = ServiceProvider.objects.filter(company=company).exists()
         company_name = company.name[:10] if len(company.name) > 10 else company.name
@@ -221,6 +225,7 @@ def room(request, secret_key, lang, u_id):
         static_dict = dict(zip(static_title, static_list))
 
         context = {
+            'previous_chat': previous_chat,
             'company_secret_key': secret_key,
             'company': company,
             'parent_secret_key': company.parent_company.secret_key,
@@ -783,7 +788,8 @@ def bot_list(request):
         'test_secret_key': test_secret_key,
     }
 
-    return render(request, 'bot/all_bots.html', context)
+    response = render(request, 'bot/all_bots.html', context)
+    return response
 
 
 @login_required(login_url='user_login')

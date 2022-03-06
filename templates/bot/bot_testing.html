@@ -153,7 +153,7 @@
 					</div>
 				</div>
 				<div class="leave-confirmation">
-					<p class="mb-0">Are you sure you want to leave this chat.
+				 	<p class="mb-0">Are you sure you want to leave this chat.
 						<button class="class-yes">Yes</button>
 						<button class="class-no">No</button>
 					</p>
@@ -326,7 +326,7 @@ $(".btn-auto-bot").click(function(){
 	 data = {'question': question, 'dir_name': dir_name, 'history_pk': history_pk, 'secret_key': secret_key,
 			'user_lang': user_lang, 'customer_id': customer_id, 'backup_line': backup_line, 'if_testing': true}
 	 page_url = "{% url 'get_bot_reply_updated' %}"
-	 AddBotReply(data, page_url)
+	 response = AddBotReply(data, page_url)
 })
 
 // Chat map question

@@ -14,3 +14,18 @@ function HideChat() {
   z.style.display = "none";
   y.style.display = "flex";
 }
+function getChatBOtReady(){
+    $.ajax({
+        url: 'https://toptecq.com/check_previous_chat',
+        dataType: 'json',
+        data: {},
+        success: function(data){
+            if(data['status'] == true){
+                $(".chat-container-iframe").attr("src", data['room_url'])
+                $("#show-button").css("display", "none")
+                $(".iframe-container").addClass("show")
+                $("#hide-button").css("display", "flex")
+            }
+        }
+    })
+}

@@ -223,7 +223,7 @@ function AddBotFormFunction(page_url, $this){
 }
 
 function AddBotReply(question_data, page_url){
-
+    var localStorage = window.localStorage;
 	$(".msg-box").find(".btn-submit").addClass("disabled")
 	$(".msg-box").find(".msg-input").prop("disabled", true).val("")
 	$(".msg-container").append("<div class='sent-msg msg-txt'>"+question_data['question']+"</div>")

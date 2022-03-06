@@ -71,7 +71,14 @@ def get_bot_reply_updated(request):
                 'status': False,
                 'message': 'All fields are required'
             }
-    return JsonResponse(data)
+    response = JsonResponse(data)
+    if data['status']:
+        response.set_cookie('incomplete_chat_history', history_pk, 600, httponly=True)
+        response.set_cookie('user_lang', user_lang, 600, httponly=True)
+        response.set_cookie('customer_id', customer_id, 600, httponly=True)
+        response.set_cookie('secret_key', secret_key, 600, httponly=True)
+
+    return response
 
 
 def chat_map_questions(request, pk, slug):
@@ -578,4 +585,29 @@ def leave_human_chat(request):
     data = {
         'status': True
     }
+    return JsonResponse(data)
+
+
+def check_previous_chat(request):
+    old_chat = request.COOKIES.get('incomplete_chat_history')
+    user_lang = request.COOKIES.get('user_lang')
+    customer_id = request.COOKIES.get('customer_id')
+    secret_key = request.COOKIES.get('secret_key')
+    if old_chat and secret_key and customer_id and user_lang:
+        chat_history = ChatHistory.objects.filter(pk=old_chat).first()
+        if chat_history:
+            room_url = HttpResponseRedirect(reverse('room', secret_key, user_lang, customer_id)).url
+            data = {
+                'status': True,
+                'room_url': request.build_absolute_uri(room_url) + '?previous_chat='+old_chat
+            }
+        else:
+            data = {
+                'status': False,
+            }
+    else:
+        data = {
+            'status': False,
+        }
+
     return JsonResponse(data)

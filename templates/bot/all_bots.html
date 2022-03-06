@@ -172,7 +172,7 @@
 <button class="open-chat-button close-btn" id="hide-button" onclick="HideChat()" style="display: none"></button>
 <div class="iframe-container fix-element" id="iframe-container">
   <iframe src="{% url 'get_user_detail' secret_key=test_secret_key %}?parent_company={{ parent_company.secret_key }}"
-          class="chat-container-iframe"></iframe>
+          class="chat-container-iframe" id="chat-container-iframe"></iframe>
 </div>
 </div>
 {% endif %}
@@ -181,6 +181,6 @@
 {% block script %}
 <script src="{% static 'bot/js/web.js' %}"></script>
 <script>
-
+getChatBOtReady()
 </script>
 {% endblock %}

@@ -68,6 +68,12 @@
 		<div class="bot-chat-body chat-category">
 			<div class="chat-body px-3 pt-3 bg-white position-relative">
 				<div class="msg-container">
+					{% if previous_chat %}
+					{% for i in new_history.chat_history.all %}
+					<div class="sent-msg msg-txt">{{ i.question }}</div>
+					<div class="reply-msg msg-txt">{{ i.answer }}</div>
+					{% endfor %}
+					{% else %}
 					<div class="reply-msg msg-txt">{{ translated_dict.intro_ques }}</div>
 					<div class="option-container">
 						{% for pk, title in chat_titles.items %}
@@ -79,6 +85,7 @@
 						</button>
 						{% endif %}
 					</div>
+					{% endif %}
 				</div>
 				<!----- Continue chat yes/no when Bot can not answer ------->
 				<div class="continue-chat mt-4 d-none p-3">
@@ -200,7 +207,6 @@
 <script src="{% static 'bot/js/scripts.js' %}"></script>
 <script>
 $(document).ready(function(){
-
 var ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 
 // hide leave-confirmation
