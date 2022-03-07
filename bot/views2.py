@@ -73,10 +73,10 @@ def get_bot_reply_updated(request):
             }
     response = JsonResponse(data)
     if data['status']:
-        response.set_cookie('incomplete_chat_history', history_pk, 600, httponly=True)
-        response.set_cookie('user_lang', user_lang, 600, httponly=True)
-        response.set_cookie('customer_id', customer_id, 600, httponly=True)
-        response.set_cookie('secret_key', secret_key, 600, httponly=True)
+        response.set_cookie('incomplete_chat_history', history_pk, max_age=600, httponly=True)
+        response.set_cookie('user_lang', user_lang, max_age=600, httponly=True)
+        response.set_cookie('customer_id', customer_id, max_age=600, httponly=True)
+        response.set_cookie('secret_key', secret_key, max_age=600, httponly=True)
 
     return response
 
